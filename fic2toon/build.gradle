@@ -34,7 +34,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web' // Web MVC
 
 	// SQLite Database Driver
-	implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
+	implementation 'org.xerial:sqlite-jdbc'
 
 	// Hibernate Dialects (Community Dialects for SQLite)
 	implementation 'org.hibernate.orm:hibernate-community-dialects:6.2.7.Final'

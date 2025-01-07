@@ -7,10 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/board")
 public class BoardController {
+
     private final BoardService boardService;
 
     @GetMapping
@@ -18,7 +19,7 @@ public class BoardController {
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
-            return "redirect:/login/login";
+            return "redirect:/login";
         }
 
         model.addAttribute("userType", user.getIdType());
@@ -33,7 +34,7 @@ public class BoardController {
 
         // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         if (user == null) {
-            return "redirect:/login/login";
+            return "redirect:/login";
         }
 
         // 게시글 상세 보기
@@ -47,7 +48,7 @@ public class BoardController {
 
         // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         if (user == null) {
-            return "redirect:/login/login";
+            return "redirect:/login";
         }
 
         // 사용자 유형을 전달 (관리자 여부 확인용)
@@ -62,7 +63,7 @@ public class BoardController {
 
         // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         if (user == null) {
-            return "redirect:/login/login";
+            return "redirect:/login";
         }
 
 
@@ -82,7 +83,7 @@ public class BoardController {
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
-            return "redirect:/login/login";
+            return "redirect:/login";
         }
 
         // 권한 확인: 관리자 또는 작성자만 삭제 가능

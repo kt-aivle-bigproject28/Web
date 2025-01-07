@@ -13,7 +13,7 @@ public class IndexController {
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
-            return "redirect:/login/login";
+            return "redirect:/login";
         }
 
         model.addAttribute("userType", user.getIdType());

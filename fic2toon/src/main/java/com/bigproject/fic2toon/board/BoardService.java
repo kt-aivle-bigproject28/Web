@@ -1,32 +1,22 @@
 package com.bigproject.fic2toon.board;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
 
-    public Board createBoard(BoardDto boardDto) {
-        Board board = Board.builder()
-                .author_id(boardDto.getAuthor_id())
-                .title(boardDto.getTitle())
-                .content(boardDto.getContent())
-                .image(boardDto.getImage())
-                .post_type(boardDto.getPost_type())
-                .created_time(boardDto.getCreated_time())
-                .build();
-
-        return boardRepository.save(board);
-    }
-
-    private String getCurrentTime() {
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+    public BoardDto createBoard(BoardDto boardDto) {
+        Board board = toEntity(boardDto);
+        board.setCreated_time(getCurrentTime());
+        return new BoardDto(boardRepository.save(board));
     }
 
     public List<BoardDto> getBoardList() {
@@ -56,6 +46,15 @@ public class BoardService {
         return boardListWithIndex;
     }
 
+    private Board toEntity(BoardDto dto) {
+        return Board.builder()
+                .author_id(dto.getAuthor_id())
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .post_type(dto.getPost_type())
+                .build();
+    }
+
     public void deleteBoard(Long board_id) {
         if (!boardRepository.existsById(board_id)) {
             throw new RuntimeException("삭제하려는 게시글이 존재하지 않습니다.");
@@ -67,10 +66,14 @@ public class BoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
+        // 기존 데이터를 업데이트
         board.setTitle(boardDto.getTitle());
         board.setContent(boardDto.getContent());
         board.setPost_type(boardDto.getPost_type());
-        board.setCreated_time(boardDto.getCreated_time());
         boardRepository.save(board);
+    }
+
+    private String getCurrentTime() {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
     }
 }

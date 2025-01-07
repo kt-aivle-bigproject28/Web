@@ -6,26 +6,34 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "board")
 public class Board {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long board_id;
-    private String author_id;
-    private String title;
-    private String content;
-    private String image;
-    private String post_type;
-    private String created_time;
 
-    @PrePersist
-    protected void onCreate() {
-        created_time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-    }
+    @Column(nullable = false)
+    private String author_id;
+
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String content;
+
+    @Column(nullable = false)
+    private String post_type;
+
+    @Column(nullable = false)
+    private String created_time;
 }

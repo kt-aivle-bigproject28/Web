@@ -7,20 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
 public class UserController {
-    @Autowired
     private final UserService userService;
 
     @GetMapping("/login")
-    public String login() {
-        return "login";
+    public String login(Model model) {
+        model.addAttribute("userDto", new UserDto());
+        return "login/login";
     }
 
     @PostMapping("/login")
@@ -50,7 +47,7 @@ public class UserController {
     @PostMapping("/agree")
     public String processAgree(@RequestParam(name = "agreement", required = true) boolean agreed) {
         if (agreed) {
-            return "redirect:/login/signup";
+            return "login/signup";
         } else {
             return "redirect:/login/agree?error=true";
         }

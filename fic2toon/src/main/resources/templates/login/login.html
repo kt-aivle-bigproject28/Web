@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -137,13 +137,14 @@
     <main>
         <div class="login-container">
             <h1>Fiction2Toon</h1>
-            <form id="login-form">
-                <input type="text" id="id" placeholder="ID" required>
-                <input type="password" id="password" placeholder="PW" required>
+            <form id="login-form" th:action="@{/login}" method="post" th:object="${userDto}">
+                <input type="text" id="id" th:field="*{id}" placeholder="ID" required>
+                <input type="password" id="password" th:field="*{pw}" placeholder="PW" required>
                 <button type="submit">로그인</button>
+                <div th:if="${error}" class="error-message" th:text="${error}"></div>
             </form>
             <div class="links">
-                <a href="agree.html">회원가입</a> | <a href="findpw.html">비밀번호 찾기</a>
+                <a th:href="@{/agree}">회원가입</a> | <a th:href="@{/findpw}">비밀번호 찾기</a>
             </div>
         </div>
     </main>
@@ -156,19 +157,5 @@
         </div>
         <p>&copy; 2025 hooncompany</p>
     </footer>
-
-    <script>
-        document.getElementById('login-form').addEventListener('submit', function (event) {
-            event.preventDefault(); // 기본 동작 방지
-            const id = document.getElementById('id').value;
-            const password = document.getElementById('password').value;
-
-            if (id && password) {
-                alert(`로그인 시도: ID = ${id}, PW = ${password}`);
-            } else {
-                alert('ID와 비밀번호를 입력해주세요.');
-            }
-        });
-    </script>
 </body>
 </html>

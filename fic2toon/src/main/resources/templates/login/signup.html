@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiction2Toon - SignUp</title>
+    <style>
+
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f4f4f4;
+            border-bottom: 1px solid #ddd;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #002855;
+        }
+
+        header .signup-btn {
+            position: absolute;
+            background-color: #002855;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            right: 20px;
+            
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: calc(100vh - 140px);
+        }
+
+        .signup-container {
+            text-align: center;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        .signup-container h1 {
+            font-size: 32px;
+            color: #002855;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-group input {
+            width: 83%;
+            padding: 10px 40px 10px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form-group button {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            background-color: #002855;
+            color: #fff;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .signup-btn-main {
+            background-color: #002855;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+
+        .footer-links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Fiction2Toon</div>
+        <button class="signup-btn">SignUp</button>
+    </header>
+
+    <main>
+        <div class="signup-container">
+            <h1>회원가입</h1>
+            <form id="signup-form">
+                <div class="form-group">
+                    <input type="text" id="id" placeholder="ID" required>
+                    <button type="button" onclick="checkId()">확인</button>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="PW" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="confirm-password" placeholder="PWC" required>
+                    <button type="button" onclick="togglePassword()">👁️</button>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="phone" placeholder="PH" required>
+                </div>
+                <button type="submit" class="signup-btn-main">가입</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </div>
+        <p>&copy; 2025 hooncompany</p>
+    </footer>
+
+    <script>
+        // ID 중복 확인 버튼 동작
+        function checkId() {
+            const id = document.getElementById('id').value;
+            if (id) {
+                alert(`ID "${id}" 확인 중...`);
+            } else {
+                alert('ID를 입력해주세요.');
+            }
+        }
+
+        // 비밀번호 보이기/숨기기 기능
+        function togglePassword() {
+            const passwordField = document.getElementById('confirm-password');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+            } else {
+                passwordField.type = 'password';
+            }
+        }
+
+        // 회원가입 폼 제출 이벤트
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const id = document.getElementById('id').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const phone = document.getElementById('phone').value;
+
+            if (password !== confirmPassword) {
+                alert('비밀번호가 일치하지 않습니다.');
+                return;
+            }
+
+            alert(`회원가입 완료!\nID: ${id}\nPhone: ${phone}`);
+        });
+    </script>
+</body>
+</html>

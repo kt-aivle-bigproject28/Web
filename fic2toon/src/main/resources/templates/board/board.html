@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiction2Toon - Board</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 헤더 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f4f4f4;
+            border-bottom: 1px solid #ddd;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .nav-container a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #002855;
+            font-size: 16px;
+        }
+
+        .logo {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: #002855;
+            font-weight: bold;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-profile-img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .logout-btn {
+            background-color: #002855;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .logout-btn, .header-profile-img{
+            position: relative;
+            right: 30px;
+
+        }
+
+        /* 메인 스타일 */
+        main {
+            flex: 1;
+            margin-top: 80px;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* 필터와 검색 스타일 */
+        .search-filter-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .checkbox-container label {
+            font-size: 16px;
+            color: #002855;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        .search-input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            flex: 1;
+        }
+
+        .search-btn {
+            background-color: #002855;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 30px;
+            cursor: pointer;
+        }
+
+        /* 게시판 스타일 */
+        .board-container {
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        .board-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .board-table th, .board-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .board-table th {
+            background-color: #f4f4f4;
+            color: #002855;
+            font-weight: bold;
+        }
+
+        /* 게시글 작성 버튼 */
+        .create-post-btn {
+            margin: -10px;
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            background-color: #002855;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .create-post-btn:hover {
+            background-color: #004080;
+        }
+
+        /* 푸터 */
+        footer {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .footer-links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #555;
+        }
+        .hamburger {
+            display: none;
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block; /* 햄버거 메뉴 표시 */
+            }
+        
+            .nav-container {
+                display: none; /* 기본적으로 숨김 */
+            }
+        
+            .nav-container.responsive {
+                display: flex; /* 햄버거 클릭 시 표시 */
+                flex-direction: column; /* 세로 정렬 */
+                align-items: flex-start;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: #f4f4f4;
+                padding: 10px 20px;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+            .search-filter-container {
+                flex-direction: column; /* 세로로 나열 */
+                align-items: flex-start; /* 왼쪽 정렬 */
+            }
+
+            .checkbox-container {
+                flex-wrap: wrap; /* 체크박스 줄바꿈 */
+                gap: 5px;
+            }
+
+            .search-btn {
+                align-self:right; /* 왼쪽 정렬 */
+            }
+
+            .search-input {
+                width: 85%; /* 입력창 전체 너비 */
+            }
+            .nav-container a{
+                flex-direction: column;
+            }
+            .hamburger {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button class="hamburger" onclick="toggleNav()">☰</button>
+        <nav class="nav-container">
+            <a href="home.html">Home</a>
+            <a href="#">PlayModel</a>
+            <a href="#">Board</a>
+        </nav>
+        <div class="logo">Fiction2Toon</div>
+        <div class="profile-container">
+            <img src="../image/profile.jpg" alt="Profile" class="header-profile-img">
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- 필터와 검색 영역 -->
+        <div class="search-filter-container">
+            <div class="checkbox-container">
+                <label><input type="checkbox" value="QnA"> QnA</label>
+                <label><input type="checkbox" value="공지사항"> 공지사항</label>
+                <label><input type="checkbox" value="후기"> 후기</label>
+            </div>
+            <input type="text" id="title-input" class="search-input" placeholder="제목 입력">
+            <input type="text" id="author-input" class="search-input" placeholder="작성자 입력">
+            <button class="search-btn" onclick="filterBoard()">검색</button>
+        </div>
+
+        <!-- 게시판 테이블 -->
+        <div class="board-container">
+            <table class="board-table" id="board-table">
+                <thead>
+                    <tr>
+                        <th>유형</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>날짜</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>QnA</td>
+                        <td>게시판 검색 기능 테스트</td>
+                        <td>홍길동</td>
+                        <td>2025-01-06</td>
+                    </tr>
+                    <tr>
+                        <td>공지사항</td>
+                        <td>공지사항 게시글</td>
+                        <td>관리자</td>
+                        <td>2025-01-05</td>
+                    </tr>
+                    <tr>
+                        <td>후기</td>
+                        <td>사용 후기 게시글</td>
+                        <td>사용자</td>
+                        <td>2025-01-04</td>
+                    </tr>
+                </tbody>
+                
+            </table>
+            <button class="create-post-btn" onclick="createPost()">게시글 작성</button>
+        </div>
+        
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </div>
+        <p>&copy; 2025 Fiction2Toon</p>
+    </footer>
+
+    <script>
+        function filterBoard() {
+            const selectedTypes = Array.from(document.querySelectorAll('.checkbox-container input:checked')).map(el => el.value);
+            const title = document.getElementById('title-input').value.toLowerCase();
+            const author = document.getElementById('author-input').value.toLowerCase();
+
+            const rows = document.querySelectorAll('#board-table tbody tr');
+
+            rows.forEach(row => {
+                const type = row.children[0].textContent;
+                const rowTitle = row.children[1].textContent.toLowerCase();
+                const rowAuthor = row.children[2].textContent.toLowerCase();
+
+                // 필터 조건에 따라 표시/숨기기
+                const matchesType = selectedTypes.length === 0 || selectedTypes.includes(type);
+                const matchesTitle = title === '' || rowTitle.includes(title);
+                const matchesAuthor = author === '' || rowAuthor.includes(author);
+
+                if (matchesType && matchesTitle && matchesAuthor) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        function toggleNav() {
+            const nav = document.querySelector('.nav-container');
+            nav.classList.toggle('responsive');
+        }
+
+        function logout() {
+            alert("로그아웃되었습니다.");
+            window.location.href = "login.html";
+        }
+        function createPost() {
+            window.location.href = "makeboard.html"; // makeboard.html로 이동
+        }
+    </script>
+</body>
+</html>

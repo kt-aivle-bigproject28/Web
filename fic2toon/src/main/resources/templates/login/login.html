@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiction2Toon - Login</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%; /* 전체 높이 */
+            display: flex;
+            flex-direction: column; /* 세로 방향 정렬 */
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f4f4f4;
+            border-bottom: 1px solid #ddd;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #002855;
+            align-items: center;
+        }
+
+        header .signup-btn {
+            position:absolute;
+            background-color: #002855;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            right: 10px;
+        }
+        header .signup-btn a {
+        text-decoration: none; /* 밑줄 제거 */
+        color: white; /* 글자 색상을 흰색으로 설정 */
+        display: block; /* 링크를 버튼 내부에서 전체 차지 */
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 140px);
+        }
+
+        .login-container {
+            text-align: center;
+            background-color: #fff;
+            padding: 50px; /* 배경 x */
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-container h1 {
+            font-size: 32px;
+            color: #002855;
+            margin-bottom: 20px;
+        }
+
+
+        form input {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 300px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 입력창과 버튼을 가운데 정렬 */
+        }
+
+        form button {
+            background-color: #002855;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 50%; /* 버튼 너비를 입력창 너비와 동일하게 설정 */
+            max-width: 400px; /* 버튼의 최대 너비 설정 */
+            margin-top: 10px; /* 입력창과 버튼 사이의 간격 설정 */
+        }
+
+        .links {
+            margin-top: 10px;
+        }
+
+        .links a {
+            text-decoration: none;
+            color: #555;
+            margin: 0 5px;
+        }
+
+        footer {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+            position: relative;
+        }
+
+        .footer-links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Fiction2Toon</div>
+        <button class="signup-btn">
+            <a href="agree.html">SignUp</a>
+        </button>
+    </header>
+
+    <main>
+        <div class="login-container">
+            <h1>Fiction2Toon</h1>
+            <form id="login-form">
+                <input type="text" id="id" placeholder="ID" required>
+                <input type="password" id="password" placeholder="PW" required>
+                <button type="submit">로그인</button>
+            </form>
+            <div class="links">
+                <a href="agree.html">회원가입</a> | <a href="findpw.html">비밀번호 찾기</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="home.html">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </div>
+        <p>&copy; 2025 hooncompany</p>
+    </footer>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // 기본 동작 방지
+            const id = document.getElementById('id').value;
+            const password = document.getElementById('password').value;
+
+            if (id && password) {
+                alert(`로그인 시도: ID = ${id}, PW = ${password}`);
+            } else {
+                alert('ID와 비밀번호를 입력해주세요.');
+            }
+        });
+    </script>
+</body>
+</html>

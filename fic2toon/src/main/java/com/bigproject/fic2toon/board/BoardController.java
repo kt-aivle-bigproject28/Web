@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/board")
 public class BoardController {
@@ -24,7 +24,7 @@ public class BoardController {
 
         model.addAttribute("userType", user.getIdType());
         model.addAttribute("boardList", boardService.getBoardListWithIndex());
-        return "board/list";
+        return "board/board";
     }
 
 

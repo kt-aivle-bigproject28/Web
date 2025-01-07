@@ -13,6 +13,17 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
+    @GetMapping("/home")
+    public String home(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        return "board/home";
+    }
+
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("userDto", new UserDto());

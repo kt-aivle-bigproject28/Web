@@ -111,18 +111,18 @@
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">Fiction2Toon</div>
-        <button class="signup-btn">SignUp</button>
-    </header>
+<header>
+    <div class="logo">Fiction2Toon</div>
+    <button class="signup-btn" th:onclick="location.href='/signup'">SignUp</button>
+</header>
 
-    <main>
+<main>
+    <form th:action="@{/agree}" method="post">
         <div class="terms-container">
             <h2>이용약관</h2>
             <div class="terms-content">
                 <p>목적: 이용자 식별 및 본인여부 확인</p>
                 <p>항목: 이름, 회원ID(이메일 주소), 비밀번호, 만 14세 미만 여부</p>
-                <p>보유기간: 회원 탈퇴 후 30일까지</p>
                 <p>목적: 유료결제, 계약이행 및 정산자료 관리, 민원 등 고객고충처리, 인재 채용 관리</p>
                 <p>항목: 결제서류, 연락처(이메일, 전화번호), 발행번호, 사업자번호, 주소, 대표자, 연체, 등록, IP 주소</p>
                 <p>보유기간: 회원 탈퇴 후 30일까지</p>
@@ -130,34 +130,31 @@
             </div>
         </div>
         <div class="checkbox-container">
-            <input type="checkbox" id="agree-checkbox">
+            <input type="checkbox" id="agree-checkbox" name="agreement" required>
             <label for="agree-checkbox">위 내용을 읽었으며 이용약관에 동의합니다.</label>
         </div>
-        <button class="next-btn" id="next-button" disabled>다음</button>
-    </main>
+        <button type="submit" class="next-btn" id="next-button">다음</button>
+    </form>
+</main>
 
-    <footer>
-        <div class="footer-links">
-            <a href="login.html">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-        </div>
-        <p>&copy; 2025 hooncompany</p>
-    </footer>
+<footer>
+    <div class="footer-links">
+        <a th:href="@{/login}">Home</a>
+        <a th:href="@{/about}">About</a>
+        <a th:href="@{/contact}">Contact</a>
+    </div>
+    <p>&copy; 2025 hooncompany</p>
+</footer>
 
-    <script>
-        const checkbox = document.getElementById('agree-checkbox');
-        const nextButton = document.getElementById('next-button');
+<script th:inline="javascript">
+    const checkbox = document.getElementById('agree-checkbox');
+    const nextButton = document.getElementById('next-button');
 
-        // 체크박스 상태에 따라 버튼 활성화/비활성화
-        checkbox.addEventListener('change', () => {
-            nextButton.disabled = !checkbox.checked;
-        });
+    checkbox.addEventListener('change', () => {
+        nextButton.disabled = !checkbox.checked;
+    });
 
-        // 다음 버튼 클릭 시 signup.html로 이동
-        nextButton.addEventListener('click', () => {
-            window.location.href = 'signup.html'; // signup.html로 이동
-        });
-    </script>
+    // form submit 이벤트로 처리되므로 별도의 클릭 이벤트 리스너는 제거
+</script>
 </body>
 </html>

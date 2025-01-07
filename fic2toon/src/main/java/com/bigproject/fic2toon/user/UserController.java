@@ -3,7 +3,6 @@ package com.bigproject.fic2toon.user;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,16 +14,16 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/login")
-    public String login(Model model) {
+    public String loginForm(Model model) {
         model.addAttribute("userDto", new UserDto());
         return "login/login";
     }
 
     @PostMapping("/login")
-    public String processLogin(@Valid @ModelAttribute UserDto userDto,
-                               BindingResult bindingResult,
-                               HttpSession session,
-                               Model model) {
+    public String login(@Valid @ModelAttribute UserDto userDto,
+                        BindingResult bindingResult,
+                        HttpSession session,
+                        Model model) {
         if (bindingResult.hasErrors()) {
             return "login/login";
         }
@@ -40,42 +39,33 @@ public class UserController {
     }
 
     @GetMapping("/agree")
-    public String agree() {
+    public String agreeForm() {
         return "login/agree";
     }
 
     @PostMapping("/agree")
-    public String processAgree(@RequestParam(name = "agreement", required = true) boolean agreed) {
-        if (agreed) {
-            return "login/signup";
-        } else {
-            return "redirect:/login/agree?error=true";
-        }
+    public String agree(@RequestParam(name = "agreement", required = true) boolean agreed) {
+        return agreed ? "redirect:/signup" : "redirect:/agree?error=true";
     }
 
     @GetMapping("/signup")
-    public String signup(Model model) {
+    public String signupForm(Model model) {
         model.addAttribute("userDto", new UserDto());
         return "login/signup";
     }
 
     @PostMapping("/signup")
-    public String processSignup(@Valid @ModelAttribute UserDto userDto,
-                                BindingResult bindingResult,
-                                Model model) {
-        // 유효성 검사: 휴대폰 번호가 11자리 숫자인지 확인
-        if (!userDto.getPhone().matches("\\d{11}")) {
-            model.addAttribute("error", "휴대폰 번호는 11자리 숫자만 입력 가능합니다.");
-            return "login/signup";
-        }
-
-        if (bindingResult.hasErrors()) {
+    public String signup(@Valid @ModelAttribute UserDto userDto,
+                         BindingResult bindingResult,
+                         Model model) {
+        if (bindingResult.hasErrors() || !isValidPhoneNumber(userDto.getPhone())) {
+            model.addAttribute("error", "입력 정보를 확인해주세요.");
             return "login/signup";
         }
 
         try {
             userService.create(userDto);
-            return "redirect:/login/login";
+            return "redirect:/";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             return "login/signup";
@@ -83,21 +73,17 @@ public class UserController {
     }
 
     @GetMapping("/findpw")
-    public String findPassword() {
+    public String findPasswordForm(Model model) {
+        model.addAttribute("userDto", new UserDto());
         return "login/findpw";
     }
 
     @PostMapping("/findpw")
-    public String processFindPassword(@Valid @ModelAttribute UserDto userDto,
-                                      BindingResult bindingResult,
-                                      Model model) {
-        // 유효성 검사: 휴대폰 번호가 11자리 숫자인지 확인
-        if (!userDto.getPhone().matches("\\d{11}")) {
-            model.addAttribute("error", "전화번호는 11자리 숫자만 입력 가능합니다.");
-            return "login/findpw";
-        }
-
-        if (bindingResult.hasErrors()) {
+    public String findPassword(@Valid @ModelAttribute UserDto userDto,
+                               BindingResult bindingResult,
+                               Model model) {
+        if (bindingResult.hasErrors() || !isValidPhoneNumber(userDto.getPhone())) {
+            model.addAttribute("error", "입력 정보를 확인해주세요.");
             return "login/findpw";
         }
 
@@ -113,6 +99,10 @@ public class UserController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/login/login";
+        return "redirect:/";
+    }
+
+    private boolean isValidPhoneNumber(String phone) {
+        return phone != null && phone.matches("\\d{11}");
     }
 }

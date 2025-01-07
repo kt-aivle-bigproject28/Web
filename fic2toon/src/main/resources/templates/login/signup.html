@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -114,79 +114,107 @@
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">Fiction2Toon</div>
-        <button class="signup-btn">SignUp</button>
-    </header>
+<header>
+    <div class="logo">Fiction2Toon</div>
+    <button class="signup-btn" th:onclick="location.href='/signup'">SignUp</button>
+</header>
 
-    <main>
-        <div class="signup-container">
-            <h1>회원가입</h1>
-            <form id="signup-form">
-                <div class="form-group">
-                    <input type="text" id="id" placeholder="ID" required>
-                    <button type="button" onclick="checkId()">확인</button>
-                </div>
-                <div class="form-group">
-                    <input type="password" id="password" placeholder="PW" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" id="confirm-password" placeholder="PWC" required>
-                    <button type="button" onclick="togglePassword()">👁️</button>
-                </div>
-                <div class="form-group">
-                    <input type="text" id="phone" placeholder="PH" required>
-                </div>
-                <button type="submit" class="signup-btn-main">가입</button>
-            </form>
-        </div>
-    </main>
+<main>
+    <div class="signup-container">
+        <h1>회원가입</h1>
+        <div id="error-message" style="color: red; margin-bottom: 10px;"></div>
+        <form id="signup-form" th:action="@{/signup}" th:object="${userDto}" method="post">
+            <div class="form-group">
+                <input type="text" id="id" th:field="*{id}" placeholder="ID" required>
+                <button type="button" onclick="checkId()">확인</button>
+                <span th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></span>
+            </div>
+            <div class="form-group">
+                <input type="text" id="name" th:field="*{name}" placeholder="Name" required>
+                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" th:field="*{pw}" placeholder="Password" required>
+                <span th:if="${#fields.hasErrors('pw')}" th:errors="*{pw}"></span>
+            </div>
+            <div class="form-group">
+                <input type="password" id="confirm-password" placeholder="Password Check" required>
+                <button type="button" onclick="togglePassword()">👁️</button>
+            </div>
+            <div class="form-group">
+                <input type="text" id="phone" th:field="*{phone}" placeholder="Phone Number" required>
+                <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+            </div>
+            <button type="submit" class="signup-btn-main">가입</button>
+        </form>
+    </div>
+</main>
 
-    <footer>
-        <div class="footer-links">
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-        </div>
-        <p>&copy; 2025 hooncompany</p>
-    </footer>
+<footer>
+    <div class="footer-links">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/about}">About</a>
+        <a th:href="@{/contact}">Contact</a>
+    </div>
+    <p>&copy; 2025 hooncompany</p>
+</footer>
 
-    <script>
-        // ID 중복 확인 버튼 동작
-        function checkId() {
-            const id = document.getElementById('id').value;
-            if (id) {
-                alert(`ID "${id}" 확인 중...`);
-            } else {
-                alert('ID를 입력해주세요.');
-            }
+<script th:inline="javascript">
+    const errorMessageElement = document.getElementById('error-message');
+
+    function displayErrorMessage(message) {
+        errorMessageElement.textContent = message;
+    }
+
+    function checkId() {
+        const id = document.getElementById('id').value;
+        if (id) {
+            fetch(`/check-id?id=${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.available) {
+                        displayErrorMessage('사용 가능한 ID입니다.');
+                    } else {
+                        displayErrorMessage('이미 사용 중인 ID입니다.');
+                    }
+                })
+                .catch(error => {
+                    displayErrorMessage('ID 확인 중 오류가 발생했습니다.');
+                });
+        } else {
+            displayErrorMessage('ID를 입력해주세요.');
         }
+    }
 
-        // 비밀번호 보이기/숨기기 기능
-        function togglePassword() {
-            const passwordField = document.getElementById('confirm-password');
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-            } else {
-                passwordField.type = 'password';
-            }
-        }
+    function togglePassword() {
+        const passwordField = document.getElementById('confirm-password');
+        passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
+    }
 
-        // 회원가입 폼 제출 이벤트
-        document.getElementById('signup-form').addEventListener('submit', function(event) {
+    document.getElementById('signup-form').addEventListener('submit', function(event) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        const phone = document.getElementById('phone').value;
+
+        // 비밀번호 일치 여부 확인
+        if (password !== confirmPassword) {
             event.preventDefault();
-            const id = document.getElementById('id').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-            const phone = document.getElementById('phone').value;
+            displayErrorMessage('비밀번호가 일치하지 않습니다.');
+            return; // 함수 종료
+        }
 
-            if (password !== confirmPassword) {
-                alert('비밀번호가 일치하지 않습니다.');
-                return;
-            }
+        // 전화번호 길이 확인
+        if (phone.length !== 11) {
+            event.preventDefault();
+            displayErrorMessage('전화번호는 11자리여야 합니다.');
+            return; // 함수 종료
+        }
 
-            alert(`회원가입 완료!\nID: ${id}\nPhone: ${phone}`);
-        });
-    </script>
+        // 모든 오류 메시지 초기화
+        errorMessageElement.textContent = '';
+    });
+</script>
+
+
 </body>
 </html>

@@ -34,9 +34,8 @@ out/
 ### VS Code ###
 .vscode/
 
-
 ### Database ###
-*.db
+**/database
 
 ### Images ###
 **/images

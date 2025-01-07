@@ -21,17 +21,20 @@ public class SecurityConfig {
     SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
-                .csrf((csrf) -> csrf
-                        .ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**")))
+                        .requestMatchers("/admin/**").hasRole("ADMIN")  // "/admin/**" 경로는 관리자만 접근 가능
+                        .requestMatchers("/board/**").permitAll()
+                        .requestMatchers("/user/**").authenticated()   // "/user/**" 경로는 로그인한 사용자만 접근 가능
+                        .requestMatchers(new AntPathRequestMatcher("/recover-password")).permitAll() // 비밀번호 찾기 경로 허용
+                        .anyRequest().permitAll())                     // 나머지 모든 요청은 누구나 접근 가능
+                .csrf(csrf -> csrf.disable())
                 .headers((headers) -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
                 .formLogin((formLogin) -> formLogin
-                        .loginPage("login")
+                        .loginPage("/user/login")
                         .defaultSuccessUrl("/"))
                 .logout((logout) -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("logout"))
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true))
         ;

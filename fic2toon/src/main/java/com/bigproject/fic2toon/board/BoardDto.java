@@ -12,7 +12,6 @@ public class BoardDto {
     private String author_id;
     private String title;
     private String content;
-    private String image;
     private String post_type;
     private String created_time;
 
@@ -21,7 +20,6 @@ public class BoardDto {
         this.author_id = board.getAuthor_id();
         this.title = board.getTitle();
         this.content = board.getContent();
-        this.image = board.getImage();
         this.post_type = board.getPost_type();
         this.created_time = board.getCreated_time();
     }

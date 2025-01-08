@@ -3,98 +3,108 @@ package com.bigproject.fic2toon.user;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Controller
 @RequiredArgsConstructor
 public class UserController {
+
     private final UserService userService;
 
-    @GetMapping("/home")
-    public String home(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-
-        if (user == null) {
-            return "redirect:/login";
-        }
-
-        return "board/home";
-    }
-
     @GetMapping("/login")
-    public String loginForm(Model model) {
+    public String login(Model model) {
         model.addAttribute("userDto", new UserDto());
         return "login/login";
     }
 
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute UserDto userDto,
-                        BindingResult bindingResult,
-                        HttpSession session,
-                        Model model) {
-        if (bindingResult.hasErrors()) {
-            return "login/login";
-        }
+    @ResponseBody
+    public ResponseEntity<?> processLogin(@RequestBody UserDto userDto,
+                                          HttpSession session) {
+        System.out.println("로그인 요청: " + userDto);
 
         try {
             User user = userService.login(userDto);
             session.setAttribute("user", user);
-            return "redirect:/";
+            System.out.println("로그인 성공: " + user.getId());
+            return ResponseEntity.ok(Map.of("success", true));
         } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            return "login/login";
+            System.err.println("로그인 중 오류 발생: " + e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", e.getMessage()));
+        } catch (Exception e) {
+            System.err.println("예상치 못한 서버 오류: " + e.getMessage());
+            return ResponseEntity.internalServerError().body(Map.of("success", false, "message", "서버 오류가 발생했습니다."));
         }
     }
 
+
+
     @GetMapping("/agree")
-    public String agreeForm() {
+    public String agree() {
         return "login/agree";
     }
 
     @PostMapping("/agree")
-    public String agree(@RequestParam(name = "agreement", required = true) boolean agreed) {
-        return agreed ? "redirect:/signup" : "redirect:/agree?error=true";
+    public String processAgree(@RequestParam(name = "agreement", required = true) boolean agreed, Model model) {
+        if (agreed) {
+            return "redirect:/signup";
+        } else {
+            model.addAttribute("error", "약관에 동의해야 진행할 수 있습니다.");
+            return "login/agree";
+        }
     }
 
     @GetMapping("/signup")
-    public String signupForm(Model model) {
+    public String signup(Model model) {
         model.addAttribute("userDto", new UserDto());
         return "login/signup";
     }
 
-    @PostMapping("/signup")
-    public String signup(@Valid @ModelAttribute UserDto userDto,
-                         BindingResult bindingResult,
-                         Model model) {
-        if (bindingResult.hasErrors() || !isValidPhoneNumber(userDto.getPhone())) {
-            model.addAttribute("error", "입력 정보를 확인해주세요.");
-            return "login/signup";
+    @PostMapping("/api/signup")
+    @ResponseBody
+    public ResponseEntity<?> processSignup(@Valid @RequestBody UserDto userDto,
+                                           BindingResult bindingResult) {
+        System.out.println("회원가입 요청: " + userDto);
+
+        if (!userDto.getPhone().matches("\\d{11}")) {
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", "전화번호는 11자리 숫자여야 합니다."));
+        }
+
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", "입력값 검증 실패."));
         }
 
         try {
             userService.create(userDto);
-            return "redirect:/";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            return "login/signup";
+            System.out.println("회원가입 성공: " + userDto.getId());
+            return ResponseEntity.ok(Map.of("success", true));
+        } catch (Exception e) {
+            System.err.println("회원가입 중 오류 발생: " + e.getMessage());
+            return ResponseEntity.internalServerError().body(Map.of("success", false, "message", "회원가입 중 오류가 발생했습니다."));
         }
     }
 
     @GetMapping("/findpw")
-    public String findPasswordForm(Model model) {
-        model.addAttribute("userDto", new UserDto());
+    public String findPassword() {
         return "login/findpw";
     }
 
     @PostMapping("/findpw")
-    public String findPassword(@Valid @ModelAttribute UserDto userDto,
-                               BindingResult bindingResult,
-                               Model model) {
-        if (bindingResult.hasErrors() || !isValidPhoneNumber(userDto.getPhone())) {
-            model.addAttribute("error", "입력 정보를 확인해주세요.");
+    public String processFindPassword(@Valid @ModelAttribute UserDto userDto,
+                                      BindingResult bindingResult,
+                                      Model model) {
+        if (!userDto.getPhone().matches("\\d{11}")) {
+            model.addAttribute("error", "전화번호는 11자리 숫자만 입력 가능합니다.");
+            return "login/findpw";
+        }
+
+        if (bindingResult.hasErrors()) {
             return "login/findpw";
         }
 
@@ -110,10 +120,14 @@ public class UserController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/";
+        return "redirect:/login";
     }
 
-    private boolean isValidPhoneNumber(String phone) {
-        return phone != null && phone.matches("\\d{11}");
+
+
+    @GetMapping("/home")
+    public String home() {
+        return "board/home"; // board 디렉토리 내 home.html로 이동
     }
+
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -130,32 +130,73 @@
     <header>
         <div class="logo">Fiction2Toon</div>
         <button class="signup-btn">
-            <a href="agree.html">SignUp</a>
+            <a href="/agree">SignUp</a>
         </button>
     </header>
 
     <main>
         <div class="login-container">
             <h1>Fiction2Toon</h1>
-            <form id="login-form" th:action="@{/login}" method="post" th:object="${userDto}">
-                <input type="text" id="id" th:field="*{id}" placeholder="ID" required>
-                <input type="password" id="password" th:field="*{pw}" placeholder="PW" required>
+            <form id="login-form" method="post" action="/login">
+                <input type="text" id="id" placeholder="ID" required>
+                <input type="password" id="password" placeholder="PW" required>
                 <button type="submit">로그인</button>
-                <div th:if="${error}" class="error-message" th:text="${error}"></div>
             </form>
             <div class="links">
-                <a th:href="@{/agree}">회원가입</a> | <a th:href="@{/findpw}">비밀번호 찾기</a>
+                <a href="/agree">회원가입</a> | <a href="/findpw">비밀번호 찾기</a>
             </div>
         </div>
     </main>
 
     <footer>
         <div class="footer-links">
-            <a href="home.html">Home</a>
+            <a href="#">Home</a>
             <a href="#">About</a>
             <a href="#">Contact</a>
         </div>
         <p>&copy; 2025 hooncompany</p>
     </footer>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async function (event) {
+            event.preventDefault(); // 기본 동작 방지
+            const id = document.getElementById('id').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, pw: password }) // JSON 데이터 전송
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        window.location.href = "/home"; // board/home.html로 이동
+                    } else {
+                        alert(result.message || "ID 또는 비밀번호가 올바르지 않습니다.");
+                    }
+                } else {
+                    alert("서버 에러가 발생했습니다.");
+                }
+            } catch (error) {
+                console.error('로그인 요청 실패:', error);
+                alert("네트워크 에러가 발생했습니다.");
+            }
+        });
+
+            // 회원가입 링크 이벤트 추가
+        document.getElementById('signup-link').addEventListener('click', function (event) {
+            event.preventDefault(); // 기본 링크 동작 방지
+            window.location.href = '/agree'; // agree 페이지로 이동
+        });
+
+        // SignUp 버튼 이벤트 추가
+        document.getElementById('signup-btn-link').addEventListener('click', function (event) {
+            event.preventDefault(); // 기본 링크 동작 방지
+            window.location.href = '/agree'; // agree 페이지로 이동
+        });
+    </script>
 </body>
 </html>

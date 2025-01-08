@@ -9,7 +9,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
+		languageVersion = JavaLanguageVersion.of(17) // Java 17 설정
 	}
 }
 
@@ -20,7 +20,7 @@ configurations {
 }
 
 repositories {
-	mavenCentral()
+	mavenCentral() // 의존성 리포지토리
 }
 
 ext {
@@ -28,7 +28,8 @@ ext {
 }
 
 dependencies {
-	// Spring Boot Starters
+
+	// Spring Boot 기본 Starters
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // Thymeleaf
 	implementation 'org.springframework.boot:spring-boot-starter-web' // Web MVC
@@ -36,28 +37,29 @@ dependencies {
 	// SQLite Database Driver
 	implementation 'org.xerial:sqlite-jdbc'
 
-	// Hibernate Dialects (Community Dialects for SQLite)
+	// Hibernate Dialects (SQLite 지원)
 	implementation 'org.hibernate.orm:hibernate-community-dialects:6.2.7.Final'
 
-	// Lombok
+	// Lombok (코드 간소화용)
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	// DevTools (For hot-reloading in development)
+	// 개발용 Hot-Reload
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	// H2 Database (Runtime-only for testing purposes)
+	// 런타임 DB (테스트용 H2)
 	runtimeOnly 'com.h2database:h2'
 
-	// Testing Dependencies
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
+	// Spring Validation & Security
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
-	// OpenFeign
+	// Spring Cloud OpenFeign (REST 클라이언트)
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+	// 테스트 관련
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 dependencyManagement {
@@ -67,5 +69,5 @@ dependencyManagement {
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+	useJUnitPlatform() // JUnit 5 플랫폼 사용
 }

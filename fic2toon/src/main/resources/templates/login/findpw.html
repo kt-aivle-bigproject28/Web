@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -101,39 +101,32 @@
     </style>
 </head>
 <body>
-<header>
-    <div class="logo">Fiction2Toon</div>
-    <button class="signup-btn">
-        <a th:href="@{/signup}">SignUp</a>
-    </button>
-</header>
+    <header>
+        <div class="logo">Fiction2Toon</div>
+        <button class="signup-btn">
+            <a href="/agree">SignUp</a>
+        </button>
+    </header>
 
-<main>
-    <div class="findpw-container">
-        <h1>비밀번호 찾기</h1>
-        <form th:action="@{/findpw}" th:object="${userDto}" method="post">
-            <input type="text" id="name" th:field="*{name}" placeholder="NAME" required>
-            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    <main>
+        <div class="findpw-container">
+            <h1>비밀번호 찾기</h1>
+            <form>
+                <input type="text" id="name" placeholder="NAME" required>
+                <input type="text" id="id" placeholder="ID" required>
+                <input type="text" id="ph" placeholder="PH" required>
+                <button type="submit">확인</button>
+            </form>
+        </div>
+    </main>
 
-            <input type="text" id="id" th:field="*{id}" placeholder="ID" required>
-            <span th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></span>
-
-            <input type="text" id="ph" th:field="*{phone}" placeholder="PH" required>
-            <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
-
-            <button type="submit">확인</button>
-        </form>
-        <div th:if="${message}" th:text="${message}"></div>
-    </div>
-</main>
-
-<footer>
-    <div class="footer-links">
-        <a th:href="@{/}">Home</a>
-        <a th:href="@{/about}">About</a>
-        <a th:href="@{/contact}">Contact</a>
-    </div>
-    <p>&copy; 2025 hooncompany</p>
-</footer>
+    <footer>
+        <div class="footer-links">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </div>
+        <p>&copy; 2025 hooncompany</p>
+    </footer>
 </body>
 </html>

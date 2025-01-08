@@ -187,13 +187,13 @@
     <header>
         <button class="hamburger" onclick="toggleNav()">☰</button>
         <nav class="nav-container">
-            <a href="home.html">Home</a>
+            <a href="/home">Home</a>
             <a href="#">PlayModel</a>
-            <a href="board.html">Board</a>
+            <a href="/board">Board</a>
         </nav>
         <div class="logo">Fiction2Toon</div>
         <div class="profile-container">
-            <img src="../../static/image/profile.jpg" alt="Profile" class="header-profile-img">
+            <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
             <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
     </header>
@@ -248,13 +248,12 @@
                 return;
             }
 
-            alert(`게시글 작성 완료!\n카테고리: ${selectedCategories.join(', ')}\n제목: ${title}\n내용: ${content}`);
-            window.location.href = "board.html";
+            window.location.href = "/board";
         }
 
         function logout() {
             alert("로그아웃되었습니다.");
-            window.location.href = "login.html";
+            window.location.href = "/login";
         }
         /* 체크박스 중복ㄴㄴ*/
         document.querySelectorAll('.checkbox-container input').forEach(checkbox => {

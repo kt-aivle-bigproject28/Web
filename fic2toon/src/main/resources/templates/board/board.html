@@ -237,13 +237,13 @@
     <header>
         <button class="hamburger" onclick="toggleNav()">☰</button>
         <nav class="nav-container">
-            <a href="home.html">Home</a>
+            <a href="/home">Home</a>
             <a href="#">PlayModel</a>
-            <a href="#">Board</a>
+            <a href="/board">Board</a>
         </nav>
         <div class="logo">Fiction2Toon</div>
         <div class="profile-container">
-            <img src="../../static/image/profile.jpg" alt="Profile" class="header-profile-img">
+            <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
             <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
     </header>
@@ -301,7 +301,7 @@
 
     <footer>
         <div class="footer-links">
-            <a href="#">Home</a>
+            <a href="/home">Home</a>
             <a href="#">About</a>
             <a href="#">Contact</a>
         </div>
@@ -339,11 +339,10 @@
         }
 
         function logout() {
-            alert("로그아웃되었습니다.");
-            window.location.href = "login.html";
+            window.location.href = "/login";
         }
         function createPost() {
-            window.location.href = "makeboard.html"; // makeboard.html로 이동
+            window.location.href = "/board/form";
         }
     </script>
 </body>

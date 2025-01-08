@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
+
         }
 
         header {
@@ -129,6 +130,7 @@
                 <p>회사</p>
             </div>
         </div>
+
         <div class="checkbox-container">
             <input type="checkbox" id="agree-checkbox">
             <label for="agree-checkbox">위 내용을 읽었으며 이용약관에 동의합니다.</label>
@@ -154,9 +156,30 @@
             nextButton.disabled = !checkbox.checked;
         });
 
-        // 다음 버튼 클릭 시 signup.html로 이동
-        nextButton.addEventListener('click', () => {
-            window.location.href = 'signup.html'; // signup.html로 이동
+        // 다음 버튼 클릭 시 POST 요청
+        nextButton.addEventListener('click', async () => {
+            if (!checkbox.checked) {
+                alert("이용약관에 동의해야 합니다.");
+                return;
+            }
+
+            try {
+                const response = await fetch('/agree', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({ agreement: 'true' })
+                });
+
+                if (response.ok) {
+                    window.location.href = '/signup';
+                } else {
+                    alert("서버 요청 중 오류가 발생했습니다.");
+                }
+            } catch (error) {
+                alert("요청 처리 중 오류가 발생했습니다.");
+            }
         });
     </script>
 </body>

@@ -137,7 +137,7 @@
     <main>
         <div class="login-container">
             <h1>Fiction2Toon</h1>
-            <form id="login-form">
+            <form id="login-form" method="post" action="/login">
                 <input type="text" id="id" placeholder="ID" required>
                 <input type="password" id="password" placeholder="PW" required>
                 <button type="submit">로그인</button>
@@ -158,29 +158,45 @@
     </footer>
 
     <script>
-        document.getElementById('login-form').addEventListener('submit', function (event) {
+        document.getElementById('login-form').addEventListener('submit', async function (event) {
             event.preventDefault(); // 기본 동작 방지
             const id = document.getElementById('id').value;
             const password = document.getElementById('password').value;
 
-            if (id && password) {
-                alert(`로그인 시도: ID = ${id}, PW = ${password}`);
-            } else {
-                alert('ID와 비밀번호를 입력해주세요.');
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, pw: password }) // JSON 데이터 전송
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        window.location.href = "/home"; // board/home.html로 이동
+                    } else {
+                        alert(result.message || "ID 또는 비밀번호가 올바르지 않습니다.");
+                    }
+                } else {
+                    alert("서버 에러가 발생했습니다.");
+                }
+            } catch (error) {
+                console.error('로그인 요청 실패:', error);
+                alert("네트워크 에러가 발생했습니다.");
             }
         });
 
-        // 회원가입 링크 이벤트 추가
-    document.getElementById('signup-link').addEventListener('click', function (event) {
-        event.preventDefault(); // 기본 링크 동작 방지
-        window.location.href = '/agree'; // agree 페이지로 이동
-    });
+            // 회원가입 링크 이벤트 추가
+        document.getElementById('signup-link').addEventListener('click', function (event) {
+            event.preventDefault(); // 기본 링크 동작 방지
+            window.location.href = '/agree'; // agree 페이지로 이동
+        });
 
-    // SignUp 버튼 이벤트 추가
-    document.getElementById('signup-btn-link').addEventListener('click', function (event) {
-        event.preventDefault(); // 기본 링크 동작 방지
-        window.location.href = '/agree'; // agree 페이지로 이동
-    });
+        // SignUp 버튼 이벤트 추가
+        document.getElementById('signup-btn-link').addEventListener('click', function (event) {
+            event.preventDefault(); // 기본 링크 동작 방지
+            window.location.href = '/agree'; // agree 페이지로 이동
+        });
     </script>
 </body>
 </html>

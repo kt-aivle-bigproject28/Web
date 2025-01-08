@@ -24,23 +24,26 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String processLogin(@Valid @ModelAttribute UserDto userDto,
-                               BindingResult bindingResult,
-                               HttpSession session,
-                               Model model) {
-        if (bindingResult.hasErrors()) {
-            return "login/login";
-        }
+    @ResponseBody
+    public ResponseEntity<?> processLogin(@RequestBody UserDto userDto,
+                                          HttpSession session) {
+        System.out.println("로그인 요청: " + userDto);
 
         try {
             User user = userService.login(userDto);
             session.setAttribute("user", user);
-            return "redirect:/";
+            System.out.println("로그인 성공: " + user.getId());
+            return ResponseEntity.ok(Map.of("success", true));
         } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            return "login/login";
+            System.err.println("로그인 중 오류 발생: " + e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", e.getMessage()));
+        } catch (Exception e) {
+            System.err.println("예상치 못한 서버 오류: " + e.getMessage());
+            return ResponseEntity.internalServerError().body(Map.of("success", false, "message", "서버 오류가 발생했습니다."));
         }
     }
+
+
 
     @GetMapping("/agree")
     public String agree() {
@@ -117,6 +120,14 @@ public class UserController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/login/login";
+        return "redirect:/login";
     }
+
+
+
+    @GetMapping("/home")
+    public String home() {
+        return "board/home"; // board 디렉토리 내 home.html로 이동
+    }
+
 }

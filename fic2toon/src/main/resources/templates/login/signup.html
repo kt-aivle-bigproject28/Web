@@ -179,7 +179,6 @@
 
                 const result = await response.json();
                 if (result.success) {
-                    alert('회원가입이 완료되었습니다.');
                     window.location.href = '/login'; // 로그인 페이지로 이동
                 } else {
                     alert(result.message || '회원가입 중 오류가 발생했습니다.');
@@ -189,45 +188,45 @@
             }
         }
 
-                        // 전화번호 입력 제약 및 저장
-                        document.getElementById('phone').addEventListener('input', function (event) {
-                            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);
-                        });
+        // 전화번호 입력 제약 및 저장
+        document.getElementById('phone').addEventListener('input', function (event) {
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);
+        });
 
-                        // 회원가입 폼 제출 처리
-                        document.getElementById('signup-form').addEventListener('submit', async function (event) {
-                    event.preventDefault();
-                    const id = document.getElementById('id').value;
-                    const pw = document.getElementById('password').value; // 'pw'로 변경
-                    const phone = document.getElementById('phone').value;
+        // 회원가입 폼 제출 처리
+        document.getElementById('signup-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const id = document.getElementById('id').value;
+            const pw = document.getElementById('password').value; // 'pw'로 변경
+            const phone = document.getElementById('phone').value;
 
-                    if (pw !== document.getElementById('confirm-password').value) {
-                        alert('비밀번호가 일치하지 않습니다.');
-                        return;
-                    }
+            if (pw !== document.getElementById('confirm-password').value) {
+                alert('비밀번호가 일치하지 않습니다.');
+                return;
+            }
 
-                    if (phone.length !== 11) {
-                        alert('전화번호는 11자리 숫자여야 합니다.');
-                        return;
-                    }
+            if (phone.length !== 11) {
+                alert('전화번호는 11자리 숫자여야 합니다.');
+                return;
+            }
 
-                    try {
-                        const response = await fetch('/signup', { // '/signup' 경로로 수정
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ id, pw, phone, name: '사용자 이름' }), // name 추가
-                        });
-                        const result = await response.json();
-                        if (result.success) {
-                            alert('회원가입이 완료되었습니다.');
-                            window.location.href = '/login.html';
-                        } else {
-                            alert(result.message || '회원가입 중 오류가 발생했습니다.');
-                        }
-                    } catch (error) {
-                        alert('회원가입 중 서버 오류가 발생했습니다.');
-                    }
+            try {
+                const response = await fetch('/signup', { // '/signup' 경로로 수정
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, pw, phone, name: '사용자 이름' }), // name 추가
                 });
+                const result = await response.json();
+                if (result.success) {
+                    alert('회원가입이 완료되었습니다.');
+                    window.location.href = '/login.html';
+                } else {
+                    alert(result.message || '회원가입 중 오류가 발생했습니다.');
+                }
+            } catch (error) {
+                alert('회원가입 중 서버 오류가 발생했습니다.');
+            }
+        });
 
     </script>
 

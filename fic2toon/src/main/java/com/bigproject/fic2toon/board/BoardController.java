@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/board")
 public class BoardController {
@@ -24,7 +24,7 @@ public class BoardController {
 
         model.addAttribute("userType", user.getIdType());
         model.addAttribute("boardList", boardService.getBoardListWithIndex());
-        return "board/list";
+        return "board/board";
     }
 
 
@@ -46,15 +46,13 @@ public class BoardController {
     public String createForm(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
 
-        // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         if (user == null) {
             return "redirect:/login";
         }
 
-        // 사용자 유형을 전달 (관리자 여부 확인용)
         model.addAttribute("userType", user.getIdType());
         model.addAttribute("board", new BoardDto());
-        return "board/form";
+        return "board/makeboard"; // makeboard.html로 이동
     }
 
     @PostMapping

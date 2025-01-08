@@ -62,15 +62,23 @@ public class UserService {
 
     // 로그인 처리
     public User login(UserDto userDto) {
+        System.out.println("로그인 요청 ID: " + userDto.getId());
+
+        // 데이터베이스에서 사용자 검색
         User user = userRepository.findById(userDto.getId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        System.out.println("데이터베이스에서 검색된 사용자: " + user);
 
+        // 비밀번호 검증
         if (!passwordEncoder.matches(userDto.getPw(), user.getPw())) {
+            System.out.println("비밀번호 불일치");
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
+        System.out.println("로그인 성공: " + user.getId());
         return user;
     }
+
 
     // 비밀번호 찾기
     public String findPassword(UserDto userDto) {

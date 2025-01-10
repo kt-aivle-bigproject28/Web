@@ -22,9 +22,8 @@ public class Board {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private BoardType type;
+    @Column(name = "board_type", nullable = false)
+    private Integer boardType;
 
     private String image;
 

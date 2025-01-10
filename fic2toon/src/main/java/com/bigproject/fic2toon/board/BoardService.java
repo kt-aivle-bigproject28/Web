@@ -23,7 +23,7 @@ public class BoardService {
         Board board = Board.builder()
                 .title(boardDto.getTitle())
                 .content(boardDto.getContent())
-                .type(boardDto.getType()) // BoardType 설정
+                .boardType(boardDto.getBoardType()) // int로 설정
                 .image(boardDto.getImage()) // 이미지 설정 (null 가능)
                 .user(user) // 작성자 설정
                 .build();
@@ -31,13 +31,14 @@ public class BoardService {
         boardRepository.save(board); // 게시글 저장
     }
 
+
     public List<BoardDto> getBoardList() {
         return boardRepository.findAll().stream()
                 .map(board -> new BoardDto(
                         board.getId(),
                         board.getTitle(),
                         board.getContent(),
-                        board.getType(),
+                        board.getBoardType(),
                         board.getImage(),
                         board.getCreatedTime(),
                         board.getUser() != null ? board.getUser().getId() : null // 작성자 ID 설정
@@ -51,7 +52,7 @@ public class BoardService {
                         board.getId(),
                         board.getTitle(),
                         board.getContent(),
-                        board.getType(),
+                        board.getBoardType(),
                         board.getImage(),
                         board.getCreatedTime(),
                         board.getUser() != null ? board.getUser().getId() : null // 작성자 ID 설정
@@ -88,7 +89,7 @@ public class BoardService {
         // 기존 데이터를 업데이트
         board.setTitle(boardDto.getTitle());
         board.setContent(boardDto.getContent());
-        board.setType(boardDto.getType());
+        board.setBoardType(boardDto.getBoardType());
         boardRepository.save(board);
     }
 }

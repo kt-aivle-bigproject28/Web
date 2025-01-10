@@ -13,7 +13,7 @@ public class BoardDto {
     private Long id;
     private String title;
     private String content;
-    private BoardType type;
+    private Integer boardType;
     private String image;
     private LocalDateTime createdTime;
     private Long userId;

@@ -94,20 +94,20 @@ public class BoardController {
             return "redirect:/login"; // 사용자 정보가 없으면 로그인 페이지로 리다이렉트
         }
 
-        // 작성자의 ID 설정
         boardDto.setUserId(optionalUser.get().getId());
 
-        // 선택된 카테고리 처리
-        BoardType boardType = boardDto.getType(); // BoardType으로 설정
-        if (boardType == null) {
+        // 선택된 카테고리 처리 (정수로 설정)
+        if (boardDto.getBoardType() < 0 || boardDto.getBoardType() > 2) {
             model.addAttribute("error", "유효하지 않은 카테고리입니다.");
             return "board/form"; // 오류 발생 시 폼으로 돌아감
         }
 
         // 게시글 생성
         boardService.createBoard(boardDto);
+
         return "redirect:/board"; // 게시글 작성 후 게시판으로 리다이렉트
     }
+
 
     @DeleteMapping("/{id}/delete")
     public String deleteBoard(@PathVariable Long id, HttpSession session, Model model) {

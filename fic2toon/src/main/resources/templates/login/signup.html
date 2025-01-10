@@ -1,18 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiction2Toon - SignUp</title>
     <style>
-
-        
         body {
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
         }
-
         header {
             display: flex;
             justify-content: center;
@@ -21,25 +18,11 @@
             background-color: #f4f4f4;
             border-bottom: 1px solid #ddd;
         }
-
         header .logo {
             font-size: 24px;
             font-weight: bold;
             color: #002855;
         }
-
-        header .signup-btn {
-            position: absolute;
-            background-color: #002855;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            cursor: pointer;
-            border-radius: 4px;
-            right: 20px;
-            
-        }
-
         main {
             display: flex;
             flex-direction: column;
@@ -47,7 +30,6 @@
             justify-content: center;
             height: calc(100vh - 140px);
         }
-
         .signup-container {
             text-align: center;
             background-color: #fff;
@@ -56,179 +38,70 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             width: 400px;
         }
-
         .signup-container h1 {
             font-size: 32px;
             color: #002855;
             margin-bottom: 20px;
         }
-
         .form-group {
-            position: relative;
             margin-bottom: 20px;
         }
-
         .form-group input {
-            width: 83%;
-            padding: 10px 40px 10px 10px;
+            width: 100%;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 16px;
         }
-
-        .form-group button {
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            transform: translateY(-50%);
-            background-color: #002855;
-            color: #fff;
-            border: none;
-            padding: 8px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
         .signup-btn-main {
             background-color: #002855;
             color: #fff;
-            padding: 10px 20px;
-            border: none;
+            padding: 10px;
             border-radius: 4px;
             font-size: 16px;
             cursor: pointer;
         }
-
-        footer {
-            background-color: #f4f4f4;
-            padding: 20px;
-            text-align: center;
-            border-top: 1px solid #ddd;
-        }
-
-        .footer-links a {
-            margin: 0 10px;
-            text-decoration: none;
-            color: #555;
-        }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">Fiction2Toon</div>
-        <button class="signup-btn">
-            <a href="/agree">SignUp</a>
-        </button>
-    </header>
+<header>
+    <div class="logo">Fiction2Toon</div>
+</header>
 
-    <main>
-        <div class="signup-container">
-            <h1>회원가입</h1>
-            <form id="signup-form">
-                <div class="form-group">
-                    <input type="text" id="id" name="id" placeholder="ID" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" id="password" name="pw" placeholder="PW" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" id="confirm-password" name="confirmPw" placeholder="PWC" required>
-                </div>
-                <div class="form-group">
-                    <input type="text" id="phone" name="phone" placeholder="PH" required>
-                </div>
-                <div class="form-group">
-                    <input type="text" id="name" name="name" placeholder="Name" required> <!-- Name 필드 추가 -->
-                </div>
-                <button type="button" class="signup-btn-main" onclick="submitForm()">가입</button>
-            </form>
+<main>
+    <div class="signup-container">
+        <h1>회원가입</h1>
+        <form th:action="@{/signup}" method="post" th:id="'signup-form'">
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Name" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="uid" placeholder="ID" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="confirmPassword" placeholder="Password Check" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="phone" placeholder="Phone Number(010-XXXX-XXXX)" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="companyCode" placeholder="Company Code" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="position" placeholder="Position" required>
+            </div>
+            <button type="submit" class="signup-btn-main">가입</button> <!-- 가입 버튼 -->
+        </form>
 
-        </div>
-    </main>
+    </div>
+</main>
 
-    <footer>
-        <div class="footer-links">
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-        </div>
-        <p>&copy; 2025 hooncompany</p>
-    </footer>
-
-    <script>
-        async function submitForm() {
-            const id = document.getElementById('id').value;
-            const pw = document.getElementById('password').value;
-            const confirmPw = document.getElementById('confirm-password').value;
-            const phone = document.getElementById('phone').value;
-            const name = document.getElementById('name').value;
-
-            if (pw !== confirmPw) {
-                alert('비밀번호가 일치하지 않습니다.');
-                return;
-            }
-
-            try {
-                const response = await fetch('/api/signup', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ id, pw, phone, name }),
-                });
-
-                const result = await response.json();
-                if (result.success) {
-                    window.location.href = '/login'; // 로그인 페이지로 이동
-                } else {
-                    alert(result.message || '회원가입 중 오류가 발생했습니다.');
-                }
-            } catch (error) {
-                alert('회원가입 중 서버 오류가 발생했습니다.');
-            }
-        }
-
-        // 전화번호 입력 제약 및 저장
-        document.getElementById('phone').addEventListener('input', function (event) {
-            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);
-        });
-
-        // 회원가입 폼 제출 처리
-        document.getElementById('signup-form').addEventListener('submit', async function (event) {
-            event.preventDefault();
-            const id = document.getElementById('id').value;
-            const pw = document.getElementById('password').value; // 'pw'로 변경
-            const phone = document.getElementById('phone').value;
-
-            if (pw !== document.getElementById('confirm-password').value) {
-                alert('비밀번호가 일치하지 않습니다.');
-                return;
-            }
-
-            if (phone.length !== 11) {
-                alert('전화번호는 11자리 숫자여야 합니다.');
-                return;
-            }
-
-            try {
-                const response = await fetch('/signup', { // '/signup' 경로로 수정
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id, pw, phone, name: '사용자 이름' }), // name 추가
-                });
-                const result = await response.json();
-                if (result.success) {
-                    alert('회원가입이 완료되었습니다.');
-                    window.location.href = '/login.html';
-                } else {
-                    alert(result.message || '회원가입 중 오류가 발생했습니다.');
-                }
-            } catch (error) {
-                alert('회원가입 중 서버 오류가 발생했습니다.');
-            }
-        });
-
-    </script>
+<footer>
+    <p>&copy; 2025 hooncompany</p>
+</footer>
 
 </body>
 </html>

@@ -1,13 +1,9 @@
 package com.bigproject.fic2toon.board;
 
+import com.bigproject.fic2toon.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import jakarta.persistence.*;
-import lombok.*;
 
 @Getter
 @Setter
@@ -15,25 +11,32 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "board")
 public class Board {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long board_id;
-
-    @Column(nullable = false)
-    private String author_id;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)
-    private String post_type;
+    @Enumerated(EnumType.STRING)
+    private BoardType type;
+
+    private String image;
 
     @Column(nullable = false)
-    private String created_time;
+    private LocalDateTime createdTime;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @PrePersist
+    protected void onCreate() {
+        createdTime = LocalDateTime.now();
+    }
 }

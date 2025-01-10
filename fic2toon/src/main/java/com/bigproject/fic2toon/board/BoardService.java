@@ -1,8 +1,10 @@
 package com.bigproject.fic2toon.board;
 
+import com.bigproject.fic2toon.user.User;
+import com.bigproject.fic2toon.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -12,22 +14,48 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final UserService userService;
 
-    public BoardDto createBoard(BoardDto boardDto) {
-        Board board = toEntity(boardDto);
-        board.setCreated_time(getCurrentTime());
-        return new BoardDto(boardRepository.save(board));
+    @Transactional
+    public void createBoard(BoardDto boardDto) {
+        User user = userService.findById(boardDto.getUserId());
+
+        Board board = Board.builder()
+                .title(boardDto.getTitle())
+                .content(boardDto.getContent())
+                .type(boardDto.getType()) // BoardType 설정
+                .image(boardDto.getImage()) // 이미지 설정 (null 가능)
+                .user(user) // 작성자 설정
+                .build();
+
+        boardRepository.save(board); // 게시글 저장
     }
 
     public List<BoardDto> getBoardList() {
         return boardRepository.findAll().stream()
-                .map(BoardDto::new)
+                .map(board -> new BoardDto(
+                        board.getId(),
+                        board.getTitle(),
+                        board.getContent(),
+                        board.getType(),
+                        board.getImage(),
+                        board.getCreatedTime(),
+                        board.getUser() != null ? board.getUser().getId() : null // 작성자 ID 설정
+                ))
                 .collect(Collectors.toList());
     }
 
-    public BoardDto getBoardById(Long board_id) {
-        return boardRepository.findById(board_id)
-                .map(BoardDto::new)
+    public BoardDto getBoardById(Long id) {
+        return boardRepository.findById(id)
+                .map(board -> new BoardDto(
+                        board.getId(),
+                        board.getTitle(),
+                        board.getContent(),
+                        board.getType(),
+                        board.getImage(),
+                        board.getCreatedTime(),
+                        board.getUser() != null ? board.getUser().getId() : null // 작성자 ID 설정
+                ))
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
     }
 
@@ -46,15 +74,6 @@ public class BoardService {
         return boardListWithIndex;
     }
 
-    private Board toEntity(BoardDto dto) {
-        return Board.builder()
-                .author_id(dto.getAuthor_id())
-                .title(dto.getTitle())
-                .content(dto.getContent())
-                .post_type(dto.getPost_type())
-                .build();
-    }
-
     public void deleteBoard(Long board_id) {
         if (!boardRepository.existsById(board_id)) {
             throw new RuntimeException("삭제하려는 게시글이 존재하지 않습니다.");
@@ -69,11 +88,7 @@ public class BoardService {
         // 기존 데이터를 업데이트
         board.setTitle(boardDto.getTitle());
         board.setContent(boardDto.getContent());
-        board.setPost_type(boardDto.getPost_type());
+        board.setType(boardDto.getType());
         boardRepository.save(board);
-    }
-
-    private String getCurrentTime() {
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
     }
 }

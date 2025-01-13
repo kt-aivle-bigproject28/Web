@@ -1,6 +1,5 @@
 package com.bigproject.fic2toon.board;
 
-import com.bigproject.fic2toon.user.User;
 import com.bigproject.fic2toon.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -8,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,30 +24,20 @@ public class BoardController {
             return "redirect:/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         }
 
-        // 사용자 정보를 데이터베이스에서 조회
-        Optional<User> optionalUser = userService.findByUid(loginUserId); // 사용자 ID로 사용자 정보 조회
-
-        if (optionalUser.isEmpty()) {
-            return "redirect:/login"; // 사용자 정보가 없으면 로그인 페이지로 리다이렉트
-        }
-
-        User user = optionalUser.get(); // Optional에서 User 객체 추출
-
-        model.addAttribute("userType", user.getType()); // 사용자 타입 추가
-        model.addAttribute("boardList", boardService.getBoardListWithIndex()); // 게시판 목록 추가
+        model.addAttribute("user", loginUserId); // 사용자 타입 추가
+        model.addAttribute("boardList", boardService.getBoardList()); // 게시판 목록 추가
         return "board/board"; // 게시판 뷰 반환
     }
 
     @GetMapping("/{id}")
     public String getBoardDetail(@PathVariable Long id, HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
+        String loginUserId = (String) session.getAttribute("loginUser"); // 로그인한 사용자 ID를 가져옴
 
-        // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
-        if (user == null) {
-            return "redirect:/login";
+        if (loginUserId == null) {
+            return "redirect:/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         }
 
-        // 게시글 상세 보기
+        model.addAttribute("user", loginUserId);
         model.addAttribute("board", boardService.getBoardById(id));
         return "board/detail";
     }
@@ -63,16 +50,7 @@ public class BoardController {
             return "redirect:/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         }
 
-        // 사용자 정보를 데이터베이스에서 조회
-        Optional<User> optionalUser = userService.findByUid(loginUserId); // 사용자 ID로 사용자 정보 조회
-
-        if (optionalUser.isEmpty()) {
-            return "redirect:/login"; // 사용자 정보가 없으면 로그인 페이지로 리다이렉트
-        }
-
-        User user = optionalUser.get();
-
-        model.addAttribute("userType", user.getType());
+        model.addAttribute("user", loginUserId); // 사용자 타입 추가
         model.addAttribute("board", new BoardDto());
         return "board/form";
     }
@@ -87,14 +65,8 @@ public class BoardController {
             return "redirect:/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         }
 
-        // 사용자 정보를 데이터베이스에서 조회
-        Optional<User> optionalUser = userService.findByUid(loginUserId); // 사용자 ID로 사용자 정보 조회
-
-        if (optionalUser.isEmpty()) {
-            return "redirect:/login"; // 사용자 정보가 없으면 로그인 페이지로 리다이렉트
-        }
-
-        boardDto.setUserId(optionalUser.get().getId());
+        model.addAttribute("user", loginUserId); // 사용자 타입 추가
+        boardDto.setUserUid(loginUserId);
 
         // 선택된 카테고리 처리 (정수로 설정)
         if (boardDto.getBoardType() < 0 || boardDto.getBoardType() > 2) {
@@ -111,21 +83,17 @@ public class BoardController {
 
     @DeleteMapping("/{id}/delete")
     public String deleteBoard(@PathVariable Long id, HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
+        String loginUserId = (String) session.getAttribute("loginUser"); // 로그인한 사용자 ID를 가져옴
 
-        if (user == null) {
-            return "redirect:/login";
+        if (loginUserId == null) {
+            return "redirect:/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         }
+
+        model.addAttribute("user", loginUserId);
+
+        BoardDto board = boardService.getBoardById(id);
 
         // 권한 확인: 관리자 또는 작성자만 삭제 가능
-        BoardDto board = boardService.getBoardById(id);
-        /*
-        if (user.getType() != 1 && !board.getUserId().equals(user.getId())) {
-            model.addAttribute("error", "삭제 권한이 없습니다.");
-            return "error/unauthorized";
-        }
-
-         */
 
         boardService.deleteBoard(id);
 
@@ -136,11 +104,13 @@ public class BoardController {
 
     @GetMapping("/{id}/edit")
     public String editBoard(@PathVariable Long id, HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
+        String loginUserId = (String) session.getAttribute("loginUser"); // 로그인한 사용자 ID를 가져옴
 
-        if (user == null) {
-            return "redirect:/login";
+        if (loginUserId == null) {
+            return "redirect:/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         }
+
+        model.addAttribute("user", loginUserId);
 
         // 권한 확인: 관리자 또는 작성자만 수정 가능
         BoardDto board = boardService.getBoardById(id);
@@ -153,16 +123,18 @@ public class BoardController {
          */
 
         model.addAttribute("board", board);
-        model.addAttribute("userType", user.getType());
         return "board/form"; // 수정 폼으로 이동
     }
 
     @PostMapping("/{id}")
     public String updateBoard(@PathVariable Long id, @ModelAttribute BoardDto boardDto, HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return "redirect:/login";
+        String loginUserId = (String) session.getAttribute("loginUser"); // 로그인한 사용자 ID를 가져옴
+
+        if (loginUserId == null) {
+            return "redirect:/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         }
+
+        model.addAttribute("user", loginUserId);
 
         // 권한 확인
         BoardDto existingBoard = boardService.getBoardById(id);

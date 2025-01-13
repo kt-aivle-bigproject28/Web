@@ -1,8 +1,7 @@
 package com.bigproject.fic2toon.board;
 
+import com.bigproject.fic2toon.company.Company;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -13,8 +12,9 @@ public class BoardDto {
     private Long id;
     private String title;
     private String content;
-    private Integer boardType;
+    private Integer boardType; // 기존 유지
+    private String boardTypeText; // 텍스트 변환 필드
     private String image;
-    private LocalDateTime createdTime;
-    private Long userId;
+    private String createdTime; // LocalDateTime → String으로 변경
+    private String userUid;
 }

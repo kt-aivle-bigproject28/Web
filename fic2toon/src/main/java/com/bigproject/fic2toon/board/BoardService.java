@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,9 +16,13 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserService userService;
 
+    // 날짜 포맷터 추가
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     @Transactional
     public void createBoard(BoardDto boardDto) {
-        User user = userService.findById(boardDto.getUserId());
+        User user = userService.findByUid(boardDto.getUserUid())
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자입니다."));
 
         Board board = Board.builder()
                 .title(boardDto.getTitle())
@@ -31,55 +35,65 @@ public class BoardService {
         boardRepository.save(board); // 게시글 저장
     }
 
-
     public List<BoardDto> getBoardList() {
         return boardRepository.findAll().stream()
-                .map(board -> new BoardDto(
-                        board.getId(),
-                        board.getTitle(),
-                        board.getContent(),
-                        board.getBoardType(),
-                        board.getImage(),
-                        board.getCreatedTime(),
-                        board.getUser() != null ? board.getUser().getId() : null // 작성자 ID 설정
-                ))
+                .map(board -> {
+                    String userUid = null;
+                    if (board.getUser() != null) {
+                        userUid = userService.findById(board.getUser().getId()).getUid(); // 작성자 UID 조회
+                    }
+
+                    // createdTime을 문자열로 포맷
+                    String formattedCreatedTime = board.getCreatedTime() != null
+                            ? board.getCreatedTime().format(FORMATTER)
+                            : "알 수 없음";
+
+                    return new BoardDto(
+                            board.getId(),
+                            board.getTitle(),
+                            board.getContent(),
+                            board.getBoardType(), // DB 정수 값
+                            getBoardTypeText(board.getBoardType()), // 변환된 텍스트
+                            board.getImage(),
+                            formattedCreatedTime, // 포맷된 문자열 전달
+                            userUid
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
     public BoardDto getBoardById(Long id) {
         return boardRepository.findById(id)
-                .map(board -> new BoardDto(
-                        board.getId(),
-                        board.getTitle(),
-                        board.getContent(),
-                        board.getBoardType(),
-                        board.getImage(),
-                        board.getCreatedTime(),
-                        board.getUser() != null ? board.getUser().getId() : null // 작성자 ID 설정
-                ))
+                .map(board -> {
+                    // createdTime을 문자열로 포맷
+                    String formattedCreatedTime = board.getCreatedTime() != null
+                            ? board.getCreatedTime().format(FORMATTER)
+                            : "알 수 없음";
+
+                    String userUid = null;
+                    if (board.getUser() != null) {
+                        userUid = userService.findById(board.getUser().getId()).getUid(); // 작성자 UID 조회
+                    }
+
+                    return new BoardDto(
+                            board.getId(),
+                            board.getTitle(),
+                            board.getContent(),
+                            board.getBoardType(), // DB 정수 값
+                            getBoardTypeText(board.getBoardType()), // 변환된 텍스트
+                            board.getImage(),
+                            formattedCreatedTime, // 포맷된 문자열 전달
+                            userUid
+                    );
+                })
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
     }
 
-    public List<Map<String, Object>> getBoardListWithIndex() {
-        List<BoardDto> boardList = getBoardList();
-        List<Map<String, Object>> boardListWithIndex = new ArrayList<>();
-
-        for (int i = 0; i < boardList.size(); i++) {
-            BoardDto board = boardList.get(i);
-            Map<String, Object> boardWithIndex = new HashMap<>();
-            boardWithIndex.put("index", i + 1); // 1부터 시작하는 번호
-            boardWithIndex.put("board", board);
-            boardListWithIndex.add(boardWithIndex);
-        }
-
-        return boardListWithIndex;
-    }
-
-    public void deleteBoard(Long board_id) {
-        if (!boardRepository.existsById(board_id)) {
+    public void deleteBoard(Long id) {
+        if (!boardRepository.existsById(id)) {
             throw new RuntimeException("삭제하려는 게시글이 존재하지 않습니다.");
         }
-        boardRepository.deleteById(board_id);
+        boardRepository.deleteById(id);
     }
 
     public void updateBoard(Long id, BoardDto boardDto) {
@@ -91,5 +105,15 @@ public class BoardService {
         board.setContent(boardDto.getContent());
         board.setBoardType(boardDto.getBoardType());
         boardRepository.save(board);
+    }
+
+    private String getBoardTypeText(Integer boardType) {
+        if (boardType == null) return "기타"; // null 처리
+        switch (boardType) {
+            case 0: return "공지사항";
+            case 1: return "QnA";
+            case 2: return "후기";
+            default: return "기타"; // 알 수 없는 값 처리
+        }
     }
 }

@@ -272,10 +272,12 @@
                 </thead>
                 <tbody>
                 <tr th:each="post : ${boardList}">
-                    <td th:text="${post.boardType}"></td> <!-- 게시글 유형 -->
-                    <td><a th:href="@{/board/{id}(id=${post.id})}" th:text="${post.title}"></a></td> <!-- 제목 링크 -->
-                    <td th:text="${post.user.uid}"></td> <!-- 작성자 -->
-                    <td th:text="${#dates.format(post.createdTime, 'yyyy-MM-dd')}"></td> <!-- 날짜 포맷팅 -->
+                    <td th:text="${post.boardTypeText != null ? post.boardTypeText : '알 수 없음'}"></td>
+                    <td>
+                        <a th:href="@{/board/{id}(id=${post.id})}" th:text="${post.title != null ? post.title : '제목 없음'}"></a>
+                    </td>
+                    <td th:text="${post.userUid != null ? post.userUid : '알 수 없음'}"></td>
+                    <td th:text="${post.createdTime != null ? post.createdTime : '알 수 없음'}"></td> <!-- 직접 출력 -->
                 </tr>
                 </tbody>
 

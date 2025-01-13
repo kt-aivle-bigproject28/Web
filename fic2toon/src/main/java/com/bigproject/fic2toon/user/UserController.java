@@ -44,7 +44,7 @@ public class UserController {
     public String login(LoginRequestDto loginRequest, HttpSession session, Model model) {
         try {
             String token = userService.authenticate(loginRequest);
-            session.setAttribute("loginUser", loginRequest.getUid()); // 세션에 사용자 ID 저장
+            session.setAttribute("loginUser", loginRequest.getUid());
             return "redirect:/"; // 로그인 성공 시 메인 페이지로 리다이렉트
         } catch (IllegalArgumentException e) {
             model.addAttribute("errorMessage", e.getMessage());

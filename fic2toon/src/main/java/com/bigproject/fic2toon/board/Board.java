@@ -25,6 +25,7 @@ public class Board {
     @Column(name = "board_type", nullable = false)
     private Integer boardType;
 
+    @Column
     private String image;
 
     @Column(nullable = false)

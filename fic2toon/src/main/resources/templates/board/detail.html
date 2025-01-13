@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiction2Toon - 게시글 상세</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f4f4f4;
+            border-bottom: 1px solid #ddd;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #002855;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: calc(100vh - 140px);
+        }
+        .post-detail {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 600px; /* 너비 조정 */
+        }
+        .post-title {
+            font-size: 32px;
+            color: #002855;
+            margin-bottom: 20px;
+        }
+        .post-info {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .post-content {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .post-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .edit-btn, .delete-btn {
+            background-color: #002855;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px; /* 버튼 간격 조정 */
+        }
+        .delete-btn {
+            background-color: #f44336; /* 삭제 버튼 색상 */
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">Fiction2Toon</div>
+</header>
+
+<main>
+    <div class="post-detail">
+        <h1 class="post-title" th:text="${board.title}">게시글 제목</h1>
+        <div class="post-info">
+            작성자: <span th:text="${board.userUid}">작성자 ID</span> |
+            작성일: <span th:text="${board.createdTime}">작성일</span>
+        </div>
+        <div class="post-content" th:utext="${board.content}">
+            게시글 내용이 여기에 표시됩니다.
+        </div>
+        <div class="post-actions" th:if="${user == board.userUid}">
+            <form th:action="@{/board/{id}/edit(id=${board.id})}" method="get">
+                <button type="submit" class="edit-btn">수정</button>
+            </form>
+            <form th:action="@{/board/{id}/delete(id=${board.id})}" method="post" onsubmit="return confirm('정말로 이 게시글을 삭제하시겠습니까?');">
+                <input type="hidden" name="_method" value="DELETE"/>
+                <button type="submit" class="delete-btn">삭제</button>
+            </form>
+        </div>
+    </div>
+    <button onclick="window.location.href='/board'" class="search-btn">목록으로 돌아가기</button> <!-- 목록으로 돌아가는 버튼 -->
+</main>
+
+<footer>
+    <p>&copy; 2025 Fiction2Toon. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

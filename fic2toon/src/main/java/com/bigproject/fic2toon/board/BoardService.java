@@ -1,5 +1,8 @@
 package com.bigproject.fic2toon.board;
 
+import com.bigproject.fic2toon.comment.Comment;
+import com.bigproject.fic2toon.comment.CommentDto;
+import com.bigproject.fic2toon.comment.CommentService;
 import com.bigproject.fic2toon.user.User;
 import com.bigproject.fic2toon.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,7 @@ import java.util.stream.Collectors;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserService userService;
+    private final CommentService commentService;
 
     // 날짜 포맷터 추가
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -48,6 +52,18 @@ public class BoardService {
                             ? board.getCreatedTime().format(FORMATTER)
                             : "알 수 없음";
 
+                    List<Comment> comments = commentService.findByBoardId(board.getId());
+
+                    List<CommentDto> commentDtos = comments.stream()
+                            .map(comment -> new CommentDto(
+                                    comment.getId(),
+                                    comment.getUser().getUid(),
+                                    comment.getBoard().getId(),
+                                    comment.getContent(),
+                                    comment.getCreatedTime()
+                            ))
+                            .collect(Collectors.toList());
+
                     return new BoardDto(
                             board.getId(),
                             board.getTitle(),
@@ -56,7 +72,8 @@ public class BoardService {
                             getBoardTypeText(board.getBoardType()), // 변환된 텍스트
                             board.getImage(),
                             formattedCreatedTime, // 포맷된 문자열 전달
-                            userUid
+                            userUid,
+                            commentDtos
                     );
                 })
                 .collect(Collectors.toList());
@@ -75,15 +92,28 @@ public class BoardService {
                         userUid = userService.findById(board.getUser().getId()).getUid(); // 작성자 UID 조회
                     }
 
+                    List<Comment> comments = commentService.findByBoardId(board.getId());
+
+                    List<CommentDto> commentDtos = comments.stream()
+                            .map(comment -> new CommentDto(
+                                    comment.getId(),
+                                    comment.getUser().getUid(),
+                                    comment.getBoard().getId(),
+                                    comment.getContent(),
+                                    comment.getCreatedTime()
+                            ))
+                            .collect(Collectors.toList());
+
                     return new BoardDto(
                             board.getId(),
                             board.getTitle(),
                             board.getContent(),
-                            board.getBoardType(), // DB 정수 값
-                            getBoardTypeText(board.getBoardType()), // 변환된 텍스트
+                            board.getBoardType(),
+                            getBoardTypeText(board.getBoardType()),
                             board.getImage(),
-                            formattedCreatedTime, // 포맷된 문자열 전달
-                            userUid
+                            formattedCreatedTime,
+                            userUid,
+                            commentDtos
                     );
                 })
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));

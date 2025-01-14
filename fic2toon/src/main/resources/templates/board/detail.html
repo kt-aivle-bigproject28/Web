@@ -9,6 +9,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
+            overflow-x: hidden;
         }
         header {
             display: flex;
@@ -28,14 +29,17 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: calc(100vh - 140px);
+            min-height: calc(100vh - 140px);
+            height: auto;
+            padding: 20px 0;
         }
         .post-detail {
             background-color: #fff;
             padding: 40px;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 600px; /* 너비 조정 */
+            width: 90%;
+            max-width: 600px;
         }
         .post-title {
             font-size: 32px;
@@ -67,6 +71,107 @@
         .delete-btn {
             background-color: #f44336; /* 삭제 버튼 색상 */
         }
+
+        .search-btn {
+            background-color: #002855;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-btn:hover {
+            background-color: #003b7b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .search-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-upload-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        .file-upload-section h3 {
+            margin-top: 0;
+            color: #002855;
+        }
+
+        .upload-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .upload-btn:hover {
+            background-color: #45a049;
+        }
+
+        .comments-section {
+            margin-top: 30px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+
+        .comment {
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .comment-info {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .comment-actions {
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        .delete-comment-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .submit-comment-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -79,10 +184,18 @@
         <h1 class="post-title" th:text="${board.title}">게시글 제목</h1>
         <div class="post-info">
             작성자: <span th:text="${board.userUid}">작성자 ID</span> |
-            작성일: <span th:text="${board.createdTime}">작성일</span>
+            작성일: <span th:text="${board.createdTime}">작성일</span> |
+            유형: <span th:text="${board.boardTypeText != null ? board.boardTypeText : '알 수 없음'}">게시글 유형</span>
         </div>
         <div class="post-content" th:utext="${board.content}">
             게시글 내용이 여기에 표시됩니다.
+        </div>
+        <div class="file-upload-section">
+            <h3>파일 업로드</h3>
+            <form th:action="@{/board/{id}/upload(id=${board.id})}" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" id="file" accept=".jpg,.jpeg,.png">
+                <button type="submit" class="upload-btn">업로드</button>
+            </form>
         </div>
         <div class="post-actions" th:if="${user == board.userUid}">
             <form th:action="@{/board/{id}/edit(id=${board.id})}" method="get">
@@ -93,12 +206,44 @@
                 <button type="submit" class="delete-btn">삭제</button>
             </form>
         </div>
+        <div class="comments-section">
+            <h3>댓글</h3>
+            <div th:if="${#lists.isEmpty(board.comments)}">
+                <p>아직 댓글이 없습니다.</p>
+            </div>
+            <div th:each="comment : ${board.comments}" class="comment">
+                <div class="comment-info">
+                    작성자: <span th:text="${comment.userUid}">작성자</span> |
+                    작성일: <span th:text="${#temporals.format(comment.createdTime, 'yyyy-MM-dd HH:mm')}">작성일</span>
+                </div>
+                <p th:text="${comment.content}">댓글 내용</p>
+                <div th:if="${user == comment.userUid}" class="comment-actions">
+                    <form th:action="@{/comment/{commentId}(commentId=${comment.id})}" method="post" style="display: inline;">
+                        <input type="hidden" name="_method" value="DELETE"/>
+                        <input type="hidden" name="boardId" th:value="${board.id}"/>
+                        <button type="submit" class="delete-comment-btn" onclick="return confirm('정말로 이 댓글을 삭제하시겠습니까?');">삭제</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 댓글 작성 폼 -->
+            <form th:action="@{/comment}" method="post" class="comment-form">
+                <input type="hidden" name="boardId" th:value="${board.id}">
+                <textarea name="content" placeholder="댓글을 입력하세요" required></textarea>
+                <button type="submit" class="submit-comment-btn">댓글 작성</button>
+            </form>
+        </div>
     </div>
-    <button onclick="window.location.href='/board'" class="search-btn">목록으로 돌아가기</button> <!-- 목록으로 돌아가는 버튼 -->
+    <button onclick="window.location.href='/board'" class="search-btn">목록으로 돌아가기</button>
 </main>
 
 <footer>
-    <p>&copy; 2025 Fiction2Toon. All rights reserved.</p>
+    <div class="footer-links">
+        <a href="/home">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+    </div>
+    <p>&copy; 2025 hooncompany</p>
 </footer>
 
 </body>

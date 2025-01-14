@@ -1,8 +1,12 @@
 package com.bigproject.fic2toon.user;
 
+import com.bigproject.fic2toon.comment.Comment;
 import com.bigproject.fic2toon.company.Company;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -37,4 +41,7 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 }

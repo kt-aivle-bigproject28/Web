@@ -1,7 +1,9 @@
 package com.bigproject.fic2toon.board;
 
-import com.bigproject.fic2toon.company.Company;
+import com.bigproject.fic2toon.comment.CommentDto;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,4 +19,5 @@ public class BoardDto {
     private String image;
     private String createdTime; // LocalDateTime → String으로 변경
     private String userUid;
+    private List<CommentDto> comments;
 }

@@ -96,32 +96,6 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .file-upload-section {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #f0f0f0;
-            border-radius: 4px;
-        }
-
-        .file-upload-section h3 {
-            margin-top: 0;
-            color: #002855;
-        }
-
-        .upload-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .upload-btn:hover {
-            background-color: #45a049;
-        }
-
         .comments-section {
             margin-top: 30px;
             border-top: 1px solid #ddd;
@@ -189,13 +163,6 @@
         </div>
         <div class="post-content" th:utext="${board.content}">
             게시글 내용이 여기에 표시됩니다.
-        </div>
-        <div class="file-upload-section">
-            <h3>파일 업로드</h3>
-            <form th:action="@{/board/{id}/upload(id=${board.id})}" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" id="file" accept=".jpg,.jpeg,.png">
-                <button type="submit" class="upload-btn">업로드</button>
-            </form>
         </div>
         <div class="post-actions" th:if="${user == board.userUid}">
             <form th:action="@{/board/{id}/edit(id=${board.id})}" method="get">

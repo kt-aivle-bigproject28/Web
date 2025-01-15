@@ -1,11 +1,16 @@
 package com.bigproject.fic2toon.board;
 
-import com.bigproject.fic2toon.user.User;
+import com.bigproject.fic2toon.user.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -13,83 +18,109 @@ import org.springframework.web.bind.annotation.*;
 public class BoardController {
 
     private final BoardService boardService;
+    private final UserService userService;
 
     @GetMapping
     public String getBoardList(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
+        String loginUserId = (String) session.getAttribute("loginUser"); // 로그인한 사용자 ID를 가져옴
 
-        if (user == null) {
-            return "redirect:/login";
+        if (loginUserId == null) {
+            return "redirect:/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         }
 
-        model.addAttribute("userType", user.getIdType());
-        model.addAttribute("boardList", boardService.getBoardListWithIndex());
-        return "board/board";
+        model.addAttribute("user", loginUserId); // 사용자 타입 추가
+        model.addAttribute("boardList", boardService.getBoardList()); // 게시판 목록 추가
+        return "board/board"; // 게시판 뷰 반환
     }
-
 
     @GetMapping("/{id}")
     public String getBoardDetail(@PathVariable Long id, HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
+        String loginUserId = (String) session.getAttribute("loginUser"); // 로그인한 사용자 ID를 가져옴
 
-        // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
-        if (user == null) {
-            return "redirect:/login";
+        if (loginUserId == null) {
+            return "redirect:/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         }
 
-        // 게시글 상세 보기
+        model.addAttribute("user", loginUserId);
         model.addAttribute("board", boardService.getBoardById(id));
         return "board/detail";
     }
 
     @GetMapping("/form")
     public String createForm(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
+        String loginUserId = (String) session.getAttribute("loginUser"); // 로그인한 사용자 ID를 가져옴
 
-        if (user == null) {
-            return "redirect:/login";
+        if (loginUserId == null) {
+            return "redirect:/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         }
 
-        model.addAttribute("userType", user.getIdType());
+        model.addAttribute("user", loginUserId); // 사용자 타입 추가
         model.addAttribute("board", new BoardDto());
-        return "board/makeboard"; // makeboard.html로 이동
+        return "board/form";
     }
 
-    @PostMapping
-    public String saveBoard(@ModelAttribute BoardDto boardDto, HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
+    @PostMapping("/form")
+    public String saveForm(@ModelAttribute @Valid BoardDto boardDto,
+                           @RequestParam("file") MultipartFile file,
+                           HttpSession session,
+                           Model model) {
+        String loginUserId = (String) session.getAttribute("loginUser"); // 로그인한 사용자 ID를 가져옴
 
-        // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
-        if (user == null) {
-            return "redirect:/login";
+        if (loginUserId == null) {
+            return "redirect:/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         }
 
+        model.addAttribute("user", loginUserId); // 사용자 타입 추가
+        boardDto.setUserUid(loginUserId);
 
-        // 공지사항 작성 권한 제한
-        if ("공지사항".equals(boardDto.getPost_type()) && user.getIdType() != 1) {
-            model.addAttribute("error", "관리자만 공지사항을 작성할 수 있습니다.");
-            return "board/form";
+        // 파일 업로드 처리
+        if (!file.isEmpty()) {
+            String uploadDir = "C:/uploads/";
+            File uploadFolder = new File(uploadDir);
+            if (!uploadFolder.exists()) {
+                uploadFolder.mkdirs(); // 업로드 폴더 생성
+            }
+
+            try {
+                // 파일 이름 생성
+                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                String filePath = uploadDir + fileName;
+
+                // 파일 저장
+                file.transferTo(new File(filePath));
+
+                // 경로를 boardDto에 설정
+                boardDto.setImage("/uploads/" + fileName);
+
+                // 디버깅: 파일 경로 확인
+                System.out.println("File saved: " + boardDto.getImage());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                model.addAttribute("error", "파일 업로드에 실패했습니다.");
+                return "board/form";
+            }
         }
-        // 작성자를 현재 로그인 사용자로 설정
-        boardDto.setAuthor_id(user.getId());
+
         boardService.createBoard(boardDto);
-        return "redirect:/board";
+
+        return "redirect:/board"; // 게시글 작성 후 게시판으로 리다이렉트
     }
+
 
     @DeleteMapping("/{id}/delete")
-    public String deleteBoard(@PathVariable Long id, HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
+    public String deleteForm(@PathVariable Long id, HttpSession session, Model model) {
+        String loginUserId = (String) session.getAttribute("loginUser"); // 로그인한 사용자 ID를 가져옴
 
-        if (user == null) {
-            return "redirect:/login";
+        if (loginUserId == null) {
+            return "redirect:/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         }
+
+        model.addAttribute("user", loginUserId);
+
+        BoardDto board = boardService.getBoardById(id);
 
         // 권한 확인: 관리자 또는 작성자만 삭제 가능
-        BoardDto board = boardService.getBoardById(id);
-        if (user.getIdType() != 1 && !board.getAuthor_id().equals(user.getId())) {
-            model.addAttribute("error", "삭제 권한이 없습니다.");
-            return "error/unauthorized";
-        }
 
         boardService.deleteBoard(id);
 
@@ -99,40 +130,69 @@ public class BoardController {
 
 
     @GetMapping("/{id}/edit")
-    public String editBoard(@PathVariable Long id, HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
+    public String editForm(@PathVariable Long id, HttpSession session, Model model) {
+        String loginUserId = (String) session.getAttribute("loginUser"); // 로그인한 사용자 ID를 가져옴
 
-        if (user == null) {
+        if (loginUserId == null) {
             return "redirect:/login";
         }
 
-        // 권한 확인: 관리자 또는 작성자만 수정 가능
+        model.addAttribute("user", loginUserId);
+
         BoardDto board = boardService.getBoardById(id);
-        if (user.getIdType() != 1 && !board.getAuthor_id().equals(user.getId())) {
+
+        if (!loginUserId.equals(board.getUserUid())) {
             model.addAttribute("error", "수정 권한이 없습니다.");
-            return "error/unauthorized";
+            return "board/board";
         }
 
         model.addAttribute("board", board);
-        model.addAttribute("userType", user.getIdType());
-        return "board/form"; // 수정 폼으로 이동
+        return "board/update";
     }
 
-    @PostMapping("/{id}")
-    public String updateBoard(@PathVariable Long id, @ModelAttribute BoardDto boardDto, HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return "redirect:/login";
+    @PostMapping("/update/{id}")
+    public String updateForm(@PathVariable Long id,
+                             @ModelAttribute BoardDto boardDto,
+                             @RequestParam MultipartFile file,
+                             HttpSession session,
+                             Model model) {
+        String loginUserId = (String) session.getAttribute("loginUser");
+
+        if (loginUserId == null) {
+            return "redirect:/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         }
 
-        // 권한 확인
-        BoardDto existingBoard = boardService.getBoardById(id);
-        if (user.getIdType() != 1 && !existingBoard.getAuthor_id().equals(user.getId())) {
-            model.addAttribute("error", "수정 권한이 없습니다.");
-            return "error/unauthorized";
+        model.addAttribute("user", loginUserId);
+
+        // 파일 업로드 처리
+        if (!file.isEmpty()) {
+            String uploadDir = "C:/uploads/";
+            File uploadFolder = new File(uploadDir);
+            if (!uploadFolder.exists()) {
+                uploadFolder.mkdirs(); // 업로드 폴더 생성
+            }
+
+            try {
+                // 파일 이름 생성
+                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                String filePath = uploadDir + fileName;
+
+                // 파일 저장
+                file.transferTo(new File(filePath));
+
+                // 경로를 boardDto에 설정
+                boardDto.setImage("/uploads/" + fileName);
+
+                // 디버깅: 파일 경로 확인
+                System.out.println("File saved: " + boardDto.getImage());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                model.addAttribute("error", "파일 업로드에 실패했습니다.");
+                return "board/form";
+            }
         }
 
-        // 업데이트 수행
         boardService.updateBoard(id, boardDto);
         return "redirect:/board";
     }

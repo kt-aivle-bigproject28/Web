@@ -1,14 +1,15 @@
 package com.bigproject.fic2toon.user;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -17,117 +18,71 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/login")
-    public String login(Model model) {
-        model.addAttribute("userDto", new UserDto());
-        return "login/login";
+    @GetMapping("/signup")
+    public String showSignupPage() {
+        return "login/signup";
     }
 
-    @PostMapping("/login")
-    @ResponseBody
-    public ResponseEntity<?> processLogin(@RequestBody UserDto userDto,
-                                          HttpSession session) {
-        System.out.println("로그인 요청: " + userDto);
-
+    @PostMapping("/signup")
+    public String signup(@Valid SignupDto signupDto, Model model) {
         try {
-            User user = userService.login(userDto);
-            session.setAttribute("user", user);
-            System.out.println("로그인 성공: " + user.getId());
-            return ResponseEntity.ok(Map.of("success", true));
+            userService.createUser(signupDto, model); // 모델을 전달하지 않음
+            return "redirect:/login"; // 회원가입 후 로그인 페이지로 리다이렉트
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("errorMessage", "이미 사용 중인 ID입니다."); // 유일성 위반 시 메시지 설정
+            model.addAttribute("signupDto", signupDto); // 입력한 데이터 유지
+            return "login/signup"; // 오류 발생 시 회원가입 페이지로 돌아감
         } catch (IllegalArgumentException e) {
-            System.err.println("로그인 중 오류 발생: " + e.getMessage());
-            return ResponseEntity.badRequest().body(Map.of("success", false, "message", e.getMessage()));
+            model.addAttribute("errorMessage", e.getMessage()); // 다른 예외 처리
+            model.addAttribute("signupDto", signupDto); // 입력한 데이터 유지
+            return "login/signup"; // 오류 발생 시 회원가입 페이지로 돌아감
         } catch (Exception e) {
-            System.err.println("예상치 못한 서버 오류: " + e.getMessage());
-            return ResponseEntity.internalServerError().body(Map.of("success", false, "message", "서버 오류가 발생했습니다."));
+            model.addAttribute("errorMessage", "서버 오류가 발생했습니다."); // 일반 오류 메시지 추가
+            model.addAttribute("signupDto", signupDto); // 입력한 데이터 유지
+            return "login/signup"; // 오류 발생 시 회원가입 페이지로 돌아감
         }
     }
 
-
+    @PostMapping("/login")
+    public String login(LoginRequestDto loginRequest, HttpSession session, Model model) {
+        try {
+            String token = userService.authenticate(loginRequest);
+            session.setAttribute("loginUser", loginRequest.getUid());
+            return "redirect:/"; // 로그인 성공 시 메인 페이지로 리다이렉트
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "login/login"; // 로그인 실패 시 로그인 페이지로 돌아감
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "서버 오류가 발생했습니다.");
+            return "login/login"; // 로그인 실패 시 로그인 페이지로 돌아감
+        }
+    }
 
     @GetMapping("/agree")
-    public String agree() {
+    public String showAgreementPage() {
+        // 약관 동의 페이지를 반환
         return "login/agree";
     }
 
     @PostMapping("/agree")
-    public String processAgree(@RequestParam(name = "agreement", required = true) boolean agreed, Model model) {
-        if (agreed) {
-            return "redirect:/signup";
-        } else {
-            model.addAttribute("error", "약관에 동의해야 진행할 수 있습니다.");
-            return "login/agree";
-        }
-    }
-
-    @GetMapping("/signup")
-    public String signup(Model model) {
-        model.addAttribute("userDto", new UserDto());
-        return "login/signup";
-    }
-
-    @PostMapping("/api/signup")
-    @ResponseBody
-    public ResponseEntity<?> processSignup(@Valid @RequestBody UserDto userDto,
-                                           BindingResult bindingResult) {
-        System.out.println("회원가입 요청: " + userDto);
-
-        if (!userDto.getPhone().matches("\\d{11}")) {
-            return ResponseEntity.badRequest().body(Map.of("success", false, "message", "전화번호는 11자리 숫자여야 합니다."));
-        }
-
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(Map.of("success", false, "message", "입력값 검증 실패."));
-        }
-
-        try {
-            userService.create(userDto);
-            System.out.println("회원가입 성공: " + userDto.getId());
-            return ResponseEntity.ok(Map.of("success", true));
-        } catch (Exception e) {
-            System.err.println("회원가입 중 오류 발생: " + e.getMessage());
-            return ResponseEntity.internalServerError().body(Map.of("success", false, "message", "회원가입 중 오류가 발생했습니다."));
-        }
-    }
-
-    @GetMapping("/findpw")
-    public String findPassword() {
-        return "login/findpw";
-    }
-
-    @PostMapping("/findpw")
-    public String processFindPassword(@Valid @ModelAttribute UserDto userDto,
-                                      BindingResult bindingResult,
-                                      Model model) {
-        if (!userDto.getPhone().matches("\\d{11}")) {
-            model.addAttribute("error", "전화번호는 11자리 숫자만 입력 가능합니다.");
-            return "login/findpw";
-        }
-
-        if (bindingResult.hasErrors()) {
-            return "login/findpw";
-        }
-
-        try {
-            String password = userService.findPassword(userDto);
-            model.addAttribute("password", password);
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-        }
-        return "login/findpw";
+    public String agreeToTerms() {
+        // 사용자가 약관에 동의한 후 회원가입 페이지로 리다이렉트
+        return "redirect:/signup"; // 회원가입 페이지로 리다이렉트
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
+        // 약관 동의 페이지를 반환
         session.invalidate();
-        return "redirect:/login";
+        return "redirect:/";
     }
 
-
-
-    @GetMapping("/home")
-    public String home() {
-        return "board/home"; // board 디렉토리 내 home.html로 이동
+    @GetMapping("/check-uid")
+    @ResponseBody
+    public Map<String, Boolean> checkUid(@RequestParam String uid) {
+        boolean isAvailable = userService.isUidAvailable(uid);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("available", isAvailable);
+        return response;
     }
-
 }

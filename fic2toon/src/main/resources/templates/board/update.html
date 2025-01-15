@@ -244,10 +244,17 @@
                 <label for="content">내용</label>
                 <textarea id="content" name="content" th:utext="${board.content}" placeholder="내용을 입력하세요." required></textarea> <!-- 내용 입력 -->
             </div>
-            <div class="file-upload-section">
-                <h3>파일 업로드</h3>
-                <input type="file" name="file" id="file" accept=".jpg,.jpeg,.png">
+
+            <div class="form-group">
+                <label for="file">이미지 업로드</label>
+                <input type="file" id="file" name="file" accept="image/*" onchange="uploadFile(event)">
+                <div id="preview">
+                    <p>이미지가 여기에 미리보기로 표시됩니다.</p>
+                </div>
+                <!-- 업로드된 파일 경로를 숨겨진 필드로 저장 -->
+                <input type="hidden" id="uploadedFilePath" name="fileName">
             </div>
+
             <div class="form-buttons">
                 <button type="reset" class="reset-btn">초기화</button> <!-- 초기화 버튼 -->
                 <button type="submit" class="submit-btn">게시글 수정</button> <!-- 제출 버튼 -->

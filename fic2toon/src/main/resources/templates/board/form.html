@@ -245,9 +245,17 @@
                     <label for="content">내용</label>
                     <textarea id="content" name="content" placeholder="내용을 입력하세요." required></textarea> <!-- 내용 입력 -->
                 </div>
-                <div class="file-upload-section">
-                    <input type="file" name="file" id="file" accept=".jpg,.jpeg,.png">
+
+                <div class="form-group">
+                    <label for="file">이미지 업로드</label>
+                    <input type="file" id="file" name="file" accept="image/*" onchange="uploadFile(event)">
+                    <div id="preview">
+                        <p>이미지가 여기에 미리보기로 표시됩니다.</p>
+                    </div>
+                    <!-- 업로드된 파일 경로를 숨겨진 필드로 저장 -->
+                    <input type="hidden" id="uploadedFilePath" name="fileName">
                 </div>
+
                 <div class="form-buttons">
                     <button type="reset" class="reset-btn">초기화</button> <!-- 초기화 버튼 -->
                     <button type="submit" class="submit-btn">게시글 작성</button> <!-- 제출 버튼 -->
@@ -257,6 +265,28 @@
     </main>
 
     <script>
+        async function uploadFile(event) {
+            const file = event.target.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+
+            try {
+                const response = await fetch("/upload", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                const fileName = await response.text(); // 서버에서 반환된 파일 경로
+                if (fileName !== "File upload failed") {
+                    console.log("Uploaded File Path:", fileName); // 반환된 경로 확인
+                } else {
+                    console.error("File upload failed.");
+                }
+            } catch (error) {
+                console.error("Error uploading file:", error);
+            }
+        }
+
         function toggleNav() {
             const nav = document.querySelector('.nav-container');
             nav.classList.toggle('responsive');

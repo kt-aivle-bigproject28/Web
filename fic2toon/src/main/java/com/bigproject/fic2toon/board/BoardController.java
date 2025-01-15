@@ -1,6 +1,5 @@
 package com.bigproject.fic2toon.board;
 
-import com.bigproject.fic2toon.user.User;
 import com.bigproject.fic2toon.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -8,6 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -58,6 +61,7 @@ public class BoardController {
 
     @PostMapping("/form")
     public String saveForm(@ModelAttribute @Valid BoardDto boardDto,
+                           @RequestParam("file") MultipartFile file,
                            HttpSession session,
                            Model model) {
         String loginUserId = (String) session.getAttribute("loginUser"); // 로그인한 사용자 ID를 가져옴
@@ -68,6 +72,35 @@ public class BoardController {
 
         model.addAttribute("user", loginUserId); // 사용자 타입 추가
         boardDto.setUserUid(loginUserId);
+
+        // 파일 업로드 처리
+        if (!file.isEmpty()) {
+            String uploadDir = "C:/uploads/";
+            File uploadFolder = new File(uploadDir);
+            if (!uploadFolder.exists()) {
+                uploadFolder.mkdirs(); // 업로드 폴더 생성
+            }
+
+            try {
+                // 파일 이름 생성
+                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                String filePath = uploadDir + fileName;
+
+                // 파일 저장
+                file.transferTo(new File(filePath));
+
+                // 경로를 boardDto에 설정
+                boardDto.setImage("/uploads/" + fileName);
+
+                // 디버깅: 파일 경로 확인
+                System.out.println("File saved: " + boardDto.getImage());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                model.addAttribute("error", "파일 업로드에 실패했습니다.");
+                return "board/form";
+            }
+        }
 
         boardService.createBoard(boardDto);
 
@@ -118,7 +151,11 @@ public class BoardController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateForm(@PathVariable Long id, @ModelAttribute BoardDto boardDto, HttpSession session, Model model) {
+    public String updateForm(@PathVariable Long id,
+                             @ModelAttribute BoardDto boardDto,
+                             @RequestParam MultipartFile file,
+                             HttpSession session,
+                             Model model) {
         String loginUserId = (String) session.getAttribute("loginUser");
 
         if (loginUserId == null) {
@@ -126,6 +163,35 @@ public class BoardController {
         }
 
         model.addAttribute("user", loginUserId);
+
+        // 파일 업로드 처리
+        if (!file.isEmpty()) {
+            String uploadDir = "C:/uploads/";
+            File uploadFolder = new File(uploadDir);
+            if (!uploadFolder.exists()) {
+                uploadFolder.mkdirs(); // 업로드 폴더 생성
+            }
+
+            try {
+                // 파일 이름 생성
+                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                String filePath = uploadDir + fileName;
+
+                // 파일 저장
+                file.transferTo(new File(filePath));
+
+                // 경로를 boardDto에 설정
+                boardDto.setImage("/uploads/" + fileName);
+
+                // 디버깅: 파일 경로 확인
+                System.out.println("File saved: " + boardDto.getImage());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                model.addAttribute("error", "파일 업로드에 실패했습니다.");
+                return "board/form";
+            }
+        }
 
         boardService.updateBoard(id, boardDto);
         return "redirect:/board";

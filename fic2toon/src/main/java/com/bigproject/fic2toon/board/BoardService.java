@@ -134,6 +134,7 @@ public class BoardService {
         board.setTitle(boardDto.getTitle());
         board.setContent(boardDto.getContent());
         board.setBoardType(boardDto.getBoardType());
+        board.setImage(boardDto.getImage());
         boardRepository.save(board);
     }
 

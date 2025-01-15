@@ -36,7 +36,7 @@ out/
 
 
 ### Database ###
-*.db
+**/database
 
 ### Images ###
 **/images

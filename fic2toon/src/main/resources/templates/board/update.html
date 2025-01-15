@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 수정</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f4f4f4;
+            border-bottom: 1px solid #ddd;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .nav-container a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #002855;
+            font-size: 16px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #002855;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-profile-img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .logout-btn {
+            background-color: #002855;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .logout-btn, .header-profile-img{
+            position: relative;
+            right: 30px;
+
+        }
+
+        main {
+            margin-top: 80px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-group textarea {
+            resize: none;
+            height: 150px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .checkbox-container label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            color: #002855;
+        }
+
+        .form-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .form-buttons button {
+            background-color: #002855;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-buttons button:hover {
+            background-color: #004080;
+        }
+
+        .form-buttons .reset-btn {
+            background-color: #bbb;
+        }
+
+        .form-buttons .reset-btn:hover {
+            background-color: #999;
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block; /* 햄버거 메뉴 표시 */
+            }
+
+            .nav-container {
+                display: none; /* 기본적으로 숨김 */
+            }
+
+            .nav-container.responsive {
+                display: flex; /* 햄버거 클릭 시 표시 */
+                flex-direction: column; /* 세로 정렬 */
+                align-items: flex-start;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: #f4f4f4;
+                padding: 10px 20px;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+        }
+
+        .file-upload-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        .file-upload-section h3 {
+            margin-top: 0;
+            color: #002855;
+        }
+
+        .upload-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .upload-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <button class="hamburger" onclick="toggleNav()">☰</button>
+    <nav class="nav-container">
+        <a href="/home">Home</a>
+        <a href="#">PlayModel</a>
+        <a href="/board">Board</a>
+    </nav>
+    <div class="logo">Fiction2Toon</div>
+    <div class="profile-container">
+        <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+</header>
+
+<main>
+    <div class="form-container">
+        <form th:action="@{/board/update/{id}(id=${board.id})}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>카테고리</label>
+                <div class="checkbox-container">
+                    <label><input type="radio" name="boardType" value="0" required> 공지사항</label>
+                    <label><input type="radio" name="boardType" value="1" required> QnA</label>
+                    <label><input type="radio" name="boardType" value="2" required> 후기</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" id="title" name="title" th:value="${board.title}" placeholder="제목을 입력하세요." required> <!-- 제목 입력 -->
+            </div>
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea id="content" name="content" th:utext="${board.content}" placeholder="내용을 입력하세요." required></textarea> <!-- 내용 입력 -->
+            </div>
+
+            <div class="form-group">
+                <label for="file">이미지 업로드</label>
+                <input type="file" id="file" name="file" accept="image/*" onchange="uploadFile(event)">
+                <div id="preview">
+                    <p>이미지가 여기에 미리보기로 표시됩니다.</p>
+                </div>
+                <!-- 업로드된 파일 경로를 숨겨진 필드로 저장 -->
+                <input type="hidden" id="uploadedFilePath" name="fileName">
+            </div>
+
+            <div class="form-buttons">
+                <button type="reset" class="reset-btn">초기화</button> <!-- 초기화 버튼 -->
+                <button type="submit" class="submit-btn">게시글 수정</button> <!-- 제출 버튼 -->
+            </div>
+        </form>
+    </div>
+
+</main>
+
+<script>
+    function toggleNav() {
+        const nav = document.querySelector('.nav-container');
+        nav.classList.toggle('responsive');
+    }
+
+    function logout() {
+        window.location.href = "/login";
+    }
+</script>
+</body>
+</html>

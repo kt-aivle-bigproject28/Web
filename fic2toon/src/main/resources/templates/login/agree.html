@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,6 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
-
         }
 
         header {
@@ -27,17 +26,6 @@
             color: #002855;
         }
 
-        header .signup-btn {
-            position:absolute;
-            background-color: #002855;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            cursor: pointer;
-            border-radius: 4px;
-            right: 20px;
-        }
-
         main {
             display: flex;
             flex-direction: column;
@@ -53,8 +41,8 @@
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             width: 400px;
-            height: auto;
-            margin-bottom: 20px;
+            max-height: 300px; /* 최대 높이 설정 */
+            overflow-y: auto; /* 스크롤 가능 */
         }
 
         .terms-container h2 {
@@ -67,11 +55,6 @@
             font-size: 14px;
             color: #333;
             line-height: 1.5;
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 4px;
         }
 
         .checkbox-container {
@@ -89,12 +72,10 @@
         .next-btn {
             background-color: #002855;
             color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            text-align: center;
+            padding: 10px 20px; /* 버튼 패딩 */
+            border-radius: 4px; /* 모서리 둥글게 */
+            font-size: 16px; /* 폰트 크기 */
+            cursor: pointer; /* 커서 포인터 */
         }
 
         footer {
@@ -112,12 +93,12 @@
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">Fiction2Toon</div>
-        <button class="signup-btn">SignUp</button>
-    </header>
+<header>
+    <div class="logo">Fiction2Toon</div>
+</header>
 
-    <main>
+<main>
+    <form th:action="@{/agree}" method="post"> <!-- POST 요청을 위한 폼 -->
         <div class="terms-container">
             <h2>이용약관</h2>
             <div class="terms-content">
@@ -127,60 +108,28 @@
                 <p>목적: 유료결제, 계약이행 및 정산자료 관리, 민원 등 고객고충처리, 인재 채용 관리</p>
                 <p>항목: 결제서류, 연락처(이메일, 전화번호), 발행번호, 사업자번호, 주소, 대표자, 연체, 등록, IP 주소</p>
                 <p>보유기간: 회원 탈퇴 후 30일까지</p>
-                <p>회사</p>
+                <p>기타 이용약관 내용을 여기에 추가할 수 있습니다.</p>
             </div>
         </div>
 
         <div class="checkbox-container">
-            <input type="checkbox" id="agree-checkbox">
+            <input type="checkbox" id="agree-checkbox" name="agreement" required> <!-- 체크박스 -->
             <label for="agree-checkbox">위 내용을 읽었으며 이용약관에 동의합니다.</label>
         </div>
-        <button class="next-btn" id="next-button" disabled>다음</button>
-    </main>
 
-    <footer>
-        <div class="footer-links">
-            <a href="login.html">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-        </div>
-        <p>&copy; 2025 hooncompany</p>
-    </footer>
+        <!-- 다음 버튼 -->
+        <button type="submit" class="next-btn">다음</button>
+    </form>
+</main>
 
-    <script>
-        const checkbox = document.getElementById('agree-checkbox');
-        const nextButton = document.getElementById('next-button');
+<footer>
+    <div class="footer-links">
+        <a th:href="@{/login}">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+    </div>
+    <p>&copy; 2025 hooncompany</p>
+</footer>
 
-        // 체크박스 상태에 따라 버튼 활성화/비활성화
-        checkbox.addEventListener('change', () => {
-            nextButton.disabled = !checkbox.checked;
-        });
-
-        // 다음 버튼 클릭 시 POST 요청
-        nextButton.addEventListener('click', async () => {
-            if (!checkbox.checked) {
-                alert("이용약관에 동의해야 합니다.");
-                return;
-            }
-
-            try {
-                const response = await fetch('/agree', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({ agreement: 'true' })
-                });
-
-                if (response.ok) {
-                    window.location.href = '/signup';
-                } else {
-                    alert("서버 요청 중 오류가 발생했습니다.");
-                }
-            } catch (error) {
-                alert("요청 처리 중 오류가 발생했습니다.");
-            }
-        });
-    </script>
 </body>
 </html>

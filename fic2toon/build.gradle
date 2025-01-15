@@ -38,7 +38,7 @@ dependencies {
 	implementation 'org.xerial:sqlite-jdbc'
 
 	// Hibernate Dialects (SQLite 지원)
-	implementation 'org.hibernate.orm:hibernate-community-dialects:6.2.7.Final'
+	implementation 'org.hibernate.orm:hibernate-community-dialects'
 
 	// Lombok (코드 간소화용)
 	compileOnly 'org.projectlombok:lombok'

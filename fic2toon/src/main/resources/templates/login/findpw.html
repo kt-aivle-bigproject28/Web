@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -101,32 +101,58 @@
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">Fiction2Toon</div>
-        <button class="signup-btn">
-            <a href="/agree">SignUp</a>
-        </button>
-    </header>
+<header>
+    <div class="logo">Fiction2Toon</div>
+    <button class="signup-btn">
+        <a href="/agree">SignUp</a>
+    </button>
+</header>
 
-    <main>
-        <div class="findpw-container">
-            <h1>비밀번호 찾기</h1>
-            <form>
-                <input type="text" id="name" placeholder="NAME" required>
-                <input type="text" id="id" placeholder="ID" required>
-                <input type="text" id="ph" placeholder="PH" required>
-                <button type="submit">확인</button>
-            </form>
-        </div>
-    </main>
+<main>
+    <div class="findpw-container">
+        <h1>비밀번호 찾기</h1>
+        <form id="findpw-form" th:onSubmit="return false;" th:id="'findpw-form'" method="post" th:action="@{/findpw}">
+            <input type="text" id="name" name="name" placeholder="NAME" required>
+            <input type="text" id="uid" name="uid" placeholder="UID" required> <!-- ID를 UID로 변경 -->
+            <input type="text" id="phone" name="phone" placeholder="PH" required> <!-- PH를 phone으로 변경 -->
+            <button type="button" onclick="submitForm()">확인</button> <!-- 버튼 클릭 시 submitForm 호출 -->
+        </form>
+    </div>
+</main>
 
-    <footer>
-        <div class="footer-links">
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-        </div>
-        <p>&copy; 2025 hooncompany</p>
-    </footer>
+<footer>
+    <div class="footer-links">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+    </div>
+    <p>&copy; 2025 hooncompany</p>
+</footer>
+
+<script>
+    async function submitForm() {
+        const name = document.getElementById('name').value; // 이름
+        const uid = document.getElementById('uid').value; // UID
+        const phone = document.getElementById('phone').value; // 전화번호
+
+        try {
+            const response = await fetch('/findpw', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, uid, phone }), // JSON 형식으로 데이터 전송
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert('비밀번호가 이메일로 전송되었습니다.'); // 성공 메시지
+                window.location.href = '/login'; // 로그인 페이지로 이동
+            } else {
+                alert(result.message || '비밀번호 찾기 중 오류가 발생했습니다.');
+            }
+        } catch (error) {
+            alert('비밀번호 찾기 중 서버 오류가 발생했습니다.');
+        }
+    }
+</script>
 </body>
 </html>

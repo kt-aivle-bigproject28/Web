@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 @RequiredArgsConstructor
 public class UserController {
@@ -72,5 +75,14 @@ public class UserController {
         // 약관 동의 페이지를 반환
         session.invalidate();
         return "redirect:/";
+    }
+
+    @GetMapping("/check-uid")
+    @ResponseBody
+    public Map<String, Boolean> checkUid(@RequestParam String uid) {
+        boolean isAvailable = userService.isUidAvailable(uid);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("available", isAvailable);
+        return response;
     }
 }

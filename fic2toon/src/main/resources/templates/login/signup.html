@@ -75,14 +75,23 @@
             <div class="form-group">
                 <input type="text" name="name" placeholder="Name" required>
             </div>
-            <div class="form-group">
-                <input type="text" name="uid" placeholder="ID" required>
+            <div class="form-group" style="display: flex; align-items: center; gap: 10px">
+                <input type="text" id="uid" name="uid" placeholder="ID" required style="flex: 1;">
+                <button type="button" id="check-uid-btn" class="signup-btn-main">중복 확인</button>
+                <p id="uid-check-message" style="display: none; color: red;"></p>
             </div>
-            <div class="form-group">
-                <input type="password" name="password" placeholder="Password" required>
+            <div class="form-group" style="position: relative;">
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <span id="toggle-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+        👁️
+    </span>
             </div>
-            <div class="form-group">
-                <input type="password" name="confirmPassword" placeholder="Password Check" required>
+            <div class="form-group" style="position: relative;">
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Password Check" required>
+                <span id="toggle-confirm-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+        👁️
+    </span>
+                <p id="password-match-message" style="margin-top: 5px; font-size: 14px; color: red; display: none;"></p>
             </div>
             <div class="form-group">
                 <input type="text" name="phone" placeholder="Phone Number(010-XXXX-XXXX)" required>
@@ -105,3 +114,76 @@
 
 </body>
 </html>
+<script>
+    document.getElementById('check-uid-btn').addEventListener('click', function () {
+        const uid = document.getElementById('uid').value;
+
+        if (!uid) {
+            alert("ID를 입력하세요.");
+            return;
+        }
+
+        fetch(`/check-uid?uid=${uid}`)
+            .then(response => response.json())
+            .then(data => {
+                const messageElement = document.getElementById('uid-check-message');
+                if (data.available) {
+                    messageElement.style.color = "green";
+                    messageElement.textContent = "사용 가능한 ID입니다.";
+                } else {
+                    messageElement.style.color = "red";
+                    messageElement.textContent = "이미 사용 중인 ID입니다.";
+                }
+                messageElement.style.display = "block";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    });
+
+    // Toggle visibility for the password field
+    document.getElementById('toggle-password').addEventListener('click', function () {
+        const passwordField = document.getElementById('password');
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text'; // Show password
+            this.textContent = '🙈'; // Change icon
+        } else {
+            passwordField.type = 'password'; // Hide password
+            this.textContent = '👁️'; // Change icon
+        }
+    });
+
+    // Toggle visibility for the confirm password field
+    document.getElementById('toggle-confirm-password').addEventListener('click', function () {
+        const confirmPasswordField = document.getElementById('confirmPassword');
+        if (confirmPasswordField.type === 'password') {
+            confirmPasswordField.type = 'text'; // Show password
+            this.textContent = '🙈'; // Change icon
+        } else {
+            confirmPasswordField.type = 'password'; // Hide password
+            this.textContent = '👁️'; // Change icon
+        }
+    });
+
+    // Check if passwords match
+    const passwordField = document.getElementById('password');
+    const confirmPasswordField = document.getElementById('confirmPassword');
+    const matchMessage = document.getElementById('password-match-message');
+
+    function checkPasswordsMatch() {
+        if (confirmPasswordField.value === '') {
+            matchMessage.style.display = 'none'; // Hide message when confirm password is empty
+        } else if (passwordField.value === confirmPasswordField.value) {
+            matchMessage.style.display = 'block';
+            matchMessage.style.color = 'green';
+            matchMessage.textContent = '비밀번호가 일치합니다.';
+        } else {
+            matchMessage.style.display = 'block';
+            matchMessage.style.color = 'red';
+            matchMessage.textContent = '비밀번호가 일치하지 않습니다.';
+        }
+    }
+
+    passwordField.addEventListener('input', checkPasswordsMatch);
+    confirmPasswordField.addEventListener('input', checkPasswordsMatch);
+</script>

@@ -87,4 +87,8 @@ public class UserService {
         // JWT 토큰 생성 로직 (생략)
         return "dummy-token"; // 실제 JWT 토큰으로 대체해야 함
     }
+
+    public boolean isUidAvailable(String uid) {
+        return userRepository.findByUid(uid).isEmpty();
+    }
 }

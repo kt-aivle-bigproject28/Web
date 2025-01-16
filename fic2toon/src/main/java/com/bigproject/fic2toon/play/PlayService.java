@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @Service
-
 public class PlayService {
     private final String apiUrl = "http://127.0.0.1:8000/text_to_webtoon"; // FastAPI 엔드포인트 URL
 

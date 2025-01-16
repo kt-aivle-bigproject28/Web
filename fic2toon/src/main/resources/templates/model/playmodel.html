@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiction2Toon - PlayModel</title>
+    <title>Fiction2Toon - Play Model</title>
     <style>
         html, body {
             margin: 0;
@@ -13,6 +13,7 @@
             flex-direction: column;
         }
         body {
+            margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
         }
@@ -30,6 +31,17 @@
             z-index: 1000;
         }
 
+        .nav-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-container a {
+            text-decoration: none;
+            color: #002855;
+            font-size: 16px;
+        }
+
         .logo {
             position: absolute;
             left: 50%;
@@ -42,19 +54,19 @@
         .profile-container {
             display: flex;
             align-items: center;
-            gap: 10px; /* 프로필과 버튼 사이 간격 */
+            gap: 10px;
             position: relative;
         }
 
         .header-profile-img {
             width: 30px;
             height: 30px;
-            border-radius: 50%; /* 원형 이미지 */
-            object-fit: cover; /* 이미지 비율 유지 */
-            border: 2px solid #002855; /* 테두리 */
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #002855;
         }
 
-        .logout-btn, .header-profile-img{
+        .logout-btn, .header-profile-img {
             position: relative;
             right: 30px;
         }
@@ -63,112 +75,108 @@
             background-color: #002855;
             color: #fff;
             border: none;
-            padding: 8px 12px; /* 버튼 크기 조정 */
+            padding: 8px 12px;
             cursor: pointer;
             border-radius: 4px;
             font-size: 14px;
             text-decoration: none;
         }
 
-        .nav-container {
-            display: flex;
-            gap: 20px;
-        }
-
-        .nav-container a {
-            text-decoration: none;
-            color: #002855;
-            font-size: 16px;
-        }
-
-        .hamburger {
-            display: none;
-            font-size: 24px;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .hamburger {
-                display: block; /* 햄버거 메뉴 표시 */
-            }
-
-            .nav-container {
-                display: none; /* 기본적으로 숨김 */
-            }
-
-            .nav-container.responsive {
-                display: flex; /* 햄버거 클릭 시 표시 */
-                flex-direction: column; /* 세로 정렬 */
-                align-items: flex-start;
-                position: absolute;
-                top: 60px;
-                left: 0;
-                width: 100%;
-                background-color: #f4f4f4;
-                padding: 10px 20px;
-                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-                z-index: 1000;
-            }
-        }
-
         main {
             flex: 1;
             margin-top: 80px;
             padding: 20px;
+        }
+
+        /* 드래그 앤 드롭 영역 스타일 */
+        .drop-zone {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .upload-container {
-            text-align: center;
-            background-color: #fff;
-            border: 2px dashed #002855;
-            padding: 40px;
-            border-radius: 8px;
-            width: 80%;
+            flex-direction: column; /* 세로 방향으로 정렬 */
+            align-items: center; /* 중앙 정렬 */
+            justify-content: center; /* 세로 중앙 정렬 */
+            width: 100%;
             max-width: 600px;
+            height: 200px;
+            padding: 25px;
+            text-align: center;
+            font-family: "Quicksand", sans-serif;
+            font-weight: 500;
+            font-size: 20px;
+            cursor: pointer;
+            color: #cccccc;
+            border: 4px dashed #002855;
+            border-radius: 10px;
+            margin: 20px auto;
+            position: relative;
         }
 
-        .upload-container h1 {
-            font-size: 24px;
+        .drop-zone svg {
+            width: 300px;
+            height: 300px;
             color: #002855;
-            margin-bottom: 20px;
+            margin-bottom: 10px; /* 텍스트와 간격 추가 */
         }
 
-        .upload-container svg {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 20px;
+        .drop-zone__prompt {
+            margin-top: 10px; /* 텍스트와 그림 사이 간격 */
+            font-size: 16px;
             color: #002855;
+        }
+
+        .drop-zone--over {
+            border-style: solid;
+        }
+
+        .drop-zone__input {
+            display: none;
+        }
+
+        .convert-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #002855;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .convert-btn:hover {
+            background-color: #004080;
+        }
+
+        .convert-btn:active {
+            background-color: #001830;
         }
 
         .buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
+          display: flex;
+          justify-content: center; /* 버튼을 가운데 정렬 */
+          gap: 500px; /* 버튼 사이 간격 설정 */
+          margin-top: 20px;
+      }
 
         .button {
-            background-color: #002855;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
+                background-color: #002855;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                font-size: 16px;
+                border-radius: 5px;
+                cursor: pointer;
+                text-decoration: none;
+            }
 
         .button:hover {
             background-color: #001f3d;
         }
 
         footer {
-            position: ;
             background-color: #f4f4f4;
             padding: 20px;
             text-align: center;
@@ -180,61 +188,139 @@
             text-decoration: none;
             color: #555;
         }
+
+        .hamburger {
+                display: none;
+                font-size: 24px;
+                background: none;
+                border: none;
+                cursor: pointer;
+            }
+
+        @media (max-width: 768px) {
+                .hamburger {
+                    display: block; /* 햄버거 메뉴 표시 */
+                }
+
+                .nav-container {
+                    display: none; /* 기본적으로 숨김 */
+                }
+
+                .nav-container.responsive {
+                    display: flex; /* 햄버거 클릭 시 표시 */
+                    flex-direction: column; /* 세로 정렬 */
+                    align-items: flex-start;
+                    position: absolute;
+                    top: 60px;
+                    left: 0;
+                    width: 100%;
+                    background-color: #f4f4f4;
+                    padding: 10px 20px;
+                    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                    z-index: 1000;
+                }
+            }
+
+        #result {
+            width: 80%;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        #result p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #002855;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        #result .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        #result .success {
+            color: #002855;
+        }
+
+        .result-images {
+            display: flex;
+            flex-direction: column; /* 세로 방향으로 정렬 */
+            align-items: center; /* 중앙 정렬 */
+        }
+
+        .result-images img {
+            max-width: 200px;
+            max-height: 300px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-container {
+            margin: 10px 0; /* 이미지 간의 간격 조정 */
+        }
+
+        .image-container img {
+            max-width: 100%; /* 이미지의 최대 너비를 부모 컨테이너에 맞춤 */
+            height: auto; /* 비율을 유지하면서 높이를 자동으로 조정 */
+        }
     </style>
 </head>
 <body>
 <header>
     <button class="hamburger" onclick="toggleNav()">☰</button>
     <nav class="nav-container">
-        <a href="/home">Home</a>
-        <a href="/playmodel">PlayModel</a>
+        <a href="/">Home</a>
+        <a href="/play">PlayModel</a>
         <a href="/board">Board</a>
     </nav>
     <div class="logo">Fiction2Toon</div>
     <div class="profile-container">
         <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
-        <a href="/logout" class="logout-btn">Logout</a>
+        <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
 </header>
 
 <main>
-    <!--1 요약 텍스트 표시 -->
-    <div class="upload-container">
-        <h1>텍스트 파일을 올려주세요.</h1>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-            <line x1="12" y1="18" x2="12" y2="12"></line>
-            <line x1="9" y1="15" x2="12" y2="12"></line>
-            <line x1="15" y1="15" x2="12" y2="12"></line>
-        </svg>
-        <p>또는 클릭하여 파일을 선택하세요.</p>
-        <form method="post" enctype="multipart/form-data">
-            <p id="error-message" style="color: red; display: none;">올바른 파일 형식이 아닙니다. .txt 파일만 업로드해주세요.</p>
-            <input type="file" name="webtoon" accept=".txt" required onchange="validateFileType(this)">
+    <form th:action="@{/play/text_to_webtoon}" method="post" enctype="multipart/form-data">
+        <div class="drop-zone" id="dropZone">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="12" y1="18" x2="12" y2="12"></line>
+                <line x1="9" y1="15" x2="12" y2="12"></line>
+                <line x1="15" y1="15" x2="12" y2="12"></line>
+            </svg>
+            <span class="drop-zone__prompt">텍스트 파일을 여기에 드래그하거나 클릭하여 업로드</span>
+            <input type="file" name="text" class="drop-zone__input" accept=".txt">
+        </div>
+        <p id="error-message" style="color: red; display: none;">.txt 파일만 업로드 가능합니다.</p>
+        <div class="buttons">
+            <button type="reset" class="button">초기화</button>
+            <button type="submit" class="button">다음</button>
+        </div>
+    </form>
 
-            <div class="buttons">
-                <button type="reset" class="button">초기화</button>
-                <button type="button" onclick="generateImages()" class="button">다음</button>
+    <!-- 결과 표시 영역 -->
+    <div id="result" th:if="${imagePaths != null && !imagePaths.isEmpty()}">
+        <p th:if="${error}" th:text="${error}" class="error"></p>
+        <div class="result-images">
+            <div th:each="imagePath : ${imagePaths}" class="image-container">
+                <img th:src="@{/uploads/{imageName}(imageName=${imagePath})}"
+                     alt="변환된 웹툰 이미지">
             </div>
-        </form>
-    </div>
-
-    <!--2 이미지 선택 -->
-    <div id="image-selection-section" class="hidden">
-        <h1>생성된 이미지</h1>
-        <div class="image-container" id="images">
-            <!-- 이미지가 동적으로 추가될 예정 -->
         </div>
     </div>
-
-    <!--3 웹툰 생성 -->
-    <div id="webtoon-section" class="hidden">
-        <h1>완성된 웹툰</h1>
-        <img id="final-webtoon" src="" alt="웹툰 이미지">
-    </div>
-
-
 </main>
 
 <footer>
@@ -245,83 +331,136 @@
     </div>
     <p>&copy; 2025 hooncompany</p>
 </footer>
-
 <script>
 
-    function logout() {
-            alert('로그아웃되었습니다.');
-            window.location.href = 'login.html';
-    }
+    document.querySelector('form').addEventListener('reset', function () {
+      // 파일 입력 필드 초기화
+      const fileInput = document.querySelector('.drop-zone__input');
+      fileInput.value = '';
 
-    function toggleNav() {
-        const nav = document.querySelector('.nav-container');
-        nav.classList.toggle('responsive');
-    }
+      // 에러 메시지 숨기기
+      const errorMessage = document.getElementById('error-message');
+      if (errorMessage) {
+          errorMessage.style.display = 'none';
+      }
 
-    function validateFileType(input) {
-        const file = input.files[0];
-        if (file && !file.name.endsWith('.txt')) {
-            document.getElementById('error-message').style.display = 'block';
-            input.value = ''; // 파일 입력 초기화
+      // 드롭존 초기 상태로 복원
+      const dropZone = document.getElementById('dropZone');
+      const promptText = dropZone.querySelector('.drop-zone__prompt');
+      const svgIcon = dropZone.querySelector('svg');
+      const thumbnail = dropZone.querySelector('.drop-zone__thumb');
+
+      // 썸네일이 있으면 제거
+      if (thumbnail) {
+          thumbnail.remove();
+      }
+
+      // 아이콘과 기본 텍스트 복원
+      if (!svgIcon) {
+          const newSvgIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          newSvgIcon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+          newSvgIcon.setAttribute('viewBox', '0 0 24 24');
+          newSvgIcon.setAttribute('fill', 'none');
+          newSvgIcon.setAttribute('stroke', 'currentColor');
+          newSvgIcon.setAttribute('stroke-width', '2');
+          newSvgIcon.setAttribute('stroke-linecap', 'round');
+          newSvgIcon.setAttribute('stroke-linejoin', 'round');
+          newSvgIcon.innerHTML = `
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="12" y1="18" x2="12" y2="12"></line>
+            <line x1="9" y1="15" x2="12" y2="12"></line>
+            <line x1="15" y1="15" x2="12" y2="12"></line>
+          `;
+          dropZone.insertBefore(newSvgIcon, promptText);
+      }
+
+      // 기본 텍스트 다시 추가
+      if (!promptText) {
+          const newPromptText = document.createElement('span');
+          newPromptText.className = 'drop-zone__prompt';
+          newPromptText.textContent = '텍스트 파일을 여기에 드래그하거나 클릭하여 업로드';
+          dropZone.appendChild(newPromptText);
+      }
+  });
+
+  function validateFileType(input) {
+      const file = input.files[0];
+      if (file && !file.name.endsWith('.txt')) {
+          document.getElementById('error-message').style.display = 'block'; // 에러 메시지 표시
+          input.value = ''; // 파일 입력 초기화
+      } else {
+          document.getElementById('error-message').style.display = 'none'; // 에러 메시지 숨김
+      }
+  }
+
+function toggleNav() {
+    const nav = document.querySelector('.nav-container');
+    nav.classList.toggle('responsive');
+}
+
+document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
+    const dropZoneElement = inputElement.closest(".drop-zone");
+
+    dropZoneElement.addEventListener("click", (e) => {
+        inputElement.click();
+    });
+
+    inputElement.addEventListener("change", (e) => {
+        if (inputElement.files.length) {
+            updateThumbnail(dropZoneElement, inputElement.files[0]);
         }
-        else {
-            document.getElementById('error-message').style.display = 'none';
+    });
+
+    dropZoneElement.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZoneElement.classList.add("drop-zone--over");
+    });
+
+    ["dragleave", "dragend"].forEach((type) => {
+        dropZoneElement.addEventListener(type, (e) => {
+            dropZoneElement.classList.remove("drop-zone--over");
+        });
+    });
+
+    dropZoneElement.addEventListener("drop", (e) => {
+        e.preventDefault();
+
+        if (e.dataTransfer.files.length) {
+            inputElement.files = e.dataTransfer.files;
+            updateThumbnail(dropZoneElement, e.dataTransfer.files[0]);
         }
-    }
-    // 요약 텍스트를 가져오는 함수
-    function fetchSummary() {
-        axios.get('/api/get-summary')
-            .then(response => {
-                document.getElementById('summary-text').innerText = response.data.summary;
-            })
-            .catch(error => {
-                console.error("요약 텍스트를 가져오는 데 실패했습니다.", error);
-            });
-    }
 
-    // 이미지를 생성하는 함수
-    function generateImages() {
-        axios.post('/api/generate-images', { summary: document.getElementById('summary-text').innerText })
-            .then(response => {
-                const images = response.data.images;
-                const imagesDiv = document.getElementById('images');
-                imagesDiv.innerHTML = '';
-                images.forEach((imageUrl, index) => {
-                    const img = document.createElement('img');
-                    img.src = imageUrl;
-                    img.alt = `이미지 ${index + 1}`;
-                    img.onclick = () => selectImage(imageUrl);
-                    imagesDiv.appendChild(img);
-                });
-                switchSection('image-selection-section');
-            })
-            .catch(error => {
-                console.error("이미지 생성 실패:", error);
-            });
+        dropZoneElement.classList.remove("drop-zone--over");
+    });
+});
+
+function updateThumbnail(dropZoneElement, file) {
+    let thumbnailElement = dropZoneElement.querySelector(".drop-zone__thumb");
+
+    if (dropZoneElement.querySelector(".drop-zone__prompt")) {
+        dropZoneElement.querySelector(".drop-zone__prompt").remove();
     }
 
-    // 선택한 이미지를 기반으로 웹툰을 생성하는 함수
-    function selectImage(imageUrl) {
-        axios.post('/api/create-webtoon', { image: imageUrl })
-            .then(response => {
-                const webtoonUrl = response.data.webtoon;
-                document.getElementById('final-webtoon').src = webtoonUrl;
-                switchSection('webtoon-section');
-            })
-            .catch(error => {
-                console.error("웹툰 생성 실패:", error);
-            });
+    if (!thumbnailElement) {
+        thumbnailElement = document.createElement("div");
+        thumbnailElement.classList.add("drop-zone__thumb");
+        dropZoneElement.appendChild(thumbnailElement);
     }
 
-    // 섹션 전환 함수
-    function switchSection(sectionId) {
-        document.querySelectorAll('main > div').forEach(div => div.classList.add('hidden'));
-        document.getElementById(sectionId).classList.remove('hidden');
+    thumbnailElement.dataset.label = file.name;
+
+    if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            thumbnailElement.style.backgroundImage = `url('${reader.result}')`;
+        };
+    } else {
+        thumbnailElement.style.backgroundImage = null;
     }
-
-
-    // 초기화 시 요약 텍스트 가져오기
-    fetchSummary();
+}
 </script>
 </body>
 </html>

@@ -7,8 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableFeignClients
 public class Fic2toonApplication {
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		SpringApplication.run(Fic2toonApplication.class, args);
 	}
 }

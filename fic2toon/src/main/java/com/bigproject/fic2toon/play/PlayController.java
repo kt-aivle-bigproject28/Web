@@ -24,7 +24,7 @@ public class PlayController {
     private final FastApiClient fastApiClient;
 
     @GetMapping
-    public String getPlayPage(HttpSession session, Model model) {
+    public String getPlayModel(HttpSession session, Model model) {
         String loginUserId = (String) session.getAttribute("loginUser"); // 로그인한 사용자 ID를 가져옴
 
         if (loginUserId == null) {

@@ -13,16 +13,65 @@
         }
         header {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
             background-color: #f4f4f4;
             border-bottom: 1px solid #ddd;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
         }
+        .nav-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-container a {
+            text-decoration: none;
+            color: #002855;
+            font-size: 16px;
+        }
+
         .logo {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 24px;
             font-weight: bold;
             color: #002855;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* 프로필과 버튼 사이 간격 */
+            position: relative;
+        }
+
+        .header-profile-img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%; /* 원형 이미지 */
+            object-fit: cover; /* 이미지 비율 유지 */
+            border: 2px solid #002855; /* 테두리 */
+        }
+
+        .logout-btn, .header-profile-img{
+            position: relative;
+            right: 30px;
+        }
+
+        .logout-btn {
+            background-color: #002855;
+            color: #fff;
+            border: none;
+            padding: 8px 12px; /* 버튼 크기 조정 */
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            text-decoration: none;
         }
         main {
             display: flex;
@@ -146,14 +195,57 @@
             border-radius: 4px;
             cursor: pointer;
         }
+        footer {
+            position: ;
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+
+        .footer-links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #555;
+        }
+        .hamburger{
+            display: none;
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+    @media (max-width: 768px) {
+        .hamburger {
+            display: block; /* 햄버거 메뉴 표시 */
+        }
+
+        .nav-container {
+            display: none; /* 기본적으로 숨김 */
+        }
+
+        .nav-container.responsive {
+            display: flex; /* 햄버거 클릭 시 표시 */
+            flex-direction: column; /* 세로 정렬 */
+            align-items: flex-start;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background-color: #f4f4f4;
+            padding: 10px 20px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+    }
     </style>
 </head>
 <body>
 <header>
     <button class="hamburger" onclick="toggleNav()">☰</button>
     <nav class="nav-container">
-        <a href="/">Home</a>
-        <a href="/play">PlayModel</a>
+        <a href="/home">Home</a>
+        <a href="/playmodel">PlayModel</a>
         <a href="/board">Board</a>
     </nav>
     <div class="logo">Fiction2Toon</div>
@@ -224,7 +316,7 @@
 <footer>
     <div class="footer-links">
         <a href="/home">Home</a>
-        <a href="#">About</a>
+        <a href="">About</a>
         <a href="#">Contact</a>
     </div>
     <p>&copy; 2025 hooncompany</p>

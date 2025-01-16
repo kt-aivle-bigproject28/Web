@@ -13,6 +13,12 @@
             flex-direction: column;
         }
 
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
         /* 헤더 */
         header {
             display: flex;
@@ -22,13 +28,17 @@
             background-color: #f4f4f4;
             border-bottom: 1px solid #ddd;
             position: fixed;
-            top: 0;
             width: 100%;
+            top: 0;
             z-index: 1000;
         }
 
+        .nav-container {
+            display: flex;
+            gap: 20px;
+        }
+
         .nav-container a {
-            margin-right: 15px;
             text-decoration: none;
             color: #002855;
             font-size: 16px;
@@ -38,15 +48,16 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 20px;
-            color: #002855;
+            font-size: 24px;
             font-weight: bold;
+            color: #002855;
         }
 
         .profile-container {
             display: flex;
             align-items: center;
             gap: 10px;
+            position: relative;
         }
 
         .header-profile-img {
@@ -54,20 +65,23 @@
             height: 30px;
             border-radius: 50%;
             object-fit: cover;
+            border: 2px solid #002855;
+        }
+
+        .logout-btn, .header-profile-img{
+            position: relative;
+            right: 30px;
         }
 
         .logout-btn {
             background-color: #002855;
             color: #fff;
-            padding: 5px 10px;
             border: none;
-            border-radius: 4px;
+            padding: 8px 12px;
             cursor: pointer;
-        }
-        .logout-btn, .header-profile-img{
-            position: relative;
-            right: 30px;
-
+            border-radius: 4px;
+            font-size: 14px;
+            text-decoration: none;
         }
 
         /* 메인 스타일 */
@@ -187,16 +201,16 @@
 
         @media (max-width: 768px) {
             .hamburger {
-                display: block; /* 햄버거 메뉴 표시 */
+                display: block;
             }
-        
+
             .nav-container {
-                display: none; /* 기본적으로 숨김 */
+                display: none;
             }
-        
+
             .nav-container.responsive {
-                display: flex; /* 햄버거 클릭 시 표시 */
-                flex-direction: column; /* 세로 정렬 */
+                display: flex;
+                flex-direction: column;
                 align-items: flex-start;
                 position: absolute;
                 top: 60px;
@@ -207,136 +221,113 @@
                 box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
                 z-index: 1000;
             }
-            .search-filter-container {
-                flex-direction: column; /* 세로로 나열 */
-                align-items: flex-start; /* 왼쪽 정렬 */
-            }
-
-            .checkbox-container {
-                flex-wrap: wrap; /* 체크박스 줄바꿈 */
-                gap: 5px;
-            }
-
-            .search-btn {
-                align-self:right; /* 왼쪽 정렬 */
-            }
-
-            .search-input {
-                width: 85%; /* 입력창 전체 너비 */
-            }
-            .nav-container a{
-                flex-direction: column;
-            }
-            .hamburger {
-                display: block;
-            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <button class="hamburger" onclick="toggleNav()">☰</button>
-        <nav class="nav-container">
-            <a href="/">Home</a>
-            <a href="/play">PlayModel</a>
-            <a href="/board">Board</a>
-        </nav>
-        <div class="logo">Fiction2Toon</div>
-        <div class="profile-container">
-            <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
-            <button class="logout-btn" onclick="logout()">Logout</button>
+<header>
+    <button class="hamburger" onclick="toggleNav()">☰</button>
+    <nav class="nav-container">
+        <a href="/">Home</a>
+        <a href="/play">PlayModel</a>
+        <a href="/board">Board</a>
+    </nav>
+    <div class="logo">Fiction2Toon</div>
+    <div class="profile-container">
+        <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+</header>
+
+<main>
+    <div class="search-filter-container">
+        <div class="checkbox-container">
+            <label><input type="checkbox" value="QnA"> QnA</label>
+            <label><input type="checkbox" value="공지사항"> 공지사항</label>
+            <label><input type="checkbox" value="후기"> 후기</label>
         </div>
-    </header>
+        <input type="text" id="title-input" class="search-input" placeholder="제목 입력">
+        <input type="text" id="author-input" class="search-input" placeholder="작성자 입력">
+        <button class="search-btn" onclick="filterBoard()">검색</button>
+    </div>
+    <!-- 게시판 테이블 -->
+    <div class="board-container">
+        <table class="board-table" id="board-table">
+            <thead>
+            <tr>
+                <th>유형</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>이미지</th>
+                <th>날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="post : ${boardList}">
+                <td th:text="${post.boardTypeText != null ? post.boardTypeText : '알 수 없음'}"></td>
+                <td>
+                    <a th:href="@{/board/{id}(id=${post.id})}" th:text="${post.title != null ? post.title : '제목 없음'}"></a>
+                </td>
+                <td th:text="${post.userUid != null ? post.userUid : '알 수 없음'}"></td>
+                <td>
+                    <img th:src="${post.image}" alt="게시글 이미지" style="max-width: 100px; height: auto;">
+                </td>
+                <td th:text="${post.createdTime != null ? post.createdTime : '알 수 없음'}"></td> <!-- 직접 출력 -->
+            </tr>
+            </tbody>
 
-    <main>
-        <div class="search-filter-container">
-            <div class="checkbox-container">
-                <label><input type="checkbox" value="QnA"> QnA</label>
-                <label><input type="checkbox" value="공지사항"> 공지사항</label>
-                <label><input type="checkbox" value="후기"> 후기</label>
-            </div>
-            <input type="text" id="title-input" class="search-input" placeholder="제목 입력">
-            <input type="text" id="author-input" class="search-input" placeholder="작성자 입력">
-            <button class="search-btn" onclick="filterBoard()">검색</button>
-        </div>
-        <!-- 게시판 테이블 -->
-        <div class="board-container">
-            <table class="board-table" id="board-table">
-                <thead>
-                <tr>
-                    <th>유형</th>
-                    <th>제목</th>
-                    <th>작성자</th>
-                    <th>이미지</th>
-                    <th>날짜</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="post : ${boardList}">
-                    <td th:text="${post.boardTypeText != null ? post.boardTypeText : '알 수 없음'}"></td>
-                    <td>
-                        <a th:href="@{/board/{id}(id=${post.id})}" th:text="${post.title != null ? post.title : '제목 없음'}"></a>
-                    </td>
-                    <td th:text="${post.userUid != null ? post.userUid : '알 수 없음'}"></td>
-                    <td>
-                        <img th:src="${post.image}" alt="게시글 이미지" style="max-width: 100px; height: auto;">
-                    </td>
-                    <td th:text="${post.createdTime != null ? post.createdTime : '알 수 없음'}"></td> <!-- 직접 출력 -->
-                </tr>
-                </tbody>
+        </table>
 
-            </table>
+        <button class="create-post-btn" onclick="window.location.href='/board/form'">게시글 작성</button> <!-- 게시글 작성 버튼 -->
+    </div>
 
-            <button class="create-post-btn" onclick="window.location.href='/board/form'">게시글 작성</button> <!-- 게시글 작성 버튼 -->
-        </div>
+</main>
 
-    </main>
+<footer>
+    <div class="footer-links">
+        <a href="/home">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+    </div>
+    <p>&copy; 2025 Fiction2Toon</p>
+</footer>
 
-    <footer>
-        <div class="footer-links">
-            <a href="/home">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-        </div>
-        <p>&copy; 2025 Fiction2Toon</p>
-    </footer>
+<script>
+    function filterBoard() {
+        const selectedTypes = Array.from(document.querySelectorAll('.checkbox-container input:checked')).map(el => el.value);
+        const title = document.getElementById('title-input').value.toLowerCase();
+        const author = document.getElementById('author-input').value.toLowerCase();
 
-    <script>
-        function filterBoard() {
-            const selectedTypes = Array.from(document.querySelectorAll('.checkbox-container input:checked')).map(el => el.value);
-            const title = document.getElementById('title-input').value.toLowerCase();
-            const author = document.getElementById('author-input').value.toLowerCase();
+        const rows = document.querySelectorAll('#board-table tbody tr');
 
-            const rows = document.querySelectorAll('#board-table tbody tr');
+        rows.forEach(row => {
+            const type = row.children[0].textContent;
+            const rowTitle = row.children[1].textContent.toLowerCase();
+            const rowAuthor = row.children[2].textContent.toLowerCase();
 
-            rows.forEach(row => {
-                const type = row.children[0].textContent;
-                const rowTitle = row.children[1].textContent.toLowerCase();
-                const rowAuthor = row.children[2].textContent.toLowerCase();
+            // 필터 조건에 따라 표시/숨기기
+            const matchesType = selectedTypes.length === 0 || selectedTypes.includes(type);
+            const matchesTitle = title === '' || rowTitle.includes(title);
+            const matchesAuthor = author === '' || rowAuthor.includes(author);
 
-                // 필터 조건에 따라 표시/숨기기
-                const matchesType = selectedTypes.length === 0 || selectedTypes.includes(type);
-                const matchesTitle = title === '' || rowTitle.includes(title);
-                const matchesAuthor = author === '' || rowAuthor.includes(author);
+            if (matchesType && matchesTitle && matchesAuthor) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+    function toggleNav() {
+        const nav = document.querySelector('.nav-container');
+        nav.classList.toggle('responsive');
+    }
 
-                if (matchesType && matchesTitle && matchesAuthor) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        }
-        function toggleNav() {
-            const nav = document.querySelector('.nav-container');
-            nav.classList.toggle('responsive');
-        }
-
-        function logout() {
-            window.location.href = "/login";
-        }
-        function createPost() {
-            window.location.href = "/board/form";
-        }
-    </script>
+    function logout() {
+        window.location.href = "/login";
+    }
+    function createPost() {
+        window.location.href = "/board/form";
+    }
+</script>
 </body>
 </html>

@@ -66,7 +66,7 @@
             border: 2px solid #002855;
         }
 
-        .logout-btn, .header-profile-img{
+        .logout-btn, .header-profile-img {
             position: relative;
             right: 30px;
         }
@@ -88,86 +88,16 @@
             padding: 20px;
         }
 
-        .content {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            gap: 20px;
-        }
-
-        .text-section {
-            flex: 1;
-            text-align: left;
-        }
-
-        .text-section h1, .text-section h2 {
-            font-size: 24px;
-            color: #002855;
-            margin-bottom: 10px;
-        }
-
-        .text-section p {
-            font-size: 16px;
-            line-height: 1.5;
-            color: #002855;
-        }
-
-        footer {
-            background-color: #f4f4f4;
-            padding: 20px;
-            text-align: center;
-            border-top: 1px solid #ddd;
-        }
-
-        .footer-links a {
-            margin: 0 10px;
-            text-decoration: none;
-            color: #555;
-        }
-        .hamburger{
-            display: none;
-            font-size: 24px;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-        @media (max-width: 768px) {
-            .hamburger {
-                display: block;
-            }
-
-            .nav-container {
-                display: none;
-            }
-
-            .nav-container.responsive {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                position: absolute;
-                top: 60px;
-                left: 0;
-                width: 100%;
-                background-color: #f4f4f4;
-                padding: 10px 20px;
-                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-                z-index: 1000;
-            }
-        }
-
         /* 드래그 앤 드롭 영역 스타일 */
         .drop-zone {
+            display: flex;
+            flex-direction: column; /* 세로 방향으로 정렬 */
+            align-items: center; /* 중앙 정렬 */
+            justify-content: center; /* 세로 중앙 정렬 */
             width: 100%;
             max-width: 600px;
             height: 200px;
             padding: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             text-align: center;
             font-family: "Quicksand", sans-serif;
             font-weight: 500;
@@ -177,6 +107,20 @@
             border: 4px dashed #002855;
             border-radius: 10px;
             margin: 20px auto;
+            position: relative;
+        }
+
+        .drop-zone svg {
+            width: 300px;
+            height: 300px;
+            color: #002855;
+            margin-bottom: 10px; /* 텍스트와 간격 추가 */
+        }
+
+        .drop-zone__prompt {
+            margin-top: 10px; /* 텍스트와 그림 사이 간격 */
+            font-size: 16px;
+            color: #002855;
         }
 
         .drop-zone--over {
@@ -185,29 +129,6 @@
 
         .drop-zone__input {
             display: none;
-        }
-
-        .drop-zone__thumb {
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
-            overflow: hidden;
-            background-color: #cccccc;
-            background-size: cover;
-            position: relative;
-        }
-
-        .drop-zone__thumb::after {
-            content: attr(data-label);
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 5px 0;
-            color: #ffffff;
-            background: rgba(0, 0, 0, 0.75);
-            font-size: 14px;
-            text-align: center;
         }
 
         .convert-btn {
@@ -232,6 +153,73 @@
         .convert-btn:active {
             background-color: #001830;
         }
+
+        .buttons {
+          display: flex;
+          justify-content: center; /* 버튼을 가운데 정렬 */
+          gap: 500px; /* 버튼 사이 간격 설정 */
+          margin-top: 20px;
+      }
+
+        .button {
+                background-color: #002855;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                font-size: 16px;
+                border-radius: 5px;
+                cursor: pointer;
+                text-decoration: none;
+            }
+
+        .button:hover {
+            background-color: #001f3d;
+        }
+
+        footer {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+
+        .footer-links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #555;
+        }
+
+        .hamburger {
+                display: none;
+                font-size: 24px;
+                background: none;
+                border: none;
+                cursor: pointer;
+            }
+
+        @media (max-width: 768px) {
+                .hamburger {
+                    display: block; /* 햄버거 메뉴 표시 */
+                }
+
+                .nav-container {
+                    display: none; /* 기본적으로 숨김 */
+                }
+
+                .nav-container.responsive {
+                    display: flex; /* 햄버거 클릭 시 표시 */
+                    flex-direction: column; /* 세로 정렬 */
+                    align-items: flex-start;
+                    position: absolute;
+                    top: 60px;
+                    left: 0;
+                    width: 100%;
+                    background-color: #f4f4f4;
+                    padding: 10px 20px;
+                    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                    z-index: 1000;
+                }
+            }
 
         #result {
             width: 80%;
@@ -305,24 +293,33 @@
 
 <main>
     <form th:action="@{/play/text_to_webtoon}" method="post" enctype="multipart/form-data">
-        <div class="drop-zone">
+        <div class="drop-zone" id="dropZone">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="12" y1="18" x2="12" y2="12"></line>
+                <line x1="9" y1="15" x2="12" y2="12"></line>
+                <line x1="15" y1="15" x2="12" y2="12"></line>
+            </svg>
             <span class="drop-zone__prompt">텍스트 파일을 여기에 드래그하거나 클릭하여 업로드</span>
             <input type="file" name="text" class="drop-zone__input" accept=".txt">
         </div>
-        <button type="submit" class="convert-btn">변환 시작</button>
+        <p id="error-message" style="color: red; display: none;">.txt 파일만 업로드 가능합니다.</p>
+        <div class="buttons">
+            <button type="reset" class="button">초기화</button>
+            <button type="submit" class="button">다음</button>
+        </div>
     </form>
 
     <!-- 결과 표시 영역 -->
-    <div id="result">
+    <div id="result" th:if="${imagePaths != null && !imagePaths.isEmpty()}">
         <p th:if="${error}" th:text="${error}" class="error"></p>
-
-        <div class="result-images" th:if="${imagePaths}">
+        <div class="result-images">
             <div th:each="imagePath : ${imagePaths}" class="image-container">
                 <img th:src="@{/uploads/{imageName}(imageName=${imagePath})}"
                      alt="변환된 웹툰 이미지">
             </div>
         </div>
-
     </div>
 </main>
 
@@ -335,73 +332,135 @@
     <p>&copy; 2025 hooncompany</p>
 </footer>
 <script>
-    function toggleNav() {
-        const nav = document.querySelector('.nav-container');
-        nav.classList.toggle('responsive');
-    }
 
-    document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
-        const dropZoneElement = inputElement.closest(".drop-zone");
+    document.querySelector('form').addEventListener('reset', function () {
+      // 파일 입력 필드 초기화
+      const fileInput = document.querySelector('.drop-zone__input');
+      fileInput.value = '';
 
-        dropZoneElement.addEventListener("click", (e) => {
-            inputElement.click();
-        });
+      // 에러 메시지 숨기기
+      const errorMessage = document.getElementById('error-message');
+      if (errorMessage) {
+          errorMessage.style.display = 'none';
+      }
 
-        inputElement.addEventListener("change", (e) => {
-            if (inputElement.files.length) {
-                updateThumbnail(dropZoneElement, inputElement.files[0]);
-            }
-        });
+      // 드롭존 초기 상태로 복원
+      const dropZone = document.getElementById('dropZone');
+      const promptText = dropZone.querySelector('.drop-zone__prompt');
+      const svgIcon = dropZone.querySelector('svg');
+      const thumbnail = dropZone.querySelector('.drop-zone__thumb');
 
-        dropZoneElement.addEventListener("dragover", (e) => {
-            e.preventDefault();
-            dropZoneElement.classList.add("drop-zone--over");
-        });
+      // 썸네일이 있으면 제거
+      if (thumbnail) {
+          thumbnail.remove();
+      }
 
-        ["dragleave", "dragend"].forEach((type) => {
-            dropZoneElement.addEventListener(type, (e) => {
-                dropZoneElement.classList.remove("drop-zone--over");
-            });
-        });
+      // 아이콘과 기본 텍스트 복원
+      if (!svgIcon) {
+          const newSvgIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          newSvgIcon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+          newSvgIcon.setAttribute('viewBox', '0 0 24 24');
+          newSvgIcon.setAttribute('fill', 'none');
+          newSvgIcon.setAttribute('stroke', 'currentColor');
+          newSvgIcon.setAttribute('stroke-width', '2');
+          newSvgIcon.setAttribute('stroke-linecap', 'round');
+          newSvgIcon.setAttribute('stroke-linejoin', 'round');
+          newSvgIcon.innerHTML = `
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="12" y1="18" x2="12" y2="12"></line>
+            <line x1="9" y1="15" x2="12" y2="12"></line>
+            <line x1="15" y1="15" x2="12" y2="12"></line>
+          `;
+          dropZone.insertBefore(newSvgIcon, promptText);
+      }
 
-        dropZoneElement.addEventListener("drop", (e) => {
-            e.preventDefault();
+      // 기본 텍스트 다시 추가
+      if (!promptText) {
+          const newPromptText = document.createElement('span');
+          newPromptText.className = 'drop-zone__prompt';
+          newPromptText.textContent = '텍스트 파일을 여기에 드래그하거나 클릭하여 업로드';
+          dropZone.appendChild(newPromptText);
+      }
+  });
 
-            if (e.dataTransfer.files.length) {
-                inputElement.files = e.dataTransfer.files;
-                updateThumbnail(dropZoneElement, e.dataTransfer.files[0]);
-            }
+  function validateFileType(input) {
+      const file = input.files[0];
+      if (file && !file.name.endsWith('.txt')) {
+          document.getElementById('error-message').style.display = 'block'; // 에러 메시지 표시
+          input.value = ''; // 파일 입력 초기화
+      } else {
+          document.getElementById('error-message').style.display = 'none'; // 에러 메시지 숨김
+      }
+  }
 
+function toggleNav() {
+    const nav = document.querySelector('.nav-container');
+    nav.classList.toggle('responsive');
+}
+
+document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
+    const dropZoneElement = inputElement.closest(".drop-zone");
+
+    dropZoneElement.addEventListener("click", (e) => {
+        inputElement.click();
+    });
+
+    inputElement.addEventListener("change", (e) => {
+        if (inputElement.files.length) {
+            updateThumbnail(dropZoneElement, inputElement.files[0]);
+        }
+    });
+
+    dropZoneElement.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZoneElement.classList.add("drop-zone--over");
+    });
+
+    ["dragleave", "dragend"].forEach((type) => {
+        dropZoneElement.addEventListener(type, (e) => {
             dropZoneElement.classList.remove("drop-zone--over");
         });
     });
 
-    function updateThumbnail(dropZoneElement, file) {
-        let thumbnailElement = dropZoneElement.querySelector(".drop-zone__thumb");
+    dropZoneElement.addEventListener("drop", (e) => {
+        e.preventDefault();
 
-        if (dropZoneElement.querySelector(".drop-zone__prompt")) {
-            dropZoneElement.querySelector(".drop-zone__prompt").remove();
+        if (e.dataTransfer.files.length) {
+            inputElement.files = e.dataTransfer.files;
+            updateThumbnail(dropZoneElement, e.dataTransfer.files[0]);
         }
 
-        if (!thumbnailElement) {
-            thumbnailElement = document.createElement("div");
-            thumbnailElement.classList.add("drop-zone__thumb");
-            dropZoneElement.appendChild(thumbnailElement);
-        }
+        dropZoneElement.classList.remove("drop-zone--over");
+    });
+});
 
-        thumbnailElement.dataset.label = file.name;
+function updateThumbnail(dropZoneElement, file) {
+    let thumbnailElement = dropZoneElement.querySelector(".drop-zone__thumb");
 
-        if (file.type.startsWith("image/")) {
-            const reader = new FileReader();
-
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-                thumbnailElement.style.backgroundImage = `url('${reader.result}')`;
-            };
-        } else {
-            thumbnailElement.style.backgroundImage = null;
-        }
+    if (dropZoneElement.querySelector(".drop-zone__prompt")) {
+        dropZoneElement.querySelector(".drop-zone__prompt").remove();
     }
+
+    if (!thumbnailElement) {
+        thumbnailElement = document.createElement("div");
+        thumbnailElement.classList.add("drop-zone__thumb");
+        dropZoneElement.appendChild(thumbnailElement);
+    }
+
+    thumbnailElement.dataset.label = file.name;
+
+    if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            thumbnailElement.style.backgroundImage = `url('${reader.result}')`;
+        };
+    } else {
+        thumbnailElement.style.backgroundImage = null;
+    }
+}
 </script>
 </body>
 </html>

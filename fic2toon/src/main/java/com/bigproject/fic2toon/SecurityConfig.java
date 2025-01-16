@@ -1,5 +1,6 @@
 package com.bigproject.fic2toon;
 
+import com.bigproject.fic2toon.api.FastApiClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

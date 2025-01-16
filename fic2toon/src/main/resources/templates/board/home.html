@@ -57,7 +57,7 @@
             gap: 10px; /* 프로필과 버튼 사이 간격 */
             position: relative;
         }
-        
+
         .header-profile-img {
             width: 30px;
             height: 30px;
@@ -86,6 +86,8 @@
             flex: 1;
             margin-top: 80px;
             padding: 20px;
+
+            overflow: visible;
         }
 
         .content {
@@ -132,20 +134,20 @@
             padding: 50px 20px;
             background-color: #f9f9f9;
         }
-        
+
         .team-section h2 {
             font-size: 32px;
             color: #002855;
             margin-bottom: 40px;
         }
-        
+
         .team-container {
             display: flex;
             justify-content: center;
             gap: 40px; /* 팀원들 간 간격 */
             flex-wrap: wrap; /* 화면 크기에 따라 줄바꿈 */
         }
-        
+
         .team-member {
             text-align: center;
             background-color: #fff;
@@ -155,7 +157,7 @@
             width: 300px;
             max-width: 100%;
         }
-        
+
         .profile-img {
             width: 120px;
             height: 120px;
@@ -164,13 +166,13 @@
             margin-bottom: 5px;
             border: 4px solid #002855; /* 테두리 추가 */
         }
-        
+
         .team-member h3 {
             font-size: 30px;
             color: #002855;
             margin-bottom: 10px;
         }
-        
+
         .team-member p {
             font-size: 15px;
             line-height: 1.6;
@@ -178,14 +180,14 @@
             flex-direction: row;
             flex-wrap: wrap;
         }
-        
+
         .email {
             font-size: 14px;
             margin-top: 15px;
             color: #002855;
             word-break: break-word; /* 긴 이메일 줄바꿈 */
         }
-        
+
         .email i {
             margin-right: 5px;
             color: #002855;
@@ -211,15 +213,24 @@
             border: none;
             cursor: pointer;
         }
+
+        .video-frame {
+            width: 100%;
+            max-width: 560px; /* 동영상 최대 너비 */
+            height: 315px; /* 고정 높이 */
+            margin: 20px auto; /* 중앙 정렬 */
+            display: block; /* 블록 레벨 요소로 설정 */
+            border: none; /* 테두리 제거 */
+        }
     @media (max-width: 768px) {
         .hamburger {
             display: block; /* 햄버거 메뉴 표시 */
         }
-    
+
         .nav-container {
             display: none; /* 기본적으로 숨김 */
         }
-    
+
         .nav-container.responsive {
             display: flex; /* 햄버거 클릭 시 표시 */
             flex-direction: column; /* 세로 정렬 */
@@ -234,162 +245,181 @@
             z-index: 1000;
         }
     }
+
     </style>
 </head>
 <body>
-    <header>
-        <button class="hamburger" onclick="toggleNav()">☰</button>
-        <nav class="nav-container">
-            <a href="/home">Home</a>
-            <a href="#">PlayModel</a>
-            <a href="/board">Board</a>
-        </nav>
-        <div class="logo">Fiction2Toon</div>
-        <div class="profile-container">
-            <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
-            <a href="/logout" class="logout-btn">Logout</a>
-        </div>
+<header>
+    <button class="hamburger" onclick="toggleNav()">☰</button>
+    <nav class="nav-container">
+        <a href="/home">Home</a>
+        <a href="/playmodel">PlayModel</a>
+        <a href="/board">Board</a>
+    </nav>
+    <div class="logo">Fiction2Toon</div>
+    <div class="profile-container">
+        <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
 
-    </header>
+</header>
 
-    <main>
-        <!-- 첫 번째 섹션 -->
-        <div class="content">
-            <div class="text-section">
-                <h1>저희 <strong>Fiction2Toon</strong>을 사용하려면 아래로...</h1>
-                <p>Fiction2Toon은 사용자 친화적인 인터페이스를 제공합니다. 간단하고 편리하게 이용하세요!</p>
-            </div>
-            <div class="image-section">
-                <img src="/image/hoonpaint.jpg" alt="HoonPaint 이미지">
-            </div>
+<main>
+    <!-- 첫 번째 섹션 -->
+    <div class="content">
+        <div class="text-section">
+            <h1>저희 <strong>Fiction2Toon</strong>을 사용하려면 아래로...</h1>
+            <p>Fiction2Toon은 사용자 친화적인 인터페이스를 제공합니다. 간단하고 편리하게 이용하세요!</p>
         </div>
+        <div class="image-section">
+            <img src="/image/hoonpaint.jpg" alt="HoonPaint 이미지">
+        </div>
+    </div>
 
-        <!-- 두 번째 섹션 -->
-        <div class="content">
-            <div class="text-section">
-                <h2>줄거리를 텍스트 또는 파일로 입력하세요</h2>
-                <p>hwp, txt, pdf 형식으로 올리거나 줄거리를 적어주세요요</p>
-            </div>
-            <div class="image-section">
-                <img src="/image/hyun.png" alt="model 사용법법">
-            </div>
-        </div>
 
-        <!-- 세세 번째 섹션 -->
-        <div class="content">
-            <div class="text-section">
-                <h2>줄거리가 요약 됐어요!</h2>
-                <p>줄거리가 마음에 들면 다음 버튼을 눌러주세요.</p>
-                <p>혹시 마음에 안들면 초기화 버튼을 눌러주세요.</p>
-            </div>
-            <div class="image-section">
-                <img src="/image/hyun.png" alt="model 사용법법">
-            </div>
-        </div>
-        <!-- 네 번째 섹션 -->
-        <div class="content">
-            <div class="text-section">
-                <h2>이제 웹툰을 만들 거예요!</h2>
-                <p>웹툰에 어울리는 그림을 선택해주세요.</p>
-                <p>그러면 열심히 만들어서 결과가 나와요.</p>
-            </div>
-            <div class="image-section">
-                <img src="/image/hyun.png" alt="model 사용법법">
-            </div>
-        </div>
 
-        <section class="team-section">
-            <h2>Fiction2Toon을 만든 사람들</h2>
-            <div class="team-container">
-                <!-- 팀원 1 -->
-                <div class="team-member">
-                    <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">
-                    <h3>hoon</h3>
-                    <p>Front-End <br> Back-End
+    <div class="content">
+        <h1>사용방법 동영상</h1>
+        <iframe class="video-frame"
+                src="https://www.youtube.com/embed/WAvA4iV7Te4"
+                width="560"
+                height="315"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+        </iframe>
+    </div>
+
+
+
+
+    <!-- 두 번째 섹션 -->
+    <div class="content">
+        <div class="text-section">
+            <h2>줄거리를 텍스트 또는 파일로 입력하세요</h2>
+            <p>hwp, txt, pdf 형식으로 올리거나 줄거리를 적어주세요요</p>
+        </div>
+        <div class="image-section">
+            <img src="/image/hyun.png" alt="model 사용법법">
+        </div>
+    </div>
+
+    <!-- 세세 번째 섹션 -->
+    <div class="content">
+        <div class="text-section">
+            <h2>줄거리가 요약 됐어요!</h2>
+            <p>줄거리가 마음에 들면 다음 버튼을 눌러주세요.</p>
+            <p>혹시 마음에 안들면 초기화 버튼을 눌러주세요.</p>
+        </div>
+        <div class="image-section">
+            <img src="/image/hyun.png" alt="model 사용법법">
+        </div>
+    </div>
+    <!-- 네 번째 섹션 -->
+    <div class="content">
+        <div class="text-section">
+            <h2>이제 웹툰을 만들 거예요!</h2>
+            <p>웹툰에 어울리는 그림을 선택해주세요.</p>
+            <p>그러면 열심히 만들어서 결과가 나와요.</p>
+        </div>
+        <div class="image-section">
+            <img src="/image/hyun.png" alt="model 사용법법">
+        </div>
+    </div>
+
+    <section class="team-section">
+        <h2>Fiction2Toon을 만든 사람들</h2>
+        <div class="team-container">
+            <!-- 팀원 1 -->
+            <div class="team-member">
+                <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">
+                <h3>hoon</h3>
+                <p>Front-End <br> Back-End
                     <br>Data <br> AI Engineer
                     <br>DB <br> Server</p>
-                    <p class="email">
-                        <i class="fa fa-envelope"></i> tkfkds998811@gmail.com
-                    </p>
-                </div>
-                <!-- 팀원 2 -->
-                <div class="team-member">
-                    <img src="/image/hyun.png" alt="Hyun 사진" class="profile-img">
-                    <h3>hyun</h3>
-                    <p>Front-End <br> Back-End
-                        <br>Data <br> AI Engineer
-                        <br>DB <br> Server</p>
-                    <p class="email">
-                        <i class="fa fa-envelope"></i> pearl5322@gmail.com
-                    </p>
-                </div>
-                <!-- 팀원 3 -->
-                <div class="team-member">
-                    <img src="/image/hoon.jpg" alt="HJae 사진" class="profile-img">
-                    <h3>HJae</h3>
-                    <p>Front-End <br> Back-End
-                        <br>Data <br> AI Engineer
-                        <br>DB <br> Server</p>
-                    <p class="email">
-                        <i class="fa fa-envelope"></i> a066235@aivle.kt.co.kr
-                    </p>
-                </div>
-                <!-- 팀원 4 -->
-                <div class="team-member">
-                    <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">
-                    <h3>hoon</h3>
-                    <p>Front-End <br> Back-End
-                    <br>Data <br> AI Engineer
-                    <br>DB <br> Server</p>
-                    <p class="email">
-                        <i class="fa fa-envelope"></i> tkfkds998811@gmail.com
-                    </p>
-                </div>
-                <!-- 팀원 5 -->
-                <div class="team-member">
-                    <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">
-                    <h3>hoon</h3>
-                    <p>Front-End <br> Back-End
-                    <br>Data <br> AI Engineer
-                    <br>DB <br> Server</p>
-                    <p class="email">
-                        <i class="fa fa-envelope"></i> tkfkds998811@gmail.com
-                    </p>
-                </div>
-                <!-- 팀원 6 -->
-                <div class="team-member">
-                    <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">
-                    <h3>hoon</h3>
-                    <p>Front-End <br> Back-End
-                    <br>Data <br> AI Engineer
-                    <br>DB <br> Server</p>
-                    <p class="email">
-                        <i class="fa fa-envelope"></i> tkfkds998811@gmail.com
-                    </p>
-                </div>
+                <p class="email">
+                    <i class="fa fa-envelope"></i> tkfkds998811@gmail.com
+                </p>
             </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="footer-links">
-            <a href="/home">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
+            <!-- 팀원 2 -->
+            <div class="team-member">
+                <img src="/image/hyun.png" alt="Hyun 사진" class="profile-img">
+                <h3>hyun</h3>
+                <p>Front-End <br> Back-End
+                    <br>Data <br> AI Engineer
+                    <br>DB <br> Server</p>
+                <p class="email">
+                    <i class="fa fa-envelope"></i> pearl5322@gmail.com
+                </p>
+            </div>
+            <!-- 팀원 3 -->
+            <div class="team-member">
+                <img src="/image/hoon.jpg" alt="HJae 사진" class="profile-img">
+                <h3>HJae</h3>
+                <p>Front-End <br> Back-End
+                    <br>Data <br> AI Engineer
+                    <br>DB <br> Server</p>
+                <p class="email">
+                    <i class="fa fa-envelope"></i> a066235@aivle.kt.co.kr
+                </p>
+            </div>
+            <!-- 팀원 4 -->
+            <div class="team-member">
+                <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">
+                <h3>hoon</h3>
+                <p>Front-End <br> Back-End
+                    <br>Data <br> AI Engineer
+                    <br>DB <br> Server</p>
+                <p class="email">
+                    <i class="fa fa-envelope"></i> tkfkds998811@gmail.com
+                </p>
+            </div>
+            <!-- 팀원 5 -->
+            <div class="team-member">
+                <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">
+                <h3>hoon</h3>
+                <p>Front-End <br> Back-End
+                    <br>Data <br> AI Engineer
+                    <br>DB <br> Server</p>
+                <p class="email">
+                    <i class="fa fa-envelope"></i> tkfkds998811@gmail.com
+                </p>
+            </div>
+            <!-- 팀원 6 -->
+            <div class="team-member">
+                <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">
+                <h3>hoon</h3>
+                <p>Front-End <br> Back-End
+                    <br>Data <br> AI Engineer
+                    <br>DB <br> Server</p>
+                <p class="email">
+                    <i class="fa fa-envelope"></i> tkfkds998811@gmail.com
+                </p>
+            </div>
         </div>
-        <p>&copy; 2025 hooncompany</p>
-    </footer>
+    </section>
+</main>
 
-    <script>
-        function logout() {
-            alert('로그아웃되었습니다.');
-            window.location.href = 'login.html';
-        }
+<footer>
+    <div class="footer-links">
+        <a href="/home">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+    </div>
+    <p>&copy; 2025 hooncompany</p>
+</footer>
 
-        function toggleNav() {
-            const nav = document.querySelector('.nav-container');
-            nav.classList.toggle('responsive');
-        }
-    </script>
+<script>
+    function logout() {
+        alert('로그아웃되었습니다.');
+        window.location.href = 'login.html';
+    }
+
+    function toggleNav() {
+        const nav = document.querySelector('.nav-container');
+        nav.classList.toggle('responsive');
+    }
+</script>
 </body>
 </html>

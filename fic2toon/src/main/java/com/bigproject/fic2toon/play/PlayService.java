@@ -1,5 +1,11 @@
 package com.bigproject.fic2toon.play;
 
+import com.bigproject.fic2toon.board.Board;
+import com.bigproject.fic2toon.board.BoardDto;
+import com.bigproject.fic2toon.user.User;
+import com.bigproject.fic2toon.user.UserService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,8 +20,26 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @Service
+@RequiredArgsConstructor
 public class PlayService {
+    private final UserService userService;
+    private final LogRepository logRepository;
     private final String apiUrl = "http://127.0.0.1:8000/text_to_webtoon"; // FastAPI 엔드포인트 URL
+
+    public Long savelog(LogDto logDto){
+        User user = userService.findByUid(logDto.getUserUid())
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자입니다."));
+
+        Log log = Log.builder()
+                .title(logDto.getTitle())
+                .user(user)
+                .path(logDto.getPath())
+                .build();
+
+        logRepository.save(log); // 게시글 저장
+
+        return log.getId();
+    }
 
     public String sendTextToApi(MultipartFile file) {
         try {
@@ -50,4 +74,5 @@ public class PlayService {
             throw new RuntimeException("파일 변환 중 오류 발생", e);
         }
     }
+
 }

@@ -224,47 +224,48 @@
     </div>
 </header>
 
-    <main>
-        <div class="form-container">
-            <form th:action="@{/board/form}" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label>카테고리</label>
-                    <div class="checkbox-container">
-                        <label><input type="radio" name="boardType" value="0" required> 공지사항</label>
-                        <label><input type="radio" name="boardType" value="1" required> QnA</label>
-                        <label><input type="radio" name="boardType" value="2" required> 후기</label>
-                    </div>
+<main>
+    <div class="form-container">
+        <form th:action="@{/board/form}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>카테고리</label>
+                <div class="checkbox-container">
+                    <label><input type="radio" name="boardType" value="0" required onclick="checkCategory(this)"> 공지사항</label>
+                    <label><input type="radio" name="boardType" value="1" required onclick="checkCategory(this)"> QnA</label>
+                    <label><input type="radio" name="boardType" value="2" required onclick="checkCategory(this)"> 후기</label>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label for="title">제목</label>
-                    <input type="text" id="title" name="title" placeholder="제목을 입력하세요." required> <!-- 제목 입력 -->
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" id="title" name="title" placeholder="제목을 입력하세요." required> <!-- 제목 입력 -->
+            </div>
+
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea id="content" name="content" placeholder="내용을 입력하세요." required></textarea> <!-- 내용 입력 -->
+            </div>
+
+            <div class="form-group">
+                <label for="file">이미지 업로드</label>
+                <input type="file" id="file" name="file" accept="image/*" onchange="uploadFile(event)">
+                <div id="preview">
+                    <p>이미지가 여기에 미리보기로 표시됩니다.</p>
                 </div>
+                <!-- 업로드된 파일 경로를 숨겨진 필드로 저장 -->
+                <input type="hidden" id="uploadedFilePath" name="fileName">
+            </div>
 
-                <div class="form-group">
-                    <label for="content">내용</label>
-                    <textarea id="content" name="content" placeholder="내용을 입력하세요." required></textarea> <!-- 내용 입력 -->
-                </div>
+            <div class="form-buttons">
+                <button type="reset" class="reset-btn">초기화</button> <!-- 초기화 버튼 -->
+                <button type="submit" class="submit-btn">게시글 작성</button> <!-- 제출 버튼 -->
+            </div>
+        </form>
+    </div>
+</main>
 
-                <div class="form-group">
-                    <label for="file">이미지 업로드</label>
-                    <input type="file" id="file" name="file" accept="image/*" onchange="uploadFile(event)">
-                    <div id="preview">
-                        <p>이미지가 여기에 미리보기로 표시됩니다.</p>
-                    </div>
-                    <!-- 업로드된 파일 경로를 숨겨진 필드로 저장 -->
-                    <input type="hidden" id="uploadedFilePath" name="fileName">
-                </div>
 
-                <div class="form-buttons">
-                    <button type="reset" class="reset-btn">초기화</button> <!-- 초기화 버튼 -->
-                    <button type="submit" class="submit-btn">게시글 작성</button> <!-- 제출 버튼 -->
-                </div>
-            </form>
-        </div>
-    </main>
-
-    <script>
+<script>
         async function uploadFile(event) {
             const file = event.target.files[0];
             const formData = new FormData();

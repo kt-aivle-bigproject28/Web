@@ -274,6 +274,79 @@
             max-width: 100%; /* 이미지의 최대 너비를 부모 컨테이너에 맞춤 */
             height: auto; /* 비율을 유지하면서 높이를 자동으로 조정 */
         }
+
+        .download-container {
+            display: flex; /* 아이콘과 버튼을 옆으로 배치 */
+            align-items: center; /* 수직 정렬 */
+            justify-content: center; /* 중앙 정렬 */
+            gap: 10px; /* 아이콘과 버튼 사이 간격 */
+            margin-top: 10px; /* 이미지와의 간격 */
+        }
+
+        .download-container svg {
+            cursor: pointer; /* 아이콘 클릭 가능하도록 설정 */
+        }
+
+        .download-container .button {
+            margin: 0; /* 기본 여백 제거 */
+        }
+
+
+
+        .download-button {
+            display: flex; /* 아이콘과 텍스트를 나란히 배치 */
+            align-items: center; /* 아이콘과 텍스트를 수직 중앙 정렬 */
+            gap: 8px; /* 아이콘과 텍스트 간격 */
+            background-color: #002855; /* 버튼 배경색 */
+            color: #fff; /* 텍스트 색상 */
+            border: none; /* 기본 테두리 제거 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            padding: 10px 20px; /* 버튼 내부 여백 */
+            font-size: 16px; /* 텍스트 크기 */
+            cursor: pointer; /* 클릭 가능하게 설정 */
+            transition: background-color 0.3s ease; /* 호버 시 부드러운 색상 전환 */
+            }
+
+            .download-button:hover {
+                background-color: #001f3d; /* 호버 시 배경색 */
+            }
+
+            .download-button:active {
+                background-color: #001030; /* 클릭 시 배경색 */
+            }
+
+            .download-button svg {
+                flex-shrink: 0; /* 아이콘 크기 유지 */
+            }
+
+        .save-button {
+            display: flex; /* 아이콘과 텍스트를 나란히 배치 */
+            align-items: center; /* 아이콘과 텍스트 수직 중앙 정렬 */
+            gap: 8px; /* 아이콘과 텍스트 사이 간격 */
+            background-color: #002855; /* 버튼 배경색 */
+            color: #fff; /* 텍스트 색상 */
+            border: none; /* 기본 테두리 제거 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            padding: 10px 20px; /* 버튼 내부 여백 */
+            font-size: 16px; /* 텍스트 크기 */
+            cursor: pointer; /* 클릭 가능하게 설정 */
+            transition: background-color 0.3s ease; /* 호버 시 부드러운 색상 전환 */
+        }
+
+        .save-button:hover {
+            background-color: #001f3d; /* 호버 시 배경색 */
+        }
+
+        .save-button:active {
+            background-color: #001030; /* 클릭 시 배경색 */
+        }
+
+        .save-button svg {
+            flex-shrink: 0; /* 아이콘 크기 유지 */
+        }
+
+
+
     </style>
 </head>
 <body>
@@ -319,6 +392,29 @@
                 <img th:src="@{/uploads/{imageName}(imageName=${imagePath})}"
                      alt="변환된 웹툰 이미지">
             </div>
+        </div>
+        <div class="download-container">
+            <button class="download-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+                </svg>
+                다운
+            </button>
+
+            <form th:action="@{/play/log}" method="post">
+                <div th:each="imagePath : ${imagePaths}">
+                    <input type="hidden" name="imageUrls" th:value="${imagePath}">
+                </div>
+                <button class="save-button">
+                <svg xmlns="http://www.w3.org/2000/svg" type="submit" width="20" height="20" fill="currentColor" class="bi bi-file-earmark-richtext" viewBox="0 0 16 16">
+                    <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
+                    <path d="M4.5 12.5A.5.5 0 0 1 5 12h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5m0-2A.5.5 0 0 1 5 10h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5m1.639-3.708 1.33.886 1.854-1.855a.25.25 0 0 1 .289-.047l1.888.974V8.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V8s1.54-1.274 1.639-1.208M6.25 6a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5"/>
+                </svg>
+                저장
+            </button>
+            </form>
+
         </div>
     </div>
 </main>
@@ -461,6 +557,9 @@ function updateThumbnail(dropZoneElement, file) {
         thumbnailElement.style.backgroundImage = null;
     }
 }
+    function logout() {
+            window.location.href = "/login";
+        }
 </script>
 </body>
 </html>

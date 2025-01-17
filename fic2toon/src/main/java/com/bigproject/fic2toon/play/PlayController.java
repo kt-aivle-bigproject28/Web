@@ -1,18 +1,19 @@
 package com.bigproject.fic2toon.play;
 
 import com.bigproject.fic2toon.api.FastApiClient;
+import com.bigproject.fic2toon.board.BoardDto;
+import com.bigproject.fic2toon.user.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,8 @@ import java.util.Map;
 @RequestMapping("/play")
 public class PlayController {
     private final FastApiClient fastApiClient;
+    private final PlayService playService;
+    private final UserService userService;
 
     @GetMapping
     public String getPlayModel(HttpSession session, Model model) {
@@ -59,4 +62,58 @@ public class PlayController {
         }
         return "model/playmodel"; // 뷰 반환
     }
+
+
+    @PostMapping("/log")
+    public String savelog(@ModelAttribute @Valid LogDto logDto,
+                          @RequestParam("files") List<MultipartFile> files,
+                          HttpSession session,
+                          Model model) {
+        String loginUserId = (String) session.getAttribute("loginUser"); // 로그인한 사용자 ID를 가져옴
+
+        if (loginUserId == null) {
+            return "redirect:/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
+        }
+
+        model.addAttribute("user", loginUserId); // 사용자 타입 추가
+        logDto.setUserUid(loginUserId);
+
+        Long logId = playService.savelog(logDto);
+
+        // 파일 업로드 처리
+        String uploadDir = "C:/log/" + logId; // 게시글 ID를 폴더 이름으로 사용
+        File uploadFolder = new File(uploadDir);
+        if (!uploadFolder.exists()) {
+            uploadFolder.mkdirs(); // 업로드 폴더 생성
+        }
+
+        try {
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    // 파일 이름 생성
+                    String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                    String filePath = uploadDir + "/" + fileName;
+
+                    // 파일 저장
+                    file.transferTo(new File(filePath));
+
+                    logDto.setPath("/log/" + filePath);
+                }
+            }
+
+            // 디버깅: 저장된 파일 경로 확인
+            System.out.println("Files saved to folder: " + uploadDir);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("error", "파일 업로드에 실패했습니다.");
+            return "model/playmodel";
+        }
+
+        Long result = playService.savelog(logDto);
+
+        return "redirect:/log"; // 게시글 작성 후 게시판으로 리다이렉트
+    }
+
+
 }

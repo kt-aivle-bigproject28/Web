@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save Log</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f4f4f4;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #002855;
+        }
+
+        .nav-container a {
+            text-decoration: none;
+            margin-right: 20px;
+            color: #002855;
+        }
+
+        .logout-btn {
+            background-color: #002855;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .toggle-container label {
+            margin-left: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .title-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .image-container img {
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn {
+            background-color: #002855;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            width: 100px;
+        }
+
+        .submit-btn:hover {
+            background-color: #001f3d;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">Fiction2Toon</div>
+    <nav class="nav-container">
+        <a href="/">Home</a>
+        <a href="/play">PlayModel</a>
+        <a href="/board">Board</a>
+    </nav>
+    <button class="logout-btn">Logout</button>
+</header>
+
+<div class="container">
+    <form th:action="@{/play/saveLog}" method="post">
+        <!-- 공개 여부 -->
+        <div class="toggle-container">
+            <input type="checkbox" id="public" name="isPublic" checked>
+            <label for="public">공개</label>
+        </div>
+
+
+
+        <!-- 제목 입력 -->
+        <div class="title-container">
+            <input type="text" name="title" placeholder="제목을 입력하세요." required>
+        </div>
+
+        <!-- 이미지 미리보기 -->
+        <div class="image-container" th:each="imagePath : ${imagePaths}">
+            <img th:src="@{'/image/' + ${imagePath}}" alt="이미지">
+        </div>
+
+        <!-- 완료 버튼 -->
+        <div style="text-align: right;">
+            <button type="submit" class="submit-btn">완료</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

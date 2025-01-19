@@ -38,6 +38,31 @@ public class PlayController {
         return "model/playmodel"; // 게시판 뷰 반환
     }
 
+//    @PostMapping("/text_to_webtoon")
+//    public String textToWebtoon(@RequestParam("text") MultipartFile text, Model model) throws IOException {
+//        try {
+//            // FastApiClient를 통해 API 호출
+//            String response = fastApiClient.textToWebtoon(text);
+//
+//            // ObjectMapper를 사용하여 JSON 문자열을 Map으로 변환
+//            ObjectMapper objectMapper = new ObjectMapper();
+//
+//            // 응답이 오류인지 확인
+//            if (response.contains("error")) {
+//                Map<String, String> errorResponse = objectMapper.readValue(response, new TypeReference<Map<String, String>>(){});
+//                model.addAttribute("error", errorResponse.get("error")); // 에러 메시지 모델에 추가
+//            } else {
+//                Map<String, List<String>> responseMap = objectMapper.readValue(response, new TypeReference<Map<String, List<String>>>(){});
+//                List<String> imagePaths = responseMap.get("image_paths");
+//                model.addAttribute("imagePaths", imagePaths); // 이미지 경로를 모델에 추가
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            model.addAttribute("error", "파일 처리 실패: " + e.getMessage());
+//        }
+//        return "model/playmodel"; // 뷰 반환
+//    }
+
     @PostMapping("/text_to_webtoon")
     public String textToWebtoon(@RequestParam("text") MultipartFile text, Model model) throws IOException {
         try {
@@ -47,21 +72,48 @@ public class PlayController {
             // ObjectMapper를 사용하여 JSON 문자열을 Map으로 변환
             ObjectMapper objectMapper = new ObjectMapper();
 
-            // 응답이 오류인지 확인
             if (response.contains("error")) {
-                Map<String, String> errorResponse = objectMapper.readValue(response, new TypeReference<Map<String, String>>(){});
-                model.addAttribute("error", errorResponse.get("error")); // 에러 메시지 모델에 추가
+                Map<String, String> errorResponse = objectMapper.readValue(response, new TypeReference<Map<String, String>>() {});
+                model.addAttribute("error", errorResponse.get("error"));
+                return "model/playmodel"; // 에러 발생 시 원래 페이지로
             } else {
-                Map<String, List<String>> responseMap = objectMapper.readValue(response, new TypeReference<Map<String, List<String>>>(){});
+                Map<String, List<String>> responseMap = objectMapper.readValue(response, new TypeReference<Map<String, List<String>>>() {});
                 List<String> imagePaths = responseMap.get("image_paths");
-                model.addAttribute("imagePaths", imagePaths); // 이미지 경로를 모델에 추가
+                model.addAttribute("imagePaths", imagePaths); // 이미지 경로 추가
             }
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("error", "파일 처리 실패: " + e.getMessage());
+            return "model/playmodel"; // 에러 발생 시 원래 페이지로
         }
-        return "model/playmodel"; // 뷰 반환
+
+        return "model/savelog"; // 성공 시 savelog.html로 이동
     }
+    @PostMapping("/saveLog")
+    public String saveLog(@RequestParam("title") String title,
+                          @RequestParam("isPublic") boolean isPublic,
+                          @RequestParam("imagePaths") List<String> imagePaths,
+                          HttpSession session) {
+        String loginUserId = (String) session.getAttribute("loginUser");
+
+        if (loginUserId == null) {
+            return "redirect:/login"; // 로그인하지 않은 경우
+        }
+
+        // 저장 로직
+        for (String imagePath : imagePaths) {
+            LogDto logDto = new LogDto();
+            logDto.setTitle(title);
+            logDto.setPath(imagePath);
+            logDto.setUserUid(loginUserId);
+
+            playService.savelog(logDto);
+        }
+
+        return "redirect:/board"; // 저장 완료 후 게시판으로 이동
+    }
+
+
 
 
     @PostMapping("/log")

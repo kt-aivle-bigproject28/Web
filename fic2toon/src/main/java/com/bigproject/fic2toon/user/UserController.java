@@ -70,6 +70,16 @@ public class UserController {
         return "redirect:/signup"; // 회원가입 페이지로 리다이렉트
     }
 
+    @GetMapping("/about")
+    public String aboutPage() {
+        return "login/about"; // about pg 연결
+    }
+
+    @GetMapping("/contact")
+    public String contactPage() {
+        return "login/contact"; // contact pg 연결
+    }
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         // 약관 동의 페이지를 반환

@@ -402,7 +402,7 @@
                 다운
             </button>
 
-            <form th:action="@{/play/log}" method="post">
+            <form th:action="@{/play/savelog}" method="post" enctype="multipart/form-data">
                 <div th:each="imagePath : ${imagePaths}">
                     <input type="hidden" name="imageUrls" th:value="${imagePath}">
                 </div>

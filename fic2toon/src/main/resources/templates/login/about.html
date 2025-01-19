@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiction2Toon - About</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%; /* 전체 화면 높이를 채우기 위해 설정 */
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column; /* 플렉스 컨테이너로 설정 */
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f4f4f4;
+            border-bottom: 1px solid #ddd;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #002855;
+        }
+
+        main {
+            flex: 1;
+            margin-top: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: row; /* 가로 방향 배치 */
+            align-items: center; /* 세로 중앙 정렬 */
+            justify-content: space-between; /* 양쪽 정렬 */
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            gap: 20px; /* 텍스트와 이미지 간 간격 */
+        }
+
+        .text-section {
+            flex: 1; /* 텍스트 영역 크기 조정 */
+            font-size: 18px;
+            color: #002855;
+            text-align: center;
+        }
+
+        .text-section h1 {
+            font-size: 32px;
+            color: #002855;
+            margin-bottom: 20px;
+        }
+
+        .text-section p {
+            line-height: 1.8;
+        }
+
+        .image-section img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+            width: 100%; /* 가로로 꽉 채우기 */
+            position: relative;
+            bottom: 0;
+        }
+
+        .footer-links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">Fiction2Toon</div>
+</header>
+
+<main>
+    <div class="content">
+        <div class="text-section">
+            <h1>저희 <strong>Fiction2Toon</strong>은...</h1>
+            <p>
+                웹툰시장이 크게 증가하였고,<br>
+                그에 맞춰 책에 흥미를 유발하여 많은 관심을 가질 수 있게<br>
+                즐거운 파일만 넣으면 흥미로운 부분을 웹툰으로 만들 수 있도록<br>
+                시작되었습니다.
+            </p>
+        </div>
+        <div class="image-section">
+            <img src="/image/hoonpaint.jpg" alt="웹툰 산업 그래프">
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-links">
+        <a href="/home">Home</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+    </div>
+    <p>&copy; 2025 Fiction2Toon</p>
+</footer>
+</body>
+</html>

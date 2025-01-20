@@ -281,6 +281,7 @@
 
                 <!-- 미리보기 섹션 -->
                 <div id="preview">
+
                     <p>이미지가 여기에 미리보기로 표시됩니다.</p>
                 </div>
 
@@ -298,36 +299,62 @@
 
 
 <script>
-        async function uploadFile(event) {
-            const file = event.target.files[0];
-            const formData = new FormData();
-            formData.append("file", file);
+    async function uploadFile(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('preview');
+        preview.innerHTML = ""; // 기존 미리보기 초기화
 
-            try {
-                const response = await fetch("/upload", {
-                    method: "POST",
-                    body: formData,
-                });
+        // 이미지 파일인지 확인
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
 
-                const fileName = await response.text(); // 서버에서 반환된 파일 경로
-                if (fileName !== "File upload failed") {
-                    console.log("Uploaded File Path:", fileName); // 반환된 경로 확인
-                } else {
-                    console.error("File upload failed.");
-                }
-            } catch (error) {
-                console.error("Error uploading file:", error);
+            // 파일 읽기가 완료되었을 때 실행될 콜백
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result; // base64 이미지 데이터
+                img.alt = "미리보기 이미지";
+                img.style.maxWidth = "100%"; // 이미지 크기 제한
+                img.style.border = "1px solid #ddd";
+                img.style.borderRadius = "4px";
+                preview.appendChild(img); // 미리보기 div에 추가
+            };
+
+            reader.readAsDataURL(file); // 파일을 읽어 base64로 변환
+        } else {
+            preview.innerHTML = "<p>이미지 파일만 업로드 가능합니다.</p>";
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const response = await fetch("/upload", {
+                method: "POST",
+                body: formData,
+            });
+
+            const fileName = await response.text(); // 서버에서 반환된 파일 경로
+            if (fileName !== "File upload failed") {
+                console.log("Uploaded File Path:", fileName); // 반환된 경로 확인
+                // 서버에서 받은 파일 경로를 숨겨진 필드에 저장
+                document.getElementById('uploadedFilePath').value = fileName;
+            } else {
+                console.error("File upload failed.");
             }
+        } catch (error) {
+            console.error("Error uploading file:", error);
+        }
         }
 
-        function toggleNav() {
-            const nav = document.querySelector('.nav-container');
-            nav.classList.toggle('responsive');
-        }
 
-        function logout() {
-            window.location.href = "/login";
-        }
+    function toggleNav() {
+        const nav = document.querySelector('.nav-container');
+        nav.classList.toggle('responsive');
+    }
+
+    function logout() {
+        window.location.href = "/login";
+    }
     </script>
 </body>
 </html>

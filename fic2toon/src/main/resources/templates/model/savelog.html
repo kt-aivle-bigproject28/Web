@@ -102,45 +102,147 @@
         .submit-btn:hover {
             background-color: #001f3d;
         }
+
+        /* 스위치 체크박스 스타일 */
+        .form-check-input {
+            width: 40px;
+            height: 20px;
+            background-color: #ddd; /* 기본 배경색 */
+            border-radius: 20px;
+            position: relative;
+            appearance: none;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .form-check-input:checked {
+            background-color: #002855; /* 스위치 활성화 색상 */
+        }
+
+        .form-check-input::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background-color: white; /* 슬라이더 색상 */
+            border-radius: 50%;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .form-check-input:checked::before {
+            transform: translateX(20px); /* 활성화 상태에서 슬라이더 이동 */
+        }
+
+        .form-check-label {
+            margin-left: 10px;
+            font-size: 14px;
+            color: #333; /* 라벨 텍스트 색상 */
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block; /* 햄버거 메뉴 표시 */
+            }
+
+            .nav-container {
+                display: none; /* 기본적으로 숨김 */
+            }
+
+            .nav-container.responsive {
+                display: flex; /* 햄버거 클릭 시 표시 */
+                flex-direction: column; /* 세로 정렬 */
+                align-items: flex-start;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: #f4f4f4;
+                padding: 10px 20px;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+        }
+
+
     </style>
 </head>
 <body>
 <header>
-    <div class="logo">Fiction2Toon</div>
+    <button class="hamburger" onclick="toggleNav()">☰</button>
     <nav class="nav-container">
         <a href="/">Home</a>
         <a href="/play">PlayModel</a>
         <a href="/board">Board</a>
     </nav>
-    <button class="logout-btn">Logout</button>
+    <div class="logo">Fiction2Toon</div>
+    <div class="profile-container">
+        <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
 </header>
 
 <div class="container">
     <form th:action="@{/play/saveLog}" method="post">
-        <!-- 공개 여부 -->
-        <div class="toggle-container">
-            <input type="checkbox" id="public" name="isPublic" checked>
-            <label for="public">공개</label>
+        <!-- 공개 여부 (스위치 체크박스) -->
+        <div class="toggle-container form-check form-switch">
+            <!-- 기본값 0 설정 -->
+            <input type="hidden" name="isPublic" value="0">
+            <!-- 체크박스 값이 1 -->
+            <input class="form-check-input" type="checkbox" id="public" name="isPublic" value="1">
+            <label class="form-check-label" for="public">공개</label>
         </div>
-
 
 
         <!-- 제목 입력 -->
         <div class="title-container">
-            <input type="text" name="title" placeholder="제목을 입력하세요." required>
+            <label for="title">제목</label>
+            <input type="text" id="title" name="title" placeholder="제목을 입력하세요." required> <!-- 제목 입력 -->
         </div>
 
         <!-- 이미지 미리보기 -->
         <div class="image-container" th:each="imagePath : ${imagePaths}">
-            <img th:src="@{/uploads/log/1/{imageName}(imageName=${imagePath})}"
-                 alt="변환된 웹툰 이미지">
+            <img th:src="@{/uploads/log/1/{imageName}(imageName=${imagePath})}" alt="변환된 웹툰 이미지">
         </div>
 
         <!-- 완료 버튼 -->
         <div style="text-align: right;">
             <button type="submit" class="submit-btn">완료</button>
         </div>
+
+        <input type="hidden" id="imagePaths" name="imagePaths">
     </form>
 </div>
+
+<script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+        const checkbox = document.getElementById('public');
+        if (checkbox.checked) {
+            // 체크박스가 선택된 경우 숨겨진 필드 제거
+            const hiddenInput = this.querySelector('input[type="hidden"][name="isPublic"]');
+            if (hiddenInput) {
+                hiddenInput.parentNode.removeChild(hiddenInput);
+            }
+        }
+    });
+    function toggleNav() {
+            const nav = document.querySelector('.nav-container');
+            nav.classList.toggle('responsive');
+        }
+
+        function logout() {
+            window.location.href = "/login";
+        }
+</script>
 </body>
 </html>

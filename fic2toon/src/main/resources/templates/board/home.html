@@ -50,6 +50,10 @@
             font-weight: bold;
             color: #002855;
         }
+        .logo img {
+            height: 100px; /* 로고 높이를 설정 */
+            object-fit: contain; /* 비율 유지 */
+        }
 
         .profile-container {
             display: flex;
@@ -70,6 +74,8 @@
             position: relative;
             right: 30px;
         }
+
+
 
         .logout-btn {
             background-color: #002855;
@@ -225,6 +231,7 @@
     @media (max-width: 768px) {
         .hamburger {
             display: block; /* 햄버거 메뉴 표시 */
+            color: #002855;
         }
 
         .nav-container {
@@ -256,7 +263,7 @@
         <a href="/play">PlayModel</a>
         <a href="/board">Board</a>
     </nav>
-    <div class="logo">Fiction2Toon</div>
+    <div class="logo"><img src="/image/logo.jpg" alt="Fiction2Toon 로고" style="height: 50px;"></div>
     <div class="profile-container">
         <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
         <a href="/logout" class="logout-btn">Logout</a>

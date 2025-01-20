@@ -207,6 +207,27 @@
         .upload-btn:hover {
             background-color: #45a049;
         }
+        .file-upload-label {
+        display: flex; /* 아이콘과 텍스트를 가로로 정렬 */
+        align-items: center; /* 세로 정렬 */
+        gap: 10px; /* 아이콘과 텍스트 사이 간격 */
+        font-size: 14px; /* 텍스트 크기 */
+        color: #333; /* 텍스트 색상 */
+        cursor: pointer; /* 클릭 가능 표시 */
+    }
+
+        .file-upload-label:hover {
+            color: #002855; /* 호버 시 텍스트 색상 변경 */
+        }
+
+        .file-upload-label svg {
+            transition: transform 0.2s ease; /* 아이콘 애니메이션 */
+        }
+
+        .file-upload-label:hover svg {
+            transform: scale(1.1); /* 호버 시 아이콘 확대 */
+        }
+
     </style>
 </head>
 <body>
@@ -247,11 +268,23 @@
             </div>
 
             <div class="form-group">
-                <label for="file">이미지 업로드</label>
-                <input type="file" id="file" name="file" accept="image/*" onchange="uploadFile(event)">
+                <label for="file" class="file-upload-label">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-image" viewBox="0 0 16 16">
+                        <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                        <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z"/>
+                    </svg>
+                    이미지 업로드시 사진 클릭
+                </label>
+                <!-- 숨겨진 파일 입력 -->
+                <input type="file" id="file" name="file" accept="image/*" onchange="uploadFile(event)" style="display: none;">
+
+
+                <!-- 미리보기 섹션 -->
                 <div id="preview">
+
                     <p>이미지가 여기에 미리보기로 표시됩니다.</p>
                 </div>
+
                 <!-- 업로드된 파일 경로를 숨겨진 필드로 저장 -->
                 <input type="hidden" id="uploadedFilePath" name="fileName">
             </div>
@@ -266,36 +299,62 @@
 
 
 <script>
-        async function uploadFile(event) {
-            const file = event.target.files[0];
-            const formData = new FormData();
-            formData.append("file", file);
+    async function uploadFile(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('preview');
+        preview.innerHTML = ""; // 기존 미리보기 초기화
 
-            try {
-                const response = await fetch("/upload", {
-                    method: "POST",
-                    body: formData,
-                });
+        // 이미지 파일인지 확인
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
 
-                const fileName = await response.text(); // 서버에서 반환된 파일 경로
-                if (fileName !== "File upload failed") {
-                    console.log("Uploaded File Path:", fileName); // 반환된 경로 확인
-                } else {
-                    console.error("File upload failed.");
-                }
-            } catch (error) {
-                console.error("Error uploading file:", error);
+            // 파일 읽기가 완료되었을 때 실행될 콜백
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result; // base64 이미지 데이터
+                img.alt = "미리보기 이미지";
+                img.style.maxWidth = "100%"; // 이미지 크기 제한
+                img.style.border = "1px solid #ddd";
+                img.style.borderRadius = "4px";
+                preview.appendChild(img); // 미리보기 div에 추가
+            };
+
+            reader.readAsDataURL(file); // 파일을 읽어 base64로 변환
+        } else {
+            preview.innerHTML = "<p>이미지 파일만 업로드 가능합니다.</p>";
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const response = await fetch("/upload", {
+                method: "POST",
+                body: formData,
+            });
+
+            const fileName = await response.text(); // 서버에서 반환된 파일 경로
+            if (fileName !== "File upload failed") {
+                console.log("Uploaded File Path:", fileName); // 반환된 경로 확인
+                // 서버에서 받은 파일 경로를 숨겨진 필드에 저장
+                document.getElementById('uploadedFilePath').value = fileName;
+            } else {
+                console.error("File upload failed.");
             }
+        } catch (error) {
+            console.error("Error uploading file:", error);
+        }
         }
 
-        function toggleNav() {
-            const nav = document.querySelector('.nav-container');
-            nav.classList.toggle('responsive');
-        }
 
-        function logout() {
-            window.location.href = "/login";
-        }
+    function toggleNav() {
+        const nav = document.querySelector('.nav-container');
+        nav.classList.toggle('responsive');
+    }
+
+    function logout() {
+        window.location.href = "/login";
+    }
     </script>
 </body>
 </html>

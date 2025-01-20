@@ -2,6 +2,7 @@ package com.bigproject.fic2toon.play;
 
 import com.bigproject.fic2toon.board.Board;
 import com.bigproject.fic2toon.board.BoardDto;
+import com.bigproject.fic2toon.company.Company;
 import com.bigproject.fic2toon.user.User;
 import com.bigproject.fic2toon.user.UserService;
 import jakarta.validation.Valid;
@@ -26,19 +27,21 @@ public class PlayService {
     private final LogRepository logRepository;
     private final String apiUrl = "http://127.0.0.1:8000/text_to_webtoon"; // FastAPI 엔드포인트 URL
 
-    public Long savelog(LogDto logDto){
+    public void savelog(LogDto logDto){
         User user = userService.findByUid(logDto.getUserUid())
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자입니다."));
+
+        Company company = user.getCompany();
 
         Log log = Log.builder()
                 .title(logDto.getTitle())
                 .user(user)
+                .company(company)
                 .path(logDto.getPath())
+                .isPublic(logDto.getIsPublic())
                 .build();
 
         logRepository.save(log); // 게시글 저장
-
-        return log.getId();
     }
 
     public String sendTextToApi(MultipartFile file) {

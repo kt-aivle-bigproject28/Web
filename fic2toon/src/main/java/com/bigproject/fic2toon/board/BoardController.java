@@ -196,4 +196,5 @@ public class BoardController {
         boardService.updateBoard(id, boardDto);
         return "redirect:/board";
     }
+
 }

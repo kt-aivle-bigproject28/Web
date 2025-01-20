@@ -24,12 +24,12 @@
             color: #002855;
         }
         main {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: calc(100vh - 140px);
-        }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* 내용이 상단부터 정렬되도록 설정 */
+    padding: 20px 0; /* 상단과 하단 여백 추가 */
+}
         .signup-container {
             text-align: center;
             background-color: #fff;
@@ -60,6 +60,18 @@
             border-radius: 4px;
             font-size: 16px;
             cursor: pointer;
+        }
+        footer {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+
+        .footer-links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #555;
         }
     </style>
 </head>
@@ -109,6 +121,11 @@
 </main>
 
 <footer>
+    <div class="footer-links">
+        <a th:href="@{/login}">Home</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+    </div>
     <p>&copy; 2025 hooncompany</p>
 </footer>
 

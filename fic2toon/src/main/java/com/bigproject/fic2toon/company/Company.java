@@ -1,5 +1,6 @@
 package com.bigproject.fic2toon.company;
 
+import com.bigproject.fic2toon.play.Log;
 import com.bigproject.fic2toon.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,4 +26,7 @@ public class Company {
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> users = new ArrayList<>();
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Log> logs = new ArrayList<>();
 }

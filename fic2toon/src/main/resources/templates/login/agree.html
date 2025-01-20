@@ -58,16 +58,27 @@
         }
 
         .checkbox-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
+    display: flex; /* 플렉스 박스 사용 */
+    align-items: center; /* 세로 방향 가운데 정렬 */
+    justify-content: space-between; /* 내부 요소 간 간격 유지 */
+    margin: 20px; /* 여백 설정 */
+    font-size: 14px;
+}
 
-        .checkbox-container input {
-            margin-right: 8px;
-            transform: scale(1.2);
-        }
+.checkbox-container input {
+    margin-right: 8px;
+    transform: scale(1.2);
+}
+
+.checkbox-container .next-btn {
+    margin-left: auto; /* 오른쪽으로 정렬 */
+    background-color: #002855;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
 
         .next-btn {
             background-color: #002855;
@@ -113,20 +124,18 @@
         </div>
 
         <div class="checkbox-container">
-            <input type="checkbox" id="agree-checkbox" name="agreement" required> <!-- 체크박스 -->
+            <input type="checkbox" id="agree-checkbox" name="agreement" required>
             <label for="agree-checkbox">위 내용을 읽었으며 이용약관에 동의합니다.</label>
+            <button type="submit" class="next-btn">다음</button> <!-- 버튼을 체크박스와 함께 배치 -->
         </div>
-
-        <!-- 다음 버튼 -->
-        <button type="submit" class="next-btn">다음</button>
     </form>
 </main>
 
 <footer>
     <div class="footer-links">
         <a th:href="@{/login}">Home</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
     </div>
     <p>&copy; 2025 hooncompany</p>
 </footer>

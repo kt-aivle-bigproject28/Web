@@ -20,50 +20,66 @@
             background-color: #f4f4f4;
             border-bottom: 1px solid #ddd;
             position: fixed;
-            top: 0;
             width: 100%;
+            top: 0;
             z-index: 1000;
         }
 
+        .nav-container {
+            display: flex;
+            gap: 20px;
+        }
+
         .nav-container a {
-            margin-right: 15px;
             text-decoration: none;
             color: #002855;
             font-size: 16px;
         }
 
         .logo {
-            font-size: 20px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
             font-weight: bold;
             color: #002855;
+        }
+        .logo img {
+            height: 100px; /* 로고 높이를 설정 */
+            object-fit: contain; /* 비율 유지 */
         }
 
         .profile-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 10px; /* 프로필과 버튼 사이 간격 */
+            position: relative;
         }
 
         .header-profile-img {
             width: 30px;
             height: 30px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .logout-btn {
-            background-color: #002855;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            border-radius: 50%; /* 원형 이미지 */
+            object-fit: cover; /* 이미지 비율 유지 */
+            border: 2px solid #002855; /* 테두리 */
         }
 
         .logout-btn, .header-profile-img{
             position: relative;
             right: 30px;
+        }
 
+
+
+        .logout-btn {
+            background-color: #002855;
+            color: #fff;
+            border: none;
+            padding: 8px 12px; /* 버튼 크기 조정 */
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            text-decoration: none;
         }
 
         main {
@@ -159,28 +175,29 @@
         }
 
         @media (max-width: 768px) {
-            .hamburger {
-                display: block; /* 햄버거 메뉴 표시 */
-            }
-
-            .nav-container {
-                display: none; /* 기본적으로 숨김 */
-            }
-
-            .nav-container.responsive {
-                display: flex; /* 햄버거 클릭 시 표시 */
-                flex-direction: column; /* 세로 정렬 */
-                align-items: flex-start;
-                position: absolute;
-                top: 60px;
-                left: 0;
-                width: 100%;
-                background-color: #f4f4f4;
-                padding: 10px 20px;
-                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-                z-index: 1000;
-            }
+        .hamburger {
+            display: block; /* 햄버거 메뉴 표시 */
+            color: #002855;
         }
+
+        .nav-container {
+            display: none; /* 기본적으로 숨김 */
+        }
+
+        .nav-container.responsive {
+            display: flex; /* 햄버거 클릭 시 표시 */
+            flex-direction: column; /* 세로 정렬 */
+            align-items: flex-start;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background-color: #f4f4f4;
+            padding: 10px 20px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+    }
 
         .file-upload-label {
             display: flex; /* 아이콘과 텍스트를 가로로 정렬 */
@@ -229,28 +246,49 @@
         .upload-btn:hover {
             background-color: #45a049;
         }
+        .title-input {
+            width: 100%; /* 전체 너비 사용 */
+            padding: 20px; /* 텍스트 입력에 여유 공간 */
+            font-size: 16px; /* 텍스트 크기 */
+            border: 1px solid #002855;
+            border-radius: 4px;
+            margin-bottom: 20px; /* 제목과 다음 요소 간 여백 */
+            box-sizing: border-box; /* 패딩 포함 크기 계산 */
+        }
+
+        .content-input {
+            width: 100%; /* 전체 너비 사용 */
+            padding: 20px; /* 텍스트 입력에 여유 공간 */
+            font-size: 16px; /* 텍스트 크기 */
+            height: 150px; /* 높이 지정 */
+            border: 1px solid #002855;
+            border-radius: 4px;
+            resize: vertical; /* 사용자가 높이 조정 가능 */
+            box-sizing: border-box; /* 패딩 포함 크기 계산 */
+        }
     </style>
 </head>
 <body>
 <header>
     <button class="hamburger" onclick="toggleNav()">☰</button>
     <nav class="nav-container">
-        <a href="/">Home</a>
+        <a href="/home">Home</a>
         <a href="/play">PlayModel</a>
         <a href="/board">Board</a>
+        <a href="/log">Log</a>
     </nav>
-    <div class="logo">Fiction2Toon</div>
+    <div class="logo"><img src="/image/logo.jpg" alt="Fiction2Toon 로고" style="height: 50px;"></div>
     <div class="profile-container">
         <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
-        <button class="logout-btn" onclick="logout()">Logout</button>
+        <a href="/logout" class="logout-btn">Logout</a>
     </div>
+
 </header>
 
 <main>
     <div class="form-container">
         <form th:action="@{/board/update/{id}(id=${board.id})}" method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <label>카테고리</label>
                 <div class="checkbox-container">
                     <label><input type="radio" name="boardType" value="0" required> 공지사항</label>
                     <label><input type="radio" name="boardType" value="1" required> QnA</label>
@@ -259,12 +297,13 @@
             </div>
 
             <div class="form-group">
+                <div class="title"
                 <label for="title">제목</label>
-                <input type="text" id="title" name="title" th:value="${board.title}" placeholder="제목을 입력하세요." required> <!-- 제목 입력 -->
+                <input type="text" class="title-input" id="title" name="title" th:value="${board.title}" placeholder="제목을 입력하세요." required> <!-- 제목 입력 -->
             </div>
             <div class="form-group">
                 <label for="content">내용</label>
-                <textarea id="content" name="content" th:utext="${board.content}" placeholder="내용을 입력하세요." required></textarea> <!-- 내용 입력 -->
+                <textarea id="content" class="content-input"name="content" th:utext="${board.content}" placeholder="내용을 입력하세요." required></textarea> <!-- 내용 입력 -->
             </div>
 
             <div class="form-group">

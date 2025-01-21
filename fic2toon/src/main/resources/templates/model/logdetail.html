@@ -12,67 +12,74 @@
         overflow-x: hidden;
     }
     header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 20px;
-        background-color: #f4f4f4;
-        border-bottom: 1px solid #ddd;
-        position: fixed;
-        width: 100%;
-        top: 0;
-        z-index: 1000;
-    }
-    .nav-container {
-        display: flex;
-        gap: 20px;
-    }
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f4f4f4;
+            border-bottom: 1px solid #ddd;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
 
-    .nav-container a {
-        text-decoration: none;
-        color: #002855;
-        font-size: 16px;
-    }
+        .nav-container {
+            display: flex;
+            gap: 20px;
+        }
 
-    .logo {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 24px;
-        font-weight: bold;
-        color: #002855;
-    }
+        .nav-container a {
+            text-decoration: none;
+            color: #002855;
+            font-size: 16px;
+        }
 
-    .profile-container {
-        display: flex;
-        align-items: center;
-        gap: 10px; /* 프로필과 버튼 사이 간격 */
-        position: relative;
-    }
+        .logo {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: #002855;
+        }
+        .logo img {
+            height: 100px; /* 로고 높이를 설정 */
+            object-fit: contain; /* 비율 유지 */
+        }
 
-    .header-profile-img {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%; /* 원형 이미지 */
-        object-fit: cover; /* 이미지 비율 유지 */
-        border: 2px solid #002855; /* 테두리 */
-    }
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* 프로필과 버튼 사이 간격 */
+            position: relative;
+        }
 
-    .logout-btn, .header-profile-img{
-        position: relative;
-        right: 30px;
-    }
+        .header-profile-img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%; /* 원형 이미지 */
+            object-fit: cover; /* 이미지 비율 유지 */
+            border: 2px solid #002855; /* 테두리 */
+        }
 
-    .logout-btn {
-        background-color: #002855;
-        color: #fff;
-        border: none;
-        padding: 8px 12px; /* 버튼 크기 조정 */
-        cursor: pointer;
-        border-radius: 4px;
-        font-size: 14px;
-        text-decoration: none;
-    }
+        .logout-btn, .header-profile-img{
+            position: relative;
+            right: 30px;
+        }
+
+
+
+        .logout-btn {
+            background-color: #002855;
+            color: #fff;
+            border: none;
+            padding: 8px 12px; /* 버튼 크기 조정 */
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            text-decoration: none;
+        }
     main {
         display: flex;
         flex-direction: column;
@@ -81,6 +88,7 @@
         min-height: calc(100vh - 140px);
         height: auto;
         padding: 20px 0;
+        margin-top: 80px;
     }
     .post-detail {
         background-color: #fff;
@@ -120,6 +128,12 @@
     .delete-btn {
         background-color: #f44336; /* 삭제 버튼 색상 */
     }
+
+    .delete-btn:hover {
+            background-color: #ff645a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
 
     .search-btn {
         background-color: #002855;
@@ -259,29 +273,30 @@
         border: none;
         cursor: pointer;
     }
-@media (max-width: 768px) {
-    .hamburger {
-        display: block; /* 햄버거 메뉴 표시 */
-    }
+    @media (max-width: 768px) {
+            .hamburger {
+                display: block; /* 햄버거 메뉴 표시 */
+                color: #002855;
+            }
 
-    .nav-container {
-        display: none; /* 기본적으로 숨김 */
-    }
+            .nav-container {
+                display: none; /* 기본적으로 숨김 */
+            }
 
-    .nav-container.responsive {
-        display: flex; /* 햄버거 클릭 시 표시 */
-        flex-direction: column; /* 세로 정렬 */
-        align-items: flex-start;
-        position: absolute;
-        top: 60px;
-        left: 0;
-        width: 100%;
-        background-color: #f4f4f4;
-        padding: 10px 20px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-    }
-}
+            .nav-container.responsive {
+                display: flex; /* 햄버거 클릭 시 표시 */
+                flex-direction: column; /* 세로 정렬 */
+                align-items: flex-start;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: #f4f4f4;
+                padding: 10px 20px;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+        }
   </style>
 </head>
 <body>
@@ -291,12 +306,14 @@
     <a href="/home">Home</a>
     <a href="/play">PlayModel</a>
     <a href="/board">Board</a>
+    <a href="/log">Log</a>
   </nav>
-  <div class="logo">Fiction2Toon</div>
+  <div class="logo"><img src="/image/logo.jpg" alt="Fiction2Toon 로고" style="height: 50px;"></div>
   <div class="profile-container">
     <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
-    <button class="logout-btn" onclick="logout()">Logout</button>
+    <a href="/logout" class="logout-btn">Logout</a>
   </div>
+
 </header>
 
 <main>
@@ -306,13 +323,15 @@
       작성자: <span th:text="${log.userUid}">작성자 ID</span> |
       작성일: <span th:text="${log.createdTime}">작성일</span> |
       <div class="form-group">
-        <div style="text-align: center; margin-top: 10px;">
+        <div style="text-align: center; margin-top: 30px;">
           <!-- 이미지가 있는 경우 반복문으로 출력 -->
-          <div th:if="${imagePaths != null && !imagePaths.isEmpty()}" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-            <div th:each="imagePath : ${imagePaths}" style="flex: 0 1 calc(33.33% - 10px); max-width: 150px;">
-              <img th:src="${imagePath}" alt="log Image" style="width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+          <div th:if="${imagePaths != null && !imagePaths.isEmpty()}"
+               style="display: flex; flex-direction: column; align-items: center;">
+            <div th:each="imagePath : ${imagePaths}" style="width: 150px;">
+              <img th:src="${imagePath}" alt="log Image" style="width: 100%; height: auto;">
             </div>
           </div>
+
           <!-- 이미지가 없는 경우 메시지 출력 -->
           <p th:if="${imagePaths == null || imagePaths.isEmpty()}" style="color: #888;">첨부된 이미지가 없습니다.</p>
         </div>

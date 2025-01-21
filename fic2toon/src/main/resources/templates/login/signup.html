@@ -45,24 +45,76 @@
         }
         .form-group {
             margin-bottom: 20px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        .signup-btn-main {
-            background-color: #002855;
-            color: #fff;
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
+            display: flex;
+            align-items: center; /* 수직 가운데 정렬 */
+            gap: 10px; /* 요소 간격 */
         }
 
+        .form-group {
+            position: relative; /* 버튼과 입력창 위치 기준 설정 */
+            margin-bottom: 20px;
+        }
+
+        .form-group input {
+            width: 400px; /* 입력창 너비를 부모 요소에 맞춤 */
+            height: 44px; /* 동일한 높이 */
+            border: 1px solid #002855;
+            border-radius: 4px;
+            font-size: 16px;
+            padding: 0 10px; /* 텍스트와 테두리 간 여백 */
+            box-sizing: border-box;
+        }
+
+        .check-uid-btn {
+            position: absolute; /* 입력창 위에 겹쳐지도록 설정 */
+            top: 0; /* 입력창의 상단에 위치 */
+            right: 0px; /* 오른쪽에서 10px 간격 */
+            height: 44px; /* 입력창 높이와 동일 */
+            font-size: 14px; /* 버튼 텍스트 크기 */
+            border: 1px solid #002855;
+            border-radius: 4px;
+            background-color: #002855;
+            color: white;
+            padding: 0 15px;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .check-uid-btn:hover {
+            background-color: #003c7d; /* 호버 시 색상 변경 */
+        }
+
+
+
+        .signup-btn-main {
+            height: 44px; /* 입력창과 동일한 높이 설정 */
+            font-size: 16px; /* 텍스트 크기 통일 */
+            border-radius: 4px; /* 동일한 모서리 곡률 */
+            border: 1px solid #ccc; /* 입력창과 같은 테두리 */
+            background-color: #002855;
+            color: #fff;
+            cursor: pointer;
+            box-sizing: border-box; /* 패딩 포함 크기 계산 */
+        }
+
+
+
         .signup-btn-main:hover {
+            background-color: #003c7d;
+        }
+
+        button[type="submit"] {
+            width: 100%; /* 버튼 너비를 입력창과 동일하게 */
+            font-size: 16px;
+            border-radius: 4px;
+            background-color: #002855;
+            color: white;
+            cursor: pointer;
+            margin-top: 20px; /* 위쪽 여백 추가 */
+            box-sizing: border-box; /* 패딩 포함 크기 계산 */
+        }
+
+        button[type="submit"]:hover {
             background-color: #003c7d;
         }
         footer {
@@ -77,6 +129,23 @@
             text-decoration: none;
             color: #555;
         }
+
+        /* 경고 메시지 스타일 */
+/* 공통 스타일로 경고 메시지 통일 */
+.warning-message {
+    font-size: 14px;
+    color: red;
+    margin-top: 5px; /* 위쪽 여백 */
+    margin-bottom: 20px;
+    text-align: center; /* 왼쪽 정렬 */
+    display: none; /* 기본적으로 숨김 */
+}
+
+.warning-message.success {
+    color: green; /* 성공 메시지 색상 */
+}
+
+
     </style>
 </head>
 <body>
@@ -89,34 +158,41 @@
         <h1>회원가입</h1>
         <form th:action="@{/signup}" method="post" th:id="'signup-form'">
             <div class="form-group">
-                <input type="text" name="name" placeholder="Name" required>
+                <input type="text" name="name" placeholder="이름" required>
             </div>
-            <div class="form-group" style="display: flex; align-items: center; gap: 10px">
-                <input type="text" id="uid" name="uid" placeholder="ID" required style="flex: 1;">
-                <button type="button" id="check-uid-btn" class="signup-btn-main">중복 확인</button>
-                <p id="uid-check-message" style="display: none; color: red;"></p>
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="text" id="uid" name="uid" placeholder="아이디" required style="flex: 1;">
+                    <button type="button" id="check-uid-btn" class="check-uid-btn">중복 확인</button>
+                </div>
+                <p id="uid-check-message" style="display: none; font-size: 14px; color: red; margin: 10px 0 0;">사용 가능한 ID입니다.</p>
             </div>
+
             <div class="form-group" style="position: relative;">
-                <input type="password" id="password" name="password" placeholder="Password" required>
+                <input type="password" id="password" name="password" placeholder="비밀번호" required>
                 <span id="toggle-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
         👁️
     </span>
             </div>
+            <p id="password-check-message" class="warning-message">
+                비밀번호는 영어와 숫자를 포함한 10자리 이상이어야 합니다.
+            </p>
             <div class="form-group" style="position: relative;">
-                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Password Check" required>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="비밀번호 확인" required>
                 <span id="toggle-confirm-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
         👁️
     </span>
-                <p id="password-match-message" style="margin-top: 5px; font-size: 14px; color: red; display: none;"></p>
+            </div>
+                <p id="password-match-message" class="warning-message"></p>
+
+            <div class="form-group">
+                <input type="text" name="phone" placeholder="휴대폰 번호" required>
             </div>
             <div class="form-group">
-                <input type="text" name="phone" placeholder="Phone Number(010-XXXX-XXXX)" required>
+                <input type="text" name="companyCode" placeholder="회사 코드" required>
             </div>
             <div class="form-group">
-                <input type="text" name="companyCode" placeholder="Company Code" required>
-            </div>
-            <div class="form-group">
-                <input type="text" name="position" placeholder="Position" required>
+                <input type="text" name="position" placeholder="직책" required>
             </div>
             <button type="submit" class="signup-btn-main">가입</button> <!-- 가입 버튼 -->
         </form>
@@ -186,25 +262,44 @@
         }
     });
 
-    // Check if passwords match
     const passwordField = document.getElementById('password');
-    const confirmPasswordField = document.getElementById('confirmPassword');
-    const matchMessage = document.getElementById('password-match-message');
+const confirmPasswordField = document.getElementById('confirmPassword');
+const matchMessage = document.getElementById('password-match-message');
 
-    function checkPasswordsMatch() {
-        if (confirmPasswordField.value === '') {
-            matchMessage.style.display = 'none'; // Hide message when confirm password is empty
-        } else if (passwordField.value === confirmPasswordField.value) {
-            matchMessage.style.display = 'block';
-            matchMessage.style.color = 'green';
-            matchMessage.textContent = '비밀번호가 일치합니다.';
-        } else {
-            matchMessage.style.display = 'block';
-            matchMessage.style.color = 'red';
-            matchMessage.textContent = '비밀번호가 일치하지 않습니다.';
-        }
+function checkPasswordsMatch() {
+    if (confirmPasswordField.value === '') {
+        matchMessage.style.display = 'none'; // 메시지를 숨김
+    } else if (passwordField.value === confirmPasswordField.value) {
+        matchMessage.textContent = "비밀번호가 일치합니다.";
+        matchMessage.style.color = "green";
+        matchMessage.style.display = "block";
+    } else {
+        matchMessage.textContent = "비밀번호가 일치하지 않습니다.";
+        matchMessage.style.color = "red";
+        matchMessage.style.display = "block";
     }
+}
 
-    passwordField.addEventListener('input', checkPasswordsMatch);
-    confirmPasswordField.addEventListener('input', checkPasswordsMatch);
+document.getElementById('password').addEventListener('input', function () {
+    const password = this.value;
+    const messageElement = document.getElementById('password-check-message');
+
+    // 정규식: 영어 + 숫자 조합, 10자리 이상
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+    if (!passwordPattern.test(password)) {
+        messageElement.style.color = "red";
+        messageElement.textContent = "비밀번호는 영어와 숫자를 포함한 8자리 이상이어야 합니다.";
+        messageElement.style.display = "block";
+    } else {
+        messageElement.style.color = "green";
+        messageElement.textContent = "사용 가능한 비밀번호입니다.";
+        messageElement.style.display = "block";
+    }
+});
+
+
+passwordField.addEventListener('input', checkPasswordsMatch);
+confirmPasswordField.addEventListener('input', checkPasswordsMatch);
+
 </script>

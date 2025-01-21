@@ -9,6 +9,9 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* 화면 전체 높이를 채우기 */
         }
         header {
             display: flex;
@@ -25,10 +28,11 @@
         }
         main {
             display: flex;
+            flex: 1; /* 남은 공간을 채우기 */
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: calc(100vh - 140px);
+            justify-content: center; /* 세로 가운데 정렬 */
+            align-items: center; /* 가로 가운데 정렬 */
+            padding: 20px;
         }
         .login-container {
             text-align: center;
@@ -36,7 +40,8 @@
             padding: 40px;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
+            width: 100%;
+            max-width: 400px; /* 최대 너비 설정 */
         }
         .login-container h1 {
             font-size: 32px;
@@ -47,40 +52,41 @@
             margin-bottom: 20px;
         }
         .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
+            width: 100%; /* 부모 요소의 너비에 맞춤 */
+            padding: 12px; /* 버튼과 동일한 패딩 */
+            border: 1px solid #002855;
             border-radius: 4px;
             font-size: 16px;
+            box-sizing: border-box; /* 패딩 포함한 크기 계산 */
         }
         .btn-main {
-            display: block; /* 블록 요소로 설정하여 버튼처럼 보이게 함 */
-            background-color: #002855; /* 버튼 색상 */
-            color: white; /* 버튼 텍스트 색상 */
-            padding: 10px; /* 버튼 패딩 */
-            border-radius: 4px; /* 모서리 둥글게 */
-            font-size: 16px; /* 폰트 크기 */
-            text-decoration: none; /* 밑줄 제거 */
-            margin-top: 10px; /* 위쪽 여백 추가 */
+            display: block;
+            background-color: #002855;
+            color: white;
+            padding: 12px; /* 입력창과 동일한 패딩 */
+            border-radius: 4px;
+            font-size: 16px;
+            text-decoration: none;
+            width: 100%; /* 버튼도 입력창 크기와 동일하게 */
+            box-sizing: border-box;
+            margin-top: 10px;
         }
-
         .btn-main:hover {
             background-color: #003c7d;
         }
-
         footer {
             background-color: #f4f4f4;
             padding: 20px;
             text-align: center;
             border-top: 1px solid #ddd;
         }
-
         .footer-links a {
             margin: 0 10px;
             text-decoration: none;
             color: #555;
         }
     </style>
+
 </head>
 <body>
 <header>
@@ -92,10 +98,10 @@
         <h1>로그인</h1>
         <form th:action="@{/login}" method="post" th:id="'login-form'">
             <div class="form-group">
-                <input type="text" name="uid" placeholder="ID" required>
+                <input type="text" name="uid" placeholder="아이디" required>
             </div>
             <div class="form-group">
-                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="password" placeholder="비밀번호" required>
             </div>
 
             <!-- 로그인 버튼 -->

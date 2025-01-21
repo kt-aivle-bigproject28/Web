@@ -4,6 +4,10 @@ import com.bigproject.fic2toon.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,6 +38,8 @@ public class BoardController {
         model.addAttribute("boardList", boardService.getBoardList()); // 게시판 목록 추가
         return "board/board"; // 게시판 뷰 반환
     }
+
+
 
     @GetMapping("/{id}")
     public String getBoardDetail(@PathVariable Long id, HttpSession session, Model model) {
@@ -106,7 +114,6 @@ public class BoardController {
 
         return "redirect:/board"; // 게시글 작성 후 게시판으로 리다이렉트
     }
-
 
     @DeleteMapping("/{id}/delete")
     public String deleteForm(@PathVariable Long id, HttpSession session, Model model) {

@@ -5,7 +5,7 @@ FROM amazoncorretto:17
 COPY build/libs/fic2toon-0.0.1-SNAPSHOT.jar app.jar
 
 # 데이터베이스 파일 복사
-COPY database/user.db /database/user.db
+# COPY database/user.db /database/user.db
 
 # 포트 노출
 EXPOSE 8080

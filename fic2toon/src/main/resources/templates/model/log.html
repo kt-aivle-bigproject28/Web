@@ -226,6 +226,14 @@
 
 <main>
   <div class="log-search-container">
+    <div class="checkbox-container">
+      <label>
+        <input type="radio" name="filter" value="sameCompany" onclick="filterLogs()"> 같은 회사만 보기
+      </label>
+      <label>
+        <input type="radio" name="filter" value="all" onclick="filterLogs()"> 모두 보기
+      </label>
+    </div>
     <input type="text" id="log-title-input" class="search-input" placeholder="로그 제목 입력">
     <input type="text" id="log-author-input" class="search-input" placeholder="작성자 입력">
     <button class="search-btn" onclick="filterLogs()">검색</button>
@@ -242,7 +250,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="log : ${logList}">
+      <tr th:each="log : ${logList}" >
         <td th:text="${log.companyName}"></td>
         <td>
           <a th:href="@{/log/{id}(id=${log.id})}" th:text="${log.title != null ? log.title : '제목 없음'}"></a>
@@ -266,25 +274,33 @@
 </footer>
 
 <script>
-  function filterLogs() {
-      const title = document.getElementById('log-title-input').value.toLowerCase();
-      const author = document.getElementById('log-author-input').value.toLowerCase();
+  const loginUserCompanyName = /*[[${loginUserCompanyName}]]*/ ''; // 서버에서 전달된 값
 
-      const rows = document.querySelectorAll('.log-table tbody tr');
+function filterLogs() {
+    console.log("로그인한 사용자의 회사명:", loginUserCompanyName); // 디버깅용 로그
 
-      rows.forEach(row => {
-          const rowTitle = row.children[1].textContent.toLowerCase();
-          const rowAuthor = row.children[2].textContent.toLowerCase();
+    const filterOption = document.querySelector('input[name="filter"]:checked')?.value;
+    const title = document.getElementById('log-title-input').value.toLowerCase();
+    const author = document.getElementById('log-author-input').value.toLowerCase();
 
-          const matchesTitle = title === '' || rowTitle.includes(title);
-          const matchesAuthor = author === '' || rowAuthor.includes(author);
+    const rows = document.querySelectorAll('.log-table tbody tr');
 
-          if (matchesTitle && matchesAuthor) {
-              row.style.display = '';
-          } else {
-              row.style.display = 'none';
-          }
-      });
+    rows.forEach(row => {
+        const companyName = row.children[0].textContent.toLowerCase();
+        const rowTitle = row.children[1].textContent.toLowerCase();
+        const rowAuthor = row.children[2].textContent.toLowerCase();
+
+        const matchesTitle = title === '' || rowTitle.includes(title);
+        const matchesAuthor = author === '' || rowAuthor.includes(author);
+        const matchesFilter = filterOption === 'all' ||
+                              (filterOption === 'sameCompany' && companyName === loginUserCompanyName.toLowerCase());
+
+        if (matchesTitle && matchesAuthor && matchesFilter) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
   }
 
   function toggleNav() {

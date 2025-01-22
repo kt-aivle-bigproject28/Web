@@ -111,22 +111,37 @@
             margin-bottom: 5px;
         }
 
-        .form-group input[type="text"], 
-        .form-group textarea {
+<!--        .form-group input[type="text"], -->
+<!--        .form-group textarea {-->
+<!--            width: 100%;-->
+<!--            padding: 10px;-->
+<!--            font-size: 14px;-->
+<!--            border: 1px solid #ccc;-->
+<!--            border-radius: 4px;-->
+<!--        }-->
+        .form-group input[type="text"],
+        textarea {
+            display: block;
             width: 100%;
             padding: 10px;
             font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            border: 1px solid #002855; /* 테두리 색상 동일 */
+            border-radius: 4px; /* 둥근 테두리 동일 */
+            background-color: #ffffff; /* 동일한 배경색 */
+            color: #000000; /* 동일한 글자색 */
+            box-sizing: border-box; /* 패딩 포함 크기 계산 */
+            transition: border-color 0.2s ease, box-shadow 0.2s ease; /* 부드러운 포커스 효과 */
+            outline: none; /* 기본 외곽선 제거 */
         }
 
         .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* 항목 간 간격 */
-    margin-bottom: 20px;
-    padding: 0 20px; /* 양쪽 여백 추가 */
-}
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* 항목 간 간격 */
+            margin-bottom: 20px;
+            padding: 0 20px; /* 양쪽 여백 추가 */
+        }
 
         .checkbox-container {
             display: flex;
@@ -228,13 +243,13 @@
             background-color: #45a049;
         }
         .file-upload-label {
-        display: flex; /* 아이콘과 텍스트를 가로로 정렬 */
-        align-items: center; /* 세로 정렬 */
-        gap: 10px; /* 아이콘과 텍스트 사이 간격 */
-        font-size: 14px; /* 텍스트 크기 */
-        color: #333; /* 텍스트 색상 */
-        cursor: pointer; /* 클릭 가능 표시 */
-    }
+            display: flex; /* 아이콘과 텍스트를 가로로 정렬 */
+            align-items: center; /* 세로 정렬 */
+            gap: 10px; /* 아이콘과 텍스트 사이 간격 */
+            font-size: 14px; /* 텍스트 크기 */
+            color: #333; /* 텍스트 색상 */
+            cursor: pointer; /* 클릭 가능 표시 */
+        }
 
         .file-upload-label:hover {
             color: #002855; /* 호버 시 텍스트 색상 변경 */
@@ -269,15 +284,98 @@
         }
 
         textarea {
-            width: 80%; /* 너비를 부모 요소에 맞춤 */
-            height: 150px; /* 높이 지정 */
-            padding: 10px; /* 내부 여백 */
-            font-size: 14px; /* 글자 크기 */
-            border: 1px solid #002855 !important;
+            outline: none;
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #002855; /* 기본 테두리 색상 */
             border-radius: 4px;
-            resize: none; /* 크기 조정 비활성화 */
-            box-sizing: border-box; /* 패딩 포함 크기 계산 */
+            resize: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* 강조 효과 추가 */
         }
+
+        textarea:focus {
+            border-color: #002855; /* 포커스 시 테두리 색상 */
+            box-shadow: 0 0 5px rgba(76, 139, 245, 0.5); /* 파란색 빛남 */
+        }
+
+        input[type="text"]:focus {
+            border-color: #002855;
+            box-shadow: 0 0 5px rgba(76, 139, 245, 0.5);
+            outline: none;
+        }
+
+
+
+
+
+.radio-button-container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.radio-button {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+
+.radio-button__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio-button__label {
+  display: inline-block;
+  padding-left: 30px;
+  margin-bottom: 10px;
+  position: relative;
+  font-size: 15px;
+  color: #002855;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.radio-button__custom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 2px solid #002855;
+  transition: all 0.3s ease;
+}
+
+.radio-button__input:checked + .radio-button__label .radio-button__custom {
+  background-color: #002855;
+  border-color: transparent;
+  transform: scale(0.8);
+  box-shadow: 0 0 20px #4c8bf5;
+}
+
+.radio-button__input:checked + .radio-button__label {
+  color: #002855;
+}
+
+.radio-button__label:hover .radio-button__custom {
+  transform: scale(1.2);
+  border-color: #4c8bf5;
+  box-shadow: 0 0 20px #4c8bf580;
+}
+
+
+
+
+
+
 
 
 
@@ -305,14 +403,35 @@
         <form th:action="@{/board/form}" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <div class="row-container">
-                    <div class="checkbox-container">
-                        <label><input type="radio" name="boardType" value="0" required onclick="checkCategory(this)"> 공지사항</label>
-                        <label><input type="radio" name="boardType" value="1" required onclick="checkCategory(this)"> QnA</label>
-                        <label><input type="radio" name="boardType" value="2" required onclick="checkCategory(this)"> 후기</label>
+                    <div class="radio-button-container">
+                        <div class="radio-button">
+                            <input type="radio" class="radio-button__input" id="radio1" name="boardType" value="0" required onclick="checkCategory(this)">
+                            <label class="radio-button__label" for="radio1">
+                                <span class="radio-button__custom"></span>
+                                공지사항
+                            </label>
+                        </div>
+                        <div class="radio-button">
+                            <input type="radio" class="radio-button__input" id="radio2" name="boardType" value="1" required onclick="checkCategory(this)">
+                            <label class="radio-button__label" for="radio2">
+                                <span class="radio-button__custom"></span>
+                                QnA
+                            </label>
+                        </div>
+                        <div class="radio-button">
+                            <input type="radio" class="radio-button__input" id="radio3" name="boardType" value="2" required onclick="checkCategory(this)">
+                            <label class="radio-button__label" for="radio3">
+                                <span class="radio-button__custom"></span>
+                                후기
+                            </label>
+                        </div>
                     </div>
-                    <input type="text" id="title" name="title" placeholder="제목을 입력하세요." required> <!-- 제목 입력 -->
+                    <input type="text" id="title" name="title" placeholder="제목을 입력하세요." required>
                 </div>
             </div>
+
+
+
 
             <div class="form-group">
                 <textarea  id="content" name="content" placeholder="내용을 입력하세요." required></textarea> <!-- 내용 입력 -->

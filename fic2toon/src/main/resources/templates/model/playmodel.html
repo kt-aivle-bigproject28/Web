@@ -352,6 +352,14 @@
             flex-shrink: 0; /* 아이콘 크기 유지 */
         }
 
+        #file-name-display {
+            font-size: 14px;
+            color: #002855;
+            font-weight: bold;
+            text-align: center;
+        }
+
+
 
 
     </style>
@@ -384,7 +392,8 @@
                 <line x1="15" y1="15" x2="12" y2="12"></line>
             </svg>
             <span class="drop-zone__prompt">텍스트 파일을 여기에 드래그하거나 클릭하여 업로드</span>
-            <input type="file" name="text" class="drop-zone__input" accept=".txt">
+            <input type="file" name="text" class="drop-zone__input" accept=".txt, .pdf">
+            <div id="file-name-display" style="margin-top: 10px; font-size: 14px; color: #002855;"></div> <!-- 파일명 표시 -->
         </div>
         <p id="error-message" style="color: red; display: none;">.txt 파일만 업로드 가능합니다.</p>
         <div class="buttons">
@@ -431,73 +440,86 @@
 <footer>
     <div class="footer-links">
         <a href="/home">Home</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
     </div>
     <p>&copy; 2025 hooncompany</p>
 </footer>
 <script>
 
     document.querySelector('form').addEventListener('reset', function () {
-      // 파일 입력 필드 초기화
-      const fileInput = document.querySelector('.drop-zone__input');
-      fileInput.value = '';
+    // 파일 입력 필드 초기화
+    const fileInput = document.querySelector('.drop-zone__input');
+    fileInput.value = '';
 
-      // 에러 메시지 숨기기
-      const errorMessage = document.getElementById('error-message');
-      if (errorMessage) {
-          errorMessage.style.display = 'none';
-      }
+    // 에러 메시지 숨기기
+    const errorMessage = document.getElementById('error-message');
+    if (errorMessage) {
+        errorMessage.style.display = 'none';
+    }
 
-      // 드롭존 초기 상태로 복원
-      const dropZone = document.getElementById('dropZone');
-      const promptText = dropZone.querySelector('.drop-zone__prompt');
-      const svgIcon = dropZone.querySelector('svg');
-      const thumbnail = dropZone.querySelector('.drop-zone__thumb');
+    // 드롭존 초기 상태로 복원
+    const dropZone = document.getElementById('dropZone');
+    const promptText = dropZone.querySelector('.drop-zone__prompt');
+    const svgIcon = dropZone.querySelector('svg');
+    const thumbnail = dropZone.querySelector('.drop-zone__thumb');
 
-      // 썸네일이 있으면 제거
-      if (thumbnail) {
-          thumbnail.remove();
-      }
+    // 파일명 표시 영역 초기화
+    const fileNameDisplay = document.getElementById('file-name-display');
+    if (fileNameDisplay) {
+        fileNameDisplay.textContent = ''; // 파일명 초기화
+    }
 
-      // 아이콘과 기본 텍스트 복원
-      if (!svgIcon) {
-          const newSvgIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-          newSvgIcon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-          newSvgIcon.setAttribute('viewBox', '0 0 24 24');
-          newSvgIcon.setAttribute('fill', 'none');
-          newSvgIcon.setAttribute('stroke', 'currentColor');
-          newSvgIcon.setAttribute('stroke-width', '2');
-          newSvgIcon.setAttribute('stroke-linecap', 'round');
-          newSvgIcon.setAttribute('stroke-linejoin', 'round');
-          newSvgIcon.innerHTML = `
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-            <line x1="12" y1="18" x2="12" y2="12"></line>
-            <line x1="9" y1="15" x2="12" y2="12"></line>
-            <line x1="15" y1="15" x2="12" y2="12"></line>
-          `;
-          dropZone.insertBefore(newSvgIcon, promptText);
-      }
+    // 썸네일이 있으면 제거
+    if (thumbnail) {
+        thumbnail.remove();
+    }
 
-      // 기본 텍스트 다시 추가
-      if (!promptText) {
-          const newPromptText = document.createElement('span');
-          newPromptText.className = 'drop-zone__prompt';
-          newPromptText.textContent = '텍스트 파일을 여기에 드래그하거나 클릭하여 업로드';
-          dropZone.appendChild(newPromptText);
-      }
-  });
+    // 아이콘과 기본 텍스트 복원
+    if (!svgIcon) {
+        const newSvgIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        newSvgIcon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        newSvgIcon.setAttribute('viewBox', '0 0 24 24');
+        newSvgIcon.setAttribute('fill', 'none');
+        newSvgIcon.setAttribute('stroke', 'currentColor');
+        newSvgIcon.setAttribute('stroke-width', '2');
+        newSvgIcon.setAttribute('stroke-linecap', 'round');
+        newSvgIcon.setAttribute('stroke-linejoin', 'round');
+        newSvgIcon.innerHTML = `
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="12" y1="18" x2="12" y2="12"></line>
+          <line x1="9" y1="15" x2="12" y2="12"></line>
+          <line x1="15" y1="15" x2="12" y2="12"></line>
+        `;
+        dropZone.insertBefore(newSvgIcon, promptText);
+    }
+
+    // 기본 텍스트 다시 추가
+    if (!promptText) {
+        const newPromptText = document.createElement('span');
+        newPromptText.className = 'drop-zone__prompt';
+        newPromptText.textContent = '텍스트 파일을 여기에 드래그하거나 클릭하여 업로드';
+        dropZone.appendChild(newPromptText);
+    }
+});
+
 
   function validateFileType(input) {
-      const file = input.files[0];
-      if (file && !file.name.endsWith('.txt')) {
-          document.getElementById('error-message').style.display = 'block'; // 에러 메시지 표시
-          input.value = ''; // 파일 입력 초기화
-      } else {
-          document.getElementById('error-message').style.display = 'none'; // 에러 메시지 숨김
-      }
-  }
+    const file = input.files[0];
+    const allowedExtensions = ['.txt', '.pdf'];
+    const fileName = file ? file.name.toLowerCase() : '';
+    const isValidFile = allowedExtensions.some(ext => fileName.endsWith(ext));
+
+    if (file && !isValidFile) {
+        document.getElementById('error-message').textContent = '허용된 파일 형식은 .txt, .pdf 입니다.';
+        document.getElementById('error-message').style.display = 'block';
+        input.value = ''; // 파일 입력 초기화
+    } else {
+        document.getElementById('error-message').style.display = 'none';
+    }
+}
+
 
 function toggleNav() {
     const nav = document.querySelector('.nav-container');
@@ -541,12 +563,19 @@ document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
 });
 
 function updateThumbnail(dropZoneElement, file) {
+    const fileNameDisplay = document.getElementById("file-name-display");
+
+    // 파일명을 표시
+    fileNameDisplay.textContent = `업로드된 파일: ${file.name}`;
+
     let thumbnailElement = dropZoneElement.querySelector(".drop-zone__thumb");
 
+    // 드롭존 기본 텍스트 제거
     if (dropZoneElement.querySelector(".drop-zone__prompt")) {
         dropZoneElement.querySelector(".drop-zone__prompt").remove();
     }
 
+    // 썸네일 요소 생성
     if (!thumbnailElement) {
         thumbnailElement = document.createElement("div");
         thumbnailElement.classList.add("drop-zone__thumb");
@@ -555,6 +584,7 @@ function updateThumbnail(dropZoneElement, file) {
 
     thumbnailElement.dataset.label = file.name;
 
+    // 이미지 파일일 경우 썸네일 생성
     if (file.type.startsWith("image/")) {
         const reader = new FileReader();
 
@@ -566,6 +596,7 @@ function updateThumbnail(dropZoneElement, file) {
         thumbnailElement.style.backgroundImage = null;
     }
 }
+
     function logout() {
             window.location.href = "/login";
         }

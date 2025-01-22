@@ -25,19 +25,20 @@ public class LogService {
     private final CompanyService companyService;
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    
-    public List<LogDto> getLogList() {
+
+    public List<LogDto> getLogList(Long loginUserCompanyId) {
         return logRepository.findAll().stream()
+                .filter(log -> log.getIsPublic() == 0 ||
+                        (log.getIsPublic() == 1 && log.getCompany().getId().equals(loginUserCompanyId)))
                 .map(log -> {
                     String userUid = null;
                     String companyName = null;
 
                     if (log.getUser() != null) {
-                        userUid = userService.findById(log.getUser().getId()).getUid(); // 작성자 UID 조회
-                        companyName = companyService.findById(log.getCompany().getId()).getName();
+                        userUid = log.getUser().getUid(); // 작성자 UID 조회
+                        companyName = log.getCompany().getName();
                     }
 
-                    // createdTime을 문자열로 포맷
                     String formattedCreatedTime = log.getCreatedTime() != null
                             ? log.getCreatedTime().format(FORMATTER)
                             : "알 수 없음";
@@ -48,12 +49,13 @@ public class LogService {
                             log.getPath(),
                             userUid,
                             companyName,
-                            formattedCreatedTime, // 포맷된 문자열 전달
+                            formattedCreatedTime,
                             log.getIsPublic()
                     );
                 })
                 .collect(Collectors.toList());
     }
+
 
     public LogDto getLogById(Long id) {
         return logRepository.findById(id)

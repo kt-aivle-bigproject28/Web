@@ -13,7 +13,6 @@ import java.util.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "company", schema = "dbo")
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

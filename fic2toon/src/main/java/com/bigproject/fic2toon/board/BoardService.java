@@ -39,6 +39,8 @@ public class BoardService {
         boardRepository.save(board); // 게시글 저장
     }
 
+
+
     public List<BoardDto> getBoardList() {
         return boardRepository.findAll().stream()
                 .map(board -> {

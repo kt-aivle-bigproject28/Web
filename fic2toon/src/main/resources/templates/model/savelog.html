@@ -212,7 +212,7 @@
 
         <!-- 이미지 미리보기 -->
         <div class="image-container" th:each="imagePath : ${imagePaths}">
-            <img th:src="@{/uploads/log/1/{imageName}(imageName=${imagePath})}" alt="변환된 웹툰 이미지">
+            <img th:src="@{/uploads/result/{imageName}(imageName=${imagePath})}" alt="변환된 웹툰 이미지">
         </div>
 
         <!-- 완료 버튼 -->

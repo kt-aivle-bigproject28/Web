@@ -64,6 +64,10 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
 	implementation 'com.microsoft.sqlserver:mssql-jdbc:12.8.1.jre11'
+
+	implementation 'com.azure.spring:spring-cloud-azure-starter-storage-blob:5.19.0'
+	implementation 'com.azure:azure-storage-blob:12.29.0'
+	implementation 'com.azure:azure-identity:1.11.1'
 }
 
 dependencyManagement {

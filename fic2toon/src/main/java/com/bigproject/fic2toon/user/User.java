@@ -43,6 +43,6 @@ public class User {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @OneToMany(mappedBy = "siteuser", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 }

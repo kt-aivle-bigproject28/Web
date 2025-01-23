@@ -14,12 +14,13 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "siteuser", schema = "dbo")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "user_name")
     private String name;
 
     @Column(nullable = false, unique = true)
@@ -31,17 +32,17 @@ public class User {
     @Column(nullable = false)
     private String phone;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "user_type")
     @Enumerated(EnumType.STRING)
     private UserType type = UserType.GUEST;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "user_position")
     private String position;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "siteuser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 }

@@ -13,15 +13,16 @@ import java.util.*;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "company", schema = "dbo")
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "company_code")
     private String code;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, name = "company_name")
     private String name;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)

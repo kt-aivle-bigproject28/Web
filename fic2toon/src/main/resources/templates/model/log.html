@@ -221,19 +221,13 @@
     <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
     <a href="/logout" class="logout-btn">Logout</a>
   </div>
-
 </header>
 
 <main>
   <div class="log-search-container">
-    <div class="checkbox-container">
-      <label>
-        <input type="radio" name="filter" value="sameCompany" onclick="filterLogs()"> 같은 회사만 보기
-      </label>
-      <label>
-        <input type="radio" name="filter" value="all" onclick="filterLogs()"> 모두 보기
-      </label>
-    </div>
+    <select id="log-company-select" class="search-input">
+      <option value="">전체</option>
+    </select>
     <input type="text" id="log-title-input" class="search-input" placeholder="로그 제목 입력">
     <input type="text" id="log-author-input" class="search-input" placeholder="작성자 입력">
     <button class="search-btn" onclick="filterLogs()">검색</button>
@@ -256,12 +250,11 @@
           <a th:href="@{/log/{id}(id=${log.id})}" th:text="${log.title != null ? log.title : '제목 없음'}"></a>
         </td>
         <td th:text="${log.userUid != null ? log.userUid : '알 수 없음'}"></td>
-        <td th:text="${log.createdTime != null ? log.createdTime : '알 수 없음'}"></td> <!-- 직접 출력 -->
+        <td th:text="${log.createdTime != null ? log.createdTime : '알 수 없음'}"></td>
       </tr>
       </tbody>
     </table>
   </div>
-
 </main>
 
 <footer>
@@ -274,33 +267,48 @@
 </footer>
 
 <script>
-  const loginUserCompanyName = /*[[${loginUserCompanyName}]]*/ ''; // 서버에서 전달된 값
+  function populateCompanyDropdown() {
+      const companySet = new Set(); // 중복 제거를 위한 Set
+      const rows = document.querySelectorAll('.log-table tbody tr');
 
-function filterLogs() {
-    console.log("로그인한 사용자의 회사명:", loginUserCompanyName); // 디버깅용 로그
+      rows.forEach(row => {
+          const companyName = row.children[0].textContent.trim(); // 회사 이름 가져오기
+          if (companyName) {
+              companySet.add(companyName);
+          }
+      });
 
-    const filterOption = document.querySelector('input[name="filter"]:checked')?.value;
-    const title = document.getElementById('log-title-input').value.toLowerCase();
-    const author = document.getElementById('log-author-input').value.toLowerCase();
+      const companySelect = document.getElementById('log-company-select');
+      companySet.forEach(company => {
+          const option = document.createElement('option');
+          option.value = company.toLowerCase();
+          option.textContent = company;
+          companySelect.appendChild(option);
+      });
+  }
 
-    const rows = document.querySelectorAll('.log-table tbody tr');
+  function filterLogs() {
+      const company = document.getElementById('log-company-select').value.toLowerCase();
+      const title = document.getElementById('log-title-input').value.toLowerCase();
+      const author = document.getElementById('log-author-input').value.toLowerCase();
 
-    rows.forEach(row => {
-        const companyName = row.children[0].textContent.toLowerCase();
-        const rowTitle = row.children[1].textContent.toLowerCase();
-        const rowAuthor = row.children[2].textContent.toLowerCase();
+      const rows = document.querySelectorAll('.log-table tbody tr');
 
-        const matchesTitle = title === '' || rowTitle.includes(title);
-        const matchesAuthor = author === '' || rowAuthor.includes(author);
-        const matchesFilter = filterOption === 'all' ||
-                              (filterOption === 'sameCompany' && companyName === loginUserCompanyName.toLowerCase());
+      rows.forEach(row => {
+          const rowCompany = row.children[0].textContent.toLowerCase();
+          const rowTitle = row.children[1].textContent.toLowerCase();
+          const rowAuthor = row.children[2].textContent.toLowerCase();
 
-        if (matchesTitle && matchesAuthor && matchesFilter) {
-            row.style.display = '';
-        } else {
-            row.style.display = 'none';
-        }
-    });
+          const matchesCompany = company === '' || rowCompany.includes(company);
+          const matchesTitle = title === '' || rowTitle.includes(title);
+          const matchesAuthor = author === '' || rowAuthor.includes(author);
+
+          if (matchesCompany && matchesTitle && matchesAuthor) {
+              row.style.display = '';
+          } else {
+              row.style.display = 'none';
+          }
+      });
   }
 
   function toggleNav() {
@@ -311,6 +319,10 @@ function filterLogs() {
   function logout() {
       window.location.href = "/login";
   }
+
+  // 페이지 로드 시 회사 목록 생성
+  window.onload = populateCompanyDropdown;
 </script>
+
 </body>
 </html>

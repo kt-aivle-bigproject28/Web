@@ -1,6 +1,9 @@
 package com.bigproject.fic2toon.play;
 
 import com.bigproject.fic2toon.board.BoardDto;
+import com.bigproject.fic2toon.user.User;
+import com.bigproject.fic2toon.user.UserRepository;
+import com.bigproject.fic2toon.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,18 +25,22 @@ import java.util.stream.Collectors;
 public class LogController {
 
     private final LogService logService;
+    private final UserService userService;
 
     @GetMapping
     public String getLogList(HttpSession session, Model model) {
-        String loginUserId = (String) session.getAttribute("loginUser"); // 로그인한 사용자 ID를 가져옴
-
+        String loginUserId = (String) session.getAttribute("loginUser");
         if (loginUserId == null) {
-            return "redirect:/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
+            return "redirect:/login";
         }
 
-        model.addAttribute("user", loginUserId); // 사용자 타입 추가
-        model.addAttribute("logList", logService.getLogList()); // 게시판 목록 추가
-        return "model/log"; // 게시판 뷰 반환
+        User loginUser = userService.findByUid(loginUserId)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자입니다."));
+        Long loginUserCompanyId = loginUser.getCompany().getId();
+
+        model.addAttribute("user", loginUserId);
+        model.addAttribute("logList", logService.getLogList(loginUserCompanyId));
+        return "model/log";
     }
 
     @GetMapping("/{id}")

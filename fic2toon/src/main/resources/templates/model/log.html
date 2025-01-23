@@ -14,82 +14,92 @@
     }
 
     body {
-        font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
-    }
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
 
-    /* 헤더 */
-    header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 20px;
-        background-color: #f4f4f4;
-        border-bottom: 1px solid #ddd;
-        position: fixed;
-        width: 100%;
-        top: 0;
-        z-index: 1000;
-    }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #002855;
+            border-bottom: 1px solid #ddd;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
 
-    .nav-container {
-        display: flex;
-        gap: 20px;
-    }
+        .nav-container {
+            display: flex;
+            gap: 20px;
+        }
 
-    .nav-container a {
-        text-decoration: none;
-        color: #002855;
-        font-size: 16px;
-    }
+        .nav-container a {
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 16px;
+        }
 
-    .logo {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 24px;
-        font-weight: bold;
-        color: #002855;
-    }
+        .logo {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: #002855;
+        }
+        .logo img {
+            height: 100px; /* 로고 높이를 설정 */
+            object-fit: contain; /* 비율 유지 */
+        }
 
-    .profile-container {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        position: relative;
-    }
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* 프로필과 버튼 사이 간격 */
+            position: relative;
+        }
 
-    .header-profile-img {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #002855;
-    }
+        .header-profile-img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%; /* 원형 이미지 */
+            object-fit: cover; /* 이미지 비율 유지 */
+            border: 2px solid #002855; /* 테두리 */
+        }
 
-    .logout-btn, .header-profile-img{
-        position: relative;
-        right: 30px;
-    }
+        .logout-btn, .header-profile-img{
+            position: relative;
+            right: 30px;
+        }
 
-    .logout-btn {
-        background-color: #002855;
-        color: #fff;
-        border: none;
-        padding: 8px 12px;
-        cursor: pointer;
-        border-radius: 4px;
-        font-size: 14px;
-        text-decoration: none;
-    }
+
+
+        .logout-btn {
+            background-color: #002855;
+            color: #fff;
+            border: none;
+            padding: 8px 12px; /* 버튼 크기 조정 */
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            text-decoration: none;
+        }
 
     /* 메인 스타일 */
     main {
-        flex: 1;
-        margin-top: 80px;
-        padding: 20px;
-        position: relative;
-    }
+          flex: 1;
+          margin: 100px auto; /* 중앙 정렬: 위아래는 80px, 좌우는 자동 */
+          padding: 20px;
+          max-width: 1200px; /* 최대 너비 설정 */
+          background-color: #ffffff; /* 흰색 배경 추가 */
+          border-radius: 4px; /* 모서리를 약간 둥글게 */
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+          position: relative;
+        }
 
     .log-search-container {
         display: flex;
@@ -101,7 +111,7 @@
 
     .search-input {
         padding: 5px;
-        border: 1px solid #ccc;
+        border: 1px solid #002855;
         border-radius: 4px;
         flex: 1;
     }
@@ -114,6 +124,13 @@
         padding: 5px 30px;
         cursor: pointer;
     }
+
+    .search-btn:hover {
+    background-color: #003c7d; /* 호버 시 색상 변경 */
+    transform: translateY(-3px); /* 마우스 올리면 위로 3px 이동 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 추가로 입체감 */
+}
+
 
     .log-container {
         position: relative;
@@ -137,22 +154,31 @@
         font-weight: bold;
     }
 
+    .log-table a {
+            text-decoration: none; /* 밑줄 제거 */
+            color: #002855; /* 기본 텍스트 색상 */
+        }
+
+        .log-table a:hover {
+            text-decoration: underline; /* 호버 시 밑줄 표시 (원하면 추가) */
+            color: #004080; /* 호버 시 텍스트 색상 변경 */
+        }
+
 
 
     footer {
-        background-color: #f4f4f4;
-        padding: 20px;
-        text-align: center;
-        border-top: 1px solid #ddd;
-        margin-top: auto;
-        width: 100%;
-    }
+            position: ;
+            background-color: #002855;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
 
-    .footer-links a {
-        margin: 0 10px;
-        text-decoration: none;
-        color: #555;
-    }
+        .footer-links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #ffffff;
+        }
     .hamburger {
             display: none;
             font-size: 24px;
@@ -162,46 +188,56 @@
         }
 
         @media (max-width: 768px) {
-            .hamburger {
-                display: block;
-            }
+        .hamburger {
+            display: block; /* 햄버거 메뉴 표시 */
+            color: #ffffff;
+        }
 
-            .nav-container {
-                display: none;
-            }
+        .nav-container {
+            display: none; /* 기본적으로 숨김 */
+        }
 
-            .nav-container.responsive {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                position: absolute;
-                top: 60px;
-                left: 0;
-                width: 100%;
-                background-color: #f4f4f4;
-                padding: 10px 20px;
-                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-                z-index: 1000;
-            }
+        .nav-container.responsive {
+            display: flex; /* 햄버거 클릭 시 표시 */
+            flex-direction: column; /* 세로 정렬 */
+            align-items: flex-start;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 15%;
+            background-color: #002855;
+            padding: 10px 20px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+    }
   </style>
 </head>
 <body>
 <header>
   <button class="hamburger" onclick="toggleNav()">☰</button>
   <nav class="nav-container">
-    <a href="/">Home</a>
+    <a href="/home">Home</a>
     <a href="/play">PlayModel</a>
     <a href="/board">Board</a>
+    <a href="/log">Log</a>
   </nav>
-  <div class="logo">Fiction2Toon</div>
+  <div class="logo">
+    <a href="/home">
+      <img src="/image/logo.jpg" alt="Fiction2Toon 로고" style="height: 50px;">
+    </a>
+  </div>
   <div class="profile-container">
     <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
-    <button class="logout-btn" onclick="logout()">Logout</button>
+    <a href="/logout" class="logout-btn">Logout</a>
   </div>
 </header>
 
 <main>
   <div class="log-search-container">
+    <select id="log-company-select" class="search-input">
+      <option value="">전체</option>
+    </select>
     <input type="text" id="log-title-input" class="search-input" placeholder="로그 제목 입력">
     <input type="text" id="log-author-input" class="search-input" placeholder="작성자 입력">
     <button class="search-btn" onclick="filterLogs()">검색</button>
@@ -218,18 +254,17 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="log : ${logList}">
+      <tr th:each="log : ${logList}" >
         <td th:text="${log.companyName}"></td>
         <td>
           <a th:href="@{/log/{id}(id=${log.id})}" th:text="${log.title != null ? log.title : '제목 없음'}"></a>
         </td>
         <td th:text="${log.userUid != null ? log.userUid : '알 수 없음'}"></td>
-        <td th:text="${log.createdTime != null ? log.createdTime : '알 수 없음'}"></td> <!-- 직접 출력 -->
+        <td th:text="${log.createdTime != null ? log.createdTime : '알 수 없음'}"></td>
       </tr>
       </tbody>
     </table>
   </div>
-
 </main>
 
 <footer>
@@ -238,24 +273,47 @@
     <a href="/about">About</a>
     <a href="/contact">Contact</a>
   </div>
-  <p>&copy; 2025 Fiction2Toon</p>
+  <p style="color: #ffffff;">&copy; 2025 hooncompany</p>
 </footer>
 
 <script>
+  function populateCompanyDropdown() {
+      const companySet = new Set(); // 중복 제거를 위한 Set
+      const rows = document.querySelectorAll('.log-table tbody tr');
+
+      rows.forEach(row => {
+          const companyName = row.children[0].textContent.trim(); // 회사 이름 가져오기
+          if (companyName) {
+              companySet.add(companyName);
+          }
+      });
+
+      const companySelect = document.getElementById('log-company-select');
+      companySet.forEach(company => {
+          const option = document.createElement('option');
+          option.value = company.toLowerCase();
+          option.textContent = company;
+          companySelect.appendChild(option);
+      });
+  }
+
   function filterLogs() {
+      const company = document.getElementById('log-company-select').value.toLowerCase();
       const title = document.getElementById('log-title-input').value.toLowerCase();
       const author = document.getElementById('log-author-input').value.toLowerCase();
 
       const rows = document.querySelectorAll('.log-table tbody tr');
 
       rows.forEach(row => {
+          const rowCompany = row.children[0].textContent.toLowerCase();
           const rowTitle = row.children[1].textContent.toLowerCase();
           const rowAuthor = row.children[2].textContent.toLowerCase();
 
+          const matchesCompany = company === '' || rowCompany.includes(company);
           const matchesTitle = title === '' || rowTitle.includes(title);
           const matchesAuthor = author === '' || rowAuthor.includes(author);
 
-          if (matchesTitle && matchesAuthor) {
+          if (matchesCompany && matchesTitle && matchesAuthor) {
               row.style.display = '';
           } else {
               row.style.display = 'none';
@@ -271,6 +329,10 @@
   function logout() {
       window.location.href = "/login";
   }
+
+  // 페이지 로드 시 회사 목록 생성
+  window.onload = populateCompanyDropdown;
 </script>
+
 </body>
 </html>

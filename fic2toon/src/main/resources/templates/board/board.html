@@ -25,7 +25,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
-            background-color: #f4f4f4;
+            background-color: #002855;
             border-bottom: 1px solid #ddd;
             position: fixed;
             width: 100%;
@@ -40,7 +40,7 @@
 
         .nav-container a {
             text-decoration: none;
-            color: #002855;
+            color: #ffffff;
             font-size: 16px;
         }
 
@@ -143,6 +143,12 @@
             margin-left: 20px;
         }
 
+        .search-btn:hover {
+    background-color: #003c7d; /* 호버 시 색상 변경 */
+    transform: translateY(-3px); /* 마우스 올리면 위로 3px 이동 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 추가로 입체감 */
+}
+
         /* 게시판 스타일 */
         .board-container {
             position: relative;
@@ -197,20 +203,18 @@
             background-color: #004080;
         }
 
-        /* 푸터 */
         footer {
-            background-color: #f4f4f4;
+            position: ;
+            background-color: #002855;
             padding: 20px;
             text-align: center;
             border-top: 1px solid #ddd;
-            margin-top: auto;
-            width: 100%;
         }
 
         .footer-links a {
             margin: 0 10px;
             text-decoration: none;
-            color: #555;
+            color: #ffffff;
         }
         .hamburger {
             display: none;
@@ -224,7 +228,7 @@
         @media (max-width: 768px) {
         .hamburger {
             display: block; /* 햄버거 메뉴 표시 */
-            color: #002855;
+            color: #ffffff;
         }
 
         .nav-container {
@@ -238,8 +242,8 @@
             position: absolute;
             top: 60px;
             left: 0;
-            width: 100%;
-            background-color: #f4f4f4;
+            width: 15%;
+            background-color: #002855;
             padding: 10px 20px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             z-index: 1000;
@@ -303,7 +307,11 @@
         <a href="/board">Board</a>
         <a href="/log">Log</a>
     </nav>
-    <div class="logo"><img src="/image/logo.jpg" alt="Fiction2Toon 로고" style="height: 50px;"></div>
+    <div class="logo">
+        <a href="/home">
+            <img src="/image/logo.jpg" alt="Fiction2Toon 로고" style="height: 50px;">
+        </a>
+    </div>
     <div class="profile-container">
         <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
         <a href="/logout" class="logout-btn">Logout</a>
@@ -384,7 +392,7 @@
         <a href="/about">About</a>
         <a href="/contact">Contact</a>
     </div>
-    <p>&copy; 2025 Fiction2Toon</p>
+    <p style="color: #ffffff;">&copy; 2025 hooncompany</p>
 </footer>
 
 <script>

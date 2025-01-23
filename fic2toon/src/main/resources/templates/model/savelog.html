@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Save Log</title>
     <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%; /* 전체 높이 */
+            display: flex;
+            flex-direction: column; /* 세로 방향 정렬 */
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
@@ -12,12 +20,18 @@
             padding: 0;
         }
 
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
-            background-color: #f4f4f4;
+            background-color: #002855;
             border-bottom: 1px solid #ddd;
             position: fixed;
             width: 100%;
@@ -32,7 +46,7 @@
 
         .nav-container a {
             text-decoration: none;
-            color: #002855;
+            color: #ffffff;
             font-size: 16px;
         }
 
@@ -219,7 +233,7 @@
 
         footer {
             position: ;
-            background-color: #f4f4f4;
+            background-color: #002855;
             padding: 20px;
             text-align: center;
             border-top: 1px solid #ddd;
@@ -228,7 +242,7 @@
         .footer-links a {
             margin: 0 10px;
             text-decoration: none;
-            color: #555;
+            color: #ffffff;
         }
         .hamburger{
             display: none;
@@ -271,7 +285,7 @@
         @media (max-width: 768px) {
         .hamburger {
             display: block; /* 햄버거 메뉴 표시 */
-            color: #002855;
+            color: #ffffff;
         }
 
         .nav-container {
@@ -285,8 +299,8 @@
             position: absolute;
             top: 60px;
             left: 0;
-            width: 100%;
-            background-color: #f4f4f4;
+            width: 15%;
+            background-color: #002855;
             padding: 10px 20px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             z-index: 1000;
@@ -307,7 +321,11 @@
         <a href="/board">Board</a>
         <a href="/log">Log</a>
     </nav>
-    <div class="logo"><img src="/image/logo.jpg" alt="Fiction2Toon 로고" style="height: 50px;"></div>
+    <div class="logo">
+        <a href="/home">
+            <img src="/image/logo.jpg" alt="Fiction2Toon 로고" style="height: 50px;">
+        </a>
+    </div>
     <div class="profile-container">
         <img src="/image/profile.jpg" alt="Profile" class="header-profile-img">
         <a href="/logout" class="logout-btn">Logout</a>
@@ -363,7 +381,7 @@
             <a href="/about">About</a>
             <a href="/contact">Contact</a>
         </div>
-        <p>&copy; 2025 hooncompany</p>
+        <p style="color: #ffffff;">&copy; 2025 hooncompany</p>
     </footer>
 
 <script>

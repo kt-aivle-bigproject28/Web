@@ -26,7 +26,7 @@
             align-items: center;
             padding: 10px 20px;
             background-color: #002855;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #002855;
             position: fixed;
             width: 100%;
             top: 0;
@@ -41,7 +41,7 @@
         .nav-container a {
             text-decoration: none;
             color: #ffffff;
-            font-size: 16px;
+            font-size: 20px;
         }
 
         .logo {
@@ -65,11 +65,10 @@
         }
 
         .header-profile-img {
-            width: 30px;
-            height: 30px;
+            height: 50px; /* 로고 높이를 설정 */
+            object-fit: contain; /* 비율 유지 */
             border-radius: 50%; /* 원형 이미지 */
-            object-fit: cover; /* 이미지 비율 유지 */
-            border: 2px solid #002855; /* 테두리 */
+            border: 2px solid #ffffff; /* 테두리 */
         }
 
         .logout-btn, .header-profile-img{
@@ -86,14 +85,15 @@
             padding: 8px 12px; /* 버튼 크기 조정 */
             cursor: pointer;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 20px;
             text-decoration: none;
         }
 
         main {
             flex: 1;
-            margin-top: 80px;
-            padding: 20px;
+            margin-top: 70px;
+<!--            margin-bottom: 70px;-->
+<!--            padding: 20px;-->
 
             overflow-y: auto;
         }
@@ -113,9 +113,10 @@
     flex-direction: column;
     justify-content: center; /* 가운데 정렬 */
     align-items: center;
-
+    margin: 0; /* 섹션 간 여백 제거 */
+    padding: 0; /* 섹션 내부 여백 제거 */
     box-sizing: border-box;
-
+    background-image: linear-gradient( 135deg, #FAB2FF 10%, #1904E5 100%);
     min-height: 90vh; /* 최소 높이 설정 */
     max-height: 90vh; /* 최대 높이 제한 */
     overflow: hidden; /* 섹션 내 불필요한 스크롤 제거 */
@@ -134,15 +135,20 @@
     max-height: 90vh; /* 최대 높이 제한 */
     overflow: hidden; /* 섹션 내 불필요한 스크롤 제거 */
     margin-bottom: 80px;
+    background-image: linear-gradient( 135deg, #FD6585 10%, #0D25B9 100%);
 }
+
 .content:nth-child(odd) {
-    background-color: #f9f9f9;
+<!--    background-color: #f9f9f9;-->
+background-image: linear-gradient( 135deg, #FAB2FF 10%, #1904E5 100%);
 }
 
 .content:nth-child(even) {
-    background-color: #f3f3f3;
+    background-image: linear-gradient( 135deg, #43CBFF 10%, #9708CC 100%);
     color: #002855;
+<!--    background-color: #a9aabc;-->
 }
+
 
         .ti {
     display: flex; /* 가로 정렬 */
@@ -175,14 +181,14 @@
         .team-section {
     text-align: center;
     padding: 50px 20px; /* 내부 여백 설정 */
-    background-color: #f9f9f9;
+    margin-top: 90px;
     min-height: 100vh; /* 화면 전체 높이를 최소 높이로 설정 */
-    box-sizing: border-box; /* 패딩 포함 */
+
     justify-content: center; /* 부모 안에서 가운데 정렬 */
 }
 
         .team-section h2 {
-            font-size: 32px;
+            font-size: 40px;
             color: #002855;
             margin-bottom: 40px;
         }
@@ -194,6 +200,7 @@
     flex-wrap: wrap; /* 화면이 작아지면 다음 줄로 배치 */
 
 }
+
 
 .team-member {
     text-align: center;
@@ -271,7 +278,7 @@
   height: 50px;
   border-radius: 9999px;
   position: fixed;
-  top: 80px;
+  top: 100px;
   left: 25px;
   z-index: 1000;
 }
@@ -435,6 +442,7 @@
 
     <section class="content">
         <div class="ti">
+            <div class="text-section">
             <h1>사용방법 동영상</h1>
                 <iframe class="video-frame"
                         src="https://www.youtube.com/embed/WAvA4iV7Te4"
@@ -445,6 +453,7 @@
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen>
                 </iframe>
+            </div>
         </div>
     </section>
 
@@ -455,8 +464,9 @@
     <section class="content">
         <div class="ti">
             <div class="text-section">
-                <h2>줄거리를 텍스트 또는 파일로 입력하세요</h2>
-                <p>hwp, txt, pdf 형식으로 올리거나 줄거리를 적어주세요요</p>
+                <h2>STEP 1</h2>
+                <p>txt, pdf 형식으로 파일을 올려주세요.</p>
+                <p>드래그나 파일을 업로드 하시면 됩니다.</p>
             </div>
             <div class="image-section">
                 <img src="/image/set.png" alt="model 사용법법">
@@ -468,9 +478,9 @@
     <section class="content">
         <div class="ti">
             <div class="text-section">
-                <h2>줄거리가 요약 됐어요!</h2>
-                <p>줄거리가 마음에 들면 다음 버튼을 눌러주세요.</p>
-                <p>혹시 마음에 안들면 초기화 버튼을 눌러주세요.</p>
+                <h2>STEP 2</h2>
+                <p>마음에 드는 캐릭터가 나오면 다음 버튼을 클릭해주세요.</p>
+                <p>혹시 마음에 안들면 주사위 버튼을 눌러주세요.</p>
             </div>
             <div class="image-section">
                 <img src="/image/set.png" alt="model 사용법법">
@@ -482,9 +492,11 @@
     <section class="content">
         <div class="ti">
             <div class="text-section">
-                <h2>이제 웹툰을 만들 거예요!</h2>
-                <p>웹툰에 어울리는 그림을 선택해주세요.</p>
-                <p>그러면 열심히 만들어서 결과가 나와요.</p>
+                <h2>STEP 3</h2>
+                <p>로그에 저장을 할지 골라주시면 됩니다.</p>
+                <p>제목입력 후 공개,비공개 선택하시고</p>
+                <p>저장버튼을 누르면 돼요!</p>
+                <p>다운버튼을 누르면 다운로드가 시작됩니다!</p>
             </div>
             <div class="image-section">
                 <img src="/image/set.png" alt="model 사용법법">
@@ -498,7 +510,7 @@
         <section class="content">
             <div class="ti">
                 <div class="team-section">
-                    <h2>Fiction2Toon을 만든 사람들 (1/2)</h2>
+                    <h2>Fiction2Toon을 만든 사람들</h2>
                     <div class="team-container">
                         <!-- 팀원 1 -->
                         <div class="team-member">
@@ -530,7 +542,7 @@
         <section class="content">
             <div class="ti">
                 <div class="team-section">
-                    <h2>Fiction2Toon을 만든 사람들 (2/2)</h2>
+                    <h2>Fiction2Toon을 만든 사람들</h2>
                     <div class="team-container">
                         <!-- 팀원 4 -->
                         <div class="team-member">

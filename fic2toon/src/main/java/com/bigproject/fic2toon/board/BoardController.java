@@ -39,6 +39,11 @@ public class BoardController {
         return "board/board"; // 게시판 뷰 반환
     }
 
+    @GetMapping("/game") // 🔥 "/game" URL 요청이 오면 game.html을 반환
+    public String showGamePage() {
+        return "board/game"; // 🔥 "game.html"을 찾아서 반환 (templates/game.html)
+    }
+
 
 
     @GetMapping("/{id}")

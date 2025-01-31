@@ -218,16 +218,27 @@
 
     box-sizing: border-box;
 
-    min-height: 90vh; /* 최소 높이 설정 */
-    max-height: 90vh; /* 최대 높이 제한 */
-    overflow: hidden; /* 섹션 내 불필요한 스크롤 제거 */
-    margin-bottom: 80px;
-    /* 기존 그라디언트 배경 제거 */
-    background-image: url('/image/hoonpaint2.jpg'); /* 배경 이미지 적용 */
-    background-size: cover; /* 화면 전체 채우기 */
-    background-position: center; /* 중앙 정렬 */
-    background-repeat: no-repeat; /* 반복 없음 */
-    background-attachment: fixed; /* 스크롤해도 고정 */
+    min-height: 100vh; /* 🔥 기존보다 10vh 높게 설정 */
+    max-height: 100vh;
+    overflow: hidden;
+    background-image: url('/image/hoonpaint2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.site-footer {
+    width: 100%;
+    background-color: #002855;
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #002855;
+}
+
+.site-footer .footer-links a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #ffffff;
 }
 
         .ti {
@@ -478,10 +489,88 @@
   font-size: 18px;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  bottom: 20px; /* 화면 하단에서 20px 떨어진 위치 */
+  bottom: 40px; /* 화면 하단에서 20px 떨어진 위치 */
   right: 45px; /* 화면 오른쪽에서 20px 떨어진 위치 */
   display: block;
 }
+
+.close-btn {}
+
+
+
+/* 팝업 컨테이너 (배경) */
+.popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 팝업 내용 */
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 600px;  /* 가로 크기 */
+    max-width: 90%;
+    max-height: 800px; /* 🔥 팝업 크기 제한 */
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 닫기 버튼 */
+.close-btn {
+    position: absolute;
+    top: 10px;  /* 🔥 popup-content 내부에서 10px 떨어진 위치 */
+    right: 10px; /* 🔥 popup-content 내부에서 10px 떨어진 위치 */
+    font-size: 24px;
+    cursor: pointer;
+    color: #002855;
+    background: none;
+    border: none;
+    font-weight: bold;
+    z-index: 10; /* 🔥 다른 요소 위에 위치하도록 설정 */
+}
+
+/* 이미지 감싸는 컨테이너 */
+.image-container {
+    max-height: 400px; /* 🔥 이미지 표시 영역 제한 */
+    overflow: auto; /* 🔥 드래그 가능하도록 설정 */
+}
+
+/* 이미지 스타일 */
+.popup-content img {
+    width: 100%;  /* 가로 크기 맞춤 */
+    height: auto; /* 원본 비율 유지 */
+    user-select: none; /* 🔥 텍스트 선택 방지 */
+}
+.popup-link {
+    display: block;  /* 🔥 inline-block → block 으로 변경 */
+    margin: 15px auto;  /* 🔥 자동 정렬 (좌우 여백 auto) */
+    padding: 8px 20px;
+    background: #002855;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 150px; /* 🔥 고정 가로 길이 */
+    text-align: center;
+}
+
+
+
 
 
 
@@ -526,6 +615,7 @@
         <a href="/play">PlayModel</a>
         <a href="/board">Board</a>
         <a href="/log">Log</a>
+        <a href="/board/game">Game</a>
     </nav>
     <div class="logo">
     <a href="/home">
@@ -554,6 +644,20 @@
             </div>
         </label>
     </div>
+
+    <!-- 로그인 후 광고 팝업 -->
+    <div id="popup" class="popup-container">
+        <div class="popup-content">
+            <button class="close-btn" onclick="closePopup()">×</button> <!-- 닫기 버튼 -->
+            <h2>🎉 에이블 스쿨 7기 모집! 🚀</h2>
+            <div class="image-container"> <!-- 🔥 이미지 감싸는 컨테이너 추가 -->
+                <img src="/image/aivle7.jpg" alt="광고 이미지">
+            </div>
+            <a href="https://aivle.kt.co.kr/home/main/indexMain" class="popup-link" target="_blank" rel="noopener noreferrer">자세히 보기</a>
+        </div>
+    </div>
+
+
 
 
 
@@ -717,22 +821,40 @@
             </div>
 
         </div>
+        <footer class="site-footer">
+            <div class="footer-links">
+                <a href="/home">Home</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+            </div>
+
+            <p style="color: #ffffff;">&copy; 2025 hooncompany</p>
+
+        </footer>
     </section>
 
 </main>
 
-<!--<footer>-->
-<!--    <div class="footer-links">-->
-<!--        <a href="/home">Home</a>-->
-<!--        <a href="/about">About</a>-->
-<!--        <a href="/contact">Contact</a>-->
-<!--    </div>-->
-
-<!--    <p style="color: #ffffff;">&copy; 2025 hooncompany</p>-->
-
-<!--</footer>-->
 
 <script>
+
+    function openExternalSite() {
+        window.open("https://aivle.kt.co.kr/home/main/indexMain", "_blank"); // 🔥 새 창에서 사이트 열기
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const popup = document.getElementById("popup");
+
+    // 로그인 후 팝업 자동 표시 (임시 조건: 1초 후 표시)
+    setTimeout(() => {
+        popup.style.display = "flex";
+    }, 1000);
+
+    // 팝업 닫기 기능
+    window.closePopup = function () {
+        popup.style.display = "none";
+    };
+});
 
     document.addEventListener("DOMContentLoaded", function () {
     const elementsToObserve = document.querySelectorAll(".ti, .text-section, .image-section");

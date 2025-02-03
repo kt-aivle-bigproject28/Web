@@ -9,7 +9,7 @@
             margin: 0;
             padding: 0;
             height: 100%; /* 전체 높이 */
-            overflow: hidden; /* 스크롤바 숨김 */
+            overflow-y: hidden; /* 스크롤바 숨김 */
 
             scroll-behavior: smooth; /* 부드러운 스크롤 */
         }
@@ -25,7 +25,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
+            padding: 5px 15px;
             background-color: #002855;
             border-bottom: 1px solid #002855;
             position: fixed;
@@ -66,7 +66,7 @@
         }
 
         .header-profile-img {
-            height: 50px; /* 로고 높이를 설정 */
+            height: 40px; /* 로고 높이를 설정 */
             object-fit: contain; /* 비율 유지 */
             border-radius: 50%; /* 원형 이미지 */
             border: 2px solid #ffffff; /* 테두리 */
@@ -230,7 +230,7 @@
 .site-footer {
     width: 100%;
     background-color: #002855;
-    padding: 20px;
+    padding: 10px;
     text-align: center;
     border-top: 1px solid #002855;
 }
@@ -241,7 +241,7 @@
     color: #ffffff;
 }
 
-        .ti {
+.ti {
     display: flex; /* 가로 정렬 */
     flex-direction: row; /* 요소를 가로로 배치 */
     align-items: center; /* 세로 축 정렬 */
@@ -251,8 +251,9 @@
     opacity: 0; /* 처음에는 보이지 않도록 */
     transform: translateY(50px); /* 아래에서 올라오도록 */
     transition: opacity 1.1s ease-out, transform 1.1s ease-out;
-
 }
+
+
 .ti.show {
     opacity: 1;
     transform: translateY(0);
@@ -570,6 +571,76 @@
 }
 
 
+.book-section {
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* ✅ 책을 섹션의 정중앙에 배치 */
+    align-items: center;
+    height: 90vh; /* ✅ 기존 섹션과 동일한 높이 */
+    background-color: #f9f9f9;
+    position: relative;
+    padding-top: 0; /* ✅ 필요 없는 여백 제거 */
+}
+
+
+
+#flipbook {
+    width: 600px;
+    height: 400px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    top: 40%;  /* ✅ 창의 중앙에 배치 */
+    transform: translateY(-40%); /* ✅ 정확히 중간으로 정렬 */
+}
+
+
+    .book-title {
+        font-size: 32px;
+        margin-bottom: 20px;
+        color: #002855;
+    }
+
+    #book-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+    }
+
+
+
+    .page {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: white;
+        border: 1px solid #ddd;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .cover {
+        background-color: #002855;
+        color: white;
+    }
+
+    .arrow-btn {
+        font-size: 30px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+    .arrow-btn:hover {
+        transform: scale(1.2);
+        color: #ff5f5f;
+    }
+
+
 
 
 
@@ -745,68 +816,163 @@
 
 
 
-        <section class="content">
-            <div class="ti">
-                <div class="team-section">
-                    <h2>Fiction2Toon을 만든 사람들</h2>
-                    <div class="team-container">
-                        <!-- 팀원 1 -->
-                        <div class="team-member">
-                            <img src="/image/hoonpro.jpg" alt="Hoon 사진" class="profile-img">
-                            <h3>Hoon</h3>
-                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>
-                            <p class="email">tkfkds998811@gmail.com</p>
-                        </div>
-                        <!-- 팀원 2 -->
-                        <div class="team-member">
-                            <img src="/image/hyun.png" alt="Hyun 사진" class="profile-img">
-                            <h3>Hyun</h3>
-                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>
-                            <p class="email">pearl5322@gmail.com</p>
-                        </div>
-                        <!-- 팀원 3 -->
-                        <div class="team-member">
-                            <img src="/image/hoon.jpg" alt="HJae 사진" class="profile-img">
-                            <h3>HJae</h3>
-                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>
-                            <p class="email">a066235@aivle.kt.co.kr</p>
-                        </div>
-                    </div> <!-- team-container 닫음 -->
-                </div> <!-- team-section 닫음 -->
-            </div>
-        </section>
+<!--        <section class="content">-->
+<!--            <div class="ti">-->
+<!--                <div class="team-section">-->
+<!--                    <h2>Fiction2Toon을 만든 사람들</h2>-->
+<!--                    <div class="team-container">-->
+<!--                        &lt;!&ndash; 팀원 1 &ndash;&gt;-->
+<!--                        <div class="team-member">-->
+<!--                            <img src="/image/hoonpro.jpg" alt="Hoon 사진" class="profile-img">-->
+<!--                            <h3>Hoon</h3>-->
+<!--                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>-->
+<!--                            <p class="email">tkfkds998811@gmail.com</p>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash; 팀원 2 &ndash;&gt;-->
+<!--                        <div class="team-member">-->
+<!--                            <img src="/image/hyun.png" alt="Hyun 사진" class="profile-img">-->
+<!--                            <h3>Hyun</h3>-->
+<!--                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>-->
+<!--                            <p class="email">pearl5322@gmail.com</p>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash; 팀원 3 &ndash;&gt;-->
+<!--                        <div class="team-member">-->
+<!--                            <img src="/image/hoon.jpg" alt="HJae 사진" class="profile-img">-->
+<!--                            <h3>HJae</h3>-->
+<!--                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>-->
+<!--                            <p class="email">a066235@aivle.kt.co.kr</p>-->
+<!--                        </div>-->
+<!--                    </div> &lt;!&ndash; team-container 닫음 &ndash;&gt;-->
+<!--                </div> &lt;!&ndash; team-section 닫음 &ndash;&gt;-->
+<!--            </div>-->
+<!--        </section>-->
 
-        <!-- 팀 섹션 2 -->
-        <section class="content">
-            <div class="ti">
-                <div class="team-section">
-                    <h2>Fiction2Toon을 만든 사람들</h2>
-                    <div class="team-container">
-                        <!-- 팀원 4 -->
-                        <div class="team-member">
-                            <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">
-                            <h3>Hoon</h3>
-                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>
-                            <p class="email">tkfkds998811@gmail.com</p>
-                        </div>
-                        <!-- 팀원 5 -->
-                        <div class="team-member">
-                            <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">
-                            <h3>Hoon</h3>
-                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>
-                            <p class="email">tkfkds998811@gmail.com</p>
-                        </div>
-                        <!-- 팀원 6 -->
-                        <div class="team-member">
-                            <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">
-                            <h3>Hoon</h3>
-                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>
-                            <p class="email">tkfkds998811@gmail.com</p>
-                        </div>
-                    </div> <!-- team-container 닫음 -->
-                </div> <!-- team-section 닫음 -->
+<!--        &lt;!&ndash; 팀 섹션 2 &ndash;&gt;-->
+<!--        <section class="content">-->
+<!--            <div class="ti">-->
+<!--                <div class="team-section">-->
+<!--                    <h2>Fiction2Toon을 만든 사람들</h2>-->
+<!--                    <div class="team-container">-->
+<!--                        &lt;!&ndash; 팀원 4 &ndash;&gt;-->
+<!--                        <div class="team-member">-->
+<!--                            <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">-->
+<!--                            <h3>Hoon</h3>-->
+<!--                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>-->
+<!--                            <p class="email">tkfkds998811@gmail.com</p>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash; 팀원 5 &ndash;&gt;-->
+<!--                        <div class="team-member">-->
+<!--                            <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">-->
+<!--                            <h3>Hoon</h3>-->
+<!--                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>-->
+<!--                            <p class="email">tkfkds998811@gmail.com</p>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash; 팀원 6 &ndash;&gt;-->
+<!--                        <div class="team-member">-->
+<!--                            <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">-->
+<!--                            <h3>Hoon</h3>-->
+<!--                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>-->
+<!--                            <p class="email">tkfkds998811@gmail.com</p>-->
+<!--                        </div>-->
+<!--                    </div> &lt;!&ndash; team-container 닫음 &ndash;&gt;-->
+<!--                </div> &lt;!&ndash; team-section 닫음 &ndash;&gt;-->
+<!--            </div>-->
+<!--        </section>-->
+
+
+    <!-- ✅ 책 페이지 넘김 효과 추가 -->
+    <!-- ✅ 책 페이지 섹션 추가 (다른 content와 동일한 구조 유지) -->
+    <section class="book-section">
+        <h2 class="book-title">📖 Fiction2Toon을 만든 사람들 📖</h2>
+        <div id="book-container">
+            <button id="prev-btn" class="arrow-btn">◀</button>
+
+            <div id="flipbook">
+                <div class="page cover">
+                    <h2>Fiction2Toon 개발팀</h2>
+                    <img src="/image/logo.jpg" alt="Fiction2Toon 로고" style="height: 50px;">
+                    <p>책장을 넘겨보세요!</p>
+                </div>
+                <div class="page">
+                    <img src="/image/hoonpro.jpg" class="profile-img">
+                    <h3>이성훈</h3>
+                    <p>Front-End / Back-End / AI Engineer</p>
+                    <p class="email">tkfkds998811@gmail.com</p>
+                </div>
+                <div class="page cover">
+                    <h2>감사합니다! 🙌</h2>
+                    <p>많이 배우고 성장할 수 있었던
+                    <br>프로젝트였습니다.
+                    <br>많이 배워 갑니다!
+                    <br>앞으로 더 성장해서 만나고 싶어요
+                    <br>KT AIVLE 7기도 홧팅~~!!
+                    </p>
+                    <p>Fiction2Toon 팀</p>
+                </div>
+
+                <div class="page">
+                    <img src="/image/hyun.png" class="profile-img">
+                    <h3>진 현</h3>
+                    <p>Front-End / Back-End / AI Engineer</p>
+                    <p class="email">pearl5322@gmail.com</p>
+                </div>
+                <div class="page cover">
+                    <h2>감사합니다! 🙌</h2>
+                    <p>Fiction2Toon 팀</p>
+                </div>
+
+
+                <div class="page">
+                    <img src="/image/hoon.jpg" class="profile-img">
+                    <h3>이현제</h3>
+                    <p>Front-End / Back-End / AI Engineer</p>
+                    <p class="email">a066235@aivle.kt.co.kr</p>
+                </div>
+                <div class="page cover">
+                    <h2>감사합니다! 🙌</h2>
+                    <p>Fiction2Toon 팀</p>
+                </div>
+
+                <div class="page">
+                    <img src="/image/hoon.jpg" class="profile-img">
+                    <h3>사현제</h3>
+                    <p>Front-End / Back-End / AI Engineer</p>
+                    <p class="email">a066235@aivle.kt.co.kr</p>
+                </div>
+                <div class="page cover">
+                    <h2>감사합니다! 🙌</h2>
+                    <p>Fiction2Toon 팀</p>
+                </div>
+
+                <div class="page">
+                    <img src="/image/hoon.jpg" class="profile-img">
+                    <h3>오현제</h3>
+                    <p>Front-End / Back-End / AI Engineer</p>
+                    <p class="email">a066235@aivle.kt.co.kr</p>
+                </div>
+                <div class="page cover">
+                    <h2>감사합니다! 🙌</h2>
+                    <p>Fiction2Toon 팀</p>
+                </div>
+
+                <div class="page">
+                    <img src="/image/hoon.jpg" class="profile-img">
+                    <h3>육현제</h3>
+                    <p>Front-End / Back-End / AI Engineer</p>
+                    <p class="email">a066235@aivle.kt.co.kr</p>
+                </div>
+                <div class="page cover">
+                    <h2>감사합니다! 🙌</h2>
+                    <p>Fiction2Toon 팀</p>
+                </div>
             </div>
-        </section>
+
+
+
+            <button id="next-btn" class="arrow-btn">▶</button>
+        </div>
+    </section>
+
 
     <section class="lastcontent">
         <div class="ti">
@@ -835,8 +1001,36 @@
 
 </main>
 
+<!-- ✅ turn.js 라이브러리 추가 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
 
 <script>
+    $(document).ready(function() {
+        var flipbook = $("#flipbook");
+
+        flipbook.turn({
+            width: 600,
+            height: 400,
+            autoCenter: true,
+            display: "double",
+            elevation: 100,
+            gradients: true,
+            acceleration: true,
+            duration: 800
+        });
+
+        $("#prev-btn").on("click", function() {
+            flipbook.turn("previous");
+        });
+
+        $("#next-btn").on("click", function() {
+            flipbook.turn("next");
+        });
+    });
+
+
+
 
     function openExternalSite() {
         window.open("https://aivle.kt.co.kr/home/main/indexMain", "_blank"); // 🔥 새 창에서 사이트 열기

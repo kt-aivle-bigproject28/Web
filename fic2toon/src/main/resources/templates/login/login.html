@@ -168,7 +168,7 @@ label {
 
         footer {
             background-color: #002855;
-            padding: 20px;
+            padding: 10px;
             text-align: center;
             border-top: 1px solid #ddd;
         }
@@ -228,4 +228,12 @@ label {
 </footer>
 
 </body>
+<script th:inline="javascript">
+    /* 로그인 실패 시 alert 창 표시 */
+    var errorMessage = /*[[${errorMessage}]]*/ null;
+    if (errorMessage) {
+        alert("로그인 실패!"); // 기본적인 실패 메시지
+    }
+</script>
+
 </html>

@@ -1,281 +1,160 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>책 화면 + 네비게이션 바 조정</title>
 
-    <!-- ✅ jQuery 1.9.1 (turn.js와 완벽 호환) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-    <!-- ✅ turn.js (최신 안정 버전) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
 
-    <style>
-        /* ✅ 전체 페이지 스타일 */
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            overflow-y: auto; /* ✅ 스크롤 가능 */
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
+<!--        <section class="content">-->
+<!--            <div class="ti">-->
+<!--                <div class="team-section">-->
+<!--                    <h2>Fiction2Toon을 만든 사람들</h2>-->
+<!--                    <div class="team-container">-->
+<!--                        &lt;!&ndash; 팀원 1 &ndash;&gt;-->
+<!--                        <div class="team-member">-->
+<!--                            <img src="/image/hoonpro.jpg" alt="Hoon 사진" class="profile-img">-->
+<!--                            <h3>Hoon</h3>-->
+<!--                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>-->
+<!--                            <p class="email">tkfkds998811@gmail.com</p>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash; 팀원 2 &ndash;&gt;-->
+<!--                        <div class="team-member">-->
+<!--                            <img src="/image/hyun.png" alt="Hyun 사진" class="profile-img">-->
+<!--                            <h3>Hyun</h3>-->
+<!--                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>-->
+<!--                            <p class="email">pearl5322@gmail.com</p>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash; 팀원 3 &ndash;&gt;-->
+<!--                        <div class="team-member">-->
+<!--                            <img src="/image/hoon.jpg" alt="HJae 사진" class="profile-img">-->
+<!--                            <h3>HJae</h3>-->
+<!--                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>-->
+<!--                            <p class="email">a066235@aivle.kt.co.kr</p>-->
+<!--                        </div>-->
+<!--                    </div> &lt;!&ndash; team-container 닫음 &ndash;&gt;-->
+<!--                </div> &lt;!&ndash; team-section 닫음 &ndash;&gt;-->
+<!--            </div>-->
+<!--        </section>-->
 
-        /* ✅ 네비게이션 바 스타일 */
-        body {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          height: 100vh;
-          overflow: hidden; /* 🔥 스크롤바 제거 */
-          background-color: #f4f4f4;
-          margin: 0;
-          padding: 0;
-        }
+<!--        &lt;!&ndash; 팀 섹션 2 &ndash;&gt;-->
+<!--        <section class="content">-->
+<!--            <div class="ti">-->
+<!--                <div class="team-section">-->
+<!--                    <h2>Fiction2Toon을 만든 사람들</h2>-->
+<!--                    <div class="team-container">-->
+<!--                        &lt;!&ndash; 팀원 4 &ndash;&gt;-->
+<!--                        <div class="team-member">-->
+<!--                            <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">-->
+<!--                            <h3>Hoon</h3>-->
+<!--                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>-->
+<!--                            <p class="email">tkfkds998811@gmail.com</p>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash; 팀원 5 &ndash;&gt;-->
+<!--                        <div class="team-member">-->
+<!--                            <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">-->
+<!--                            <h3>Hoon</h3>-->
+<!--                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>-->
+<!--                            <p class="email">tkfkds998811@gmail.com</p>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash; 팀원 6 &ndash;&gt;-->
+<!--                        <div class="team-member">-->
+<!--                            <img src="/image/hoon.jpg" alt="Hoon 사진" class="profile-img">-->
+<!--                            <h3>Hoon</h3>-->
+<!--                            <p>Front-End <br> Back-End <br> Data <br> AI Engineer</p>-->
+<!--                            <p class="email">tkfkds998811@gmail.com</p>-->
+<!--                        </div>-->
+<!--                    </div> &lt;!&ndash; team-container 닫음 &ndash;&gt;-->
+<!--                </div> &lt;!&ndash; team-section 닫음 &ndash;&gt;-->
+<!--            </div>-->
+<!--        </section>-->
+섹션 추가 (다른 content와 동일한 구조 유지) -->
 
-        /* ✅ 네비게이션 바 스타일 */
-        .navbar {
-            width: 100%;
-            height: 60px;
-            background: white; /* 🔥 배경을 흰색으로 변경 */
-            color: black; /* 🔥 글자 색상을 검은색으로 변경 */
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            padding-left: 20px;
-            gap: 30px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            border-bottom: 5px solid #333; /* 🔥 아래 테두리에 어두운 회색 추가 */
-            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15); /* 🔥 더 부드러운 그림자 효과 */
-        }
 
-        /* ✅ 로고 스타일 */
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-            color: #333; /* 🔥 어두운 색으로 조정 */
-            text-transform: uppercase;
-            flex-shrink: 0;
-        }
+<!--    <section class="book-section">-->
+<!--        <h2 class="book-title">Fiction2Toon이랑 함께 한 회사들</h2>-->
+<!--        <div id="book-container">-->
+<!--            <button id="prev-btn" class="arrow-btn">◀</button>-->
 
-        /* ✅ 네비게이션 메뉴 스타일 */
-        .nav-links {
-            display: flex;
-            gap: 25px;
-            flex-grow: 1;
-        }
+<!--            <div id="flipbook">-->
+<!--                <div class="page cover">-->
+<!--                    <h2>Fiction2Toon과</h2>-->
+<!--                    <img src="/image/logo.jpg" alt="Fiction2Toon 로고" style="height: 50px;">-->
+<!--                    <p>책장을 넘겨보세요!</p>-->
+<!--                </div>-->
+<!--                <div class="page">-->
+<!--                    <img src="/image/logopic2.jpg" class="profile-img">-->
+<!--                    <h3>Fiction2Toon</h3>-->
+<!--                    <p class="email">tkfkds998811@gmail.com</p>-->
+<!--                </div>-->
+<!--                <div class="page cover">-->
+<!--                    <h2>감사합니다! 🙌</h2>-->
+<!--                    <p>많이 배우고 성장할 수 있었던-->
+<!--                    <br>프로젝트였습니다.-->
+<!--                    <br>많이 배워 갑니다!-->
+<!--                    <br>앞으로 더 성장해서 만나고 싶어요-->
+<!--                    <br>뒷장으로 넘기면 Fiction2Toon을-->
+<!--                    <br>사용하는 방법을 적어두겠습니다.-->
+<!--                    <br>-->
+<!--                    <a href="/board/game" style="text-decoration: none; color: #002855;">Hidden Game</a>-->
+<!--                    </p>-->
+<!--                    <p>Fiction2Toon 팀</p>-->
+<!--                </div>-->
 
-        .nav-links a {
-            text-decoration: none;
-            color: black; /* 🔥 글자 색상을 검은색으로 변경 */
-            font-size: 18px;
-            font-weight: bold;
-            transition: 0.3s ease;
-            white-space: nowrap;
-        }
+<!--                <div class="page">-->
+<!--                    <img src="/image/hyun.png" class="profile-img">-->
+<!--                    <h3>진 현</h3>-->
+<!--                    <p>Front-End / Back-End / AI Engineer</p>-->
+<!--                    <p class="email">pearl5322@gmail.com</p>-->
+<!--                </div>-->
+<!--                <div class="page cover">-->
+<!--                    <h2>감사합니다! 🙌</h2>-->
+<!--                    <p>Fiction2Toon 팀</p>-->
+<!--                </div>-->
 
-        .nav-links a:hover {
-            color: #333; /* 🔥 마우스 호버 시 어두운 회색 */
-            transform: scale(1.1);
-        }
-        /* ✅ 책 영역 스타일 */
-        #container {
-            display: flex;
-            align-items: center;
-            position: relative;
-            margin-top: 80px; /* 네비게이션 바 아래 여백 추가 */
-        }
 
-        #flipbook {
-            width: 800px;
-            height: 600px;
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
-            pointer-events: none; /* ✅ 마우스 이벤트 차단 */
-        }
+<!--                <div class="page">-->
+<!--                    <img src="/image/hoon.jpg" class="profile-img">-->
+<!--                    <h3>이현제</h3>-->
+<!--                    <p>Front-End / Back-End / AI Engineer</p>-->
+<!--                    <p class="email">a066235@aivle.kt.co.kr</p>-->
+<!--                </div>-->
+<!--                <div class="page cover">-->
+<!--                    <h2>감사합니다! 🙌</h2>-->
+<!--                    <p>Fiction2Toon 팀</p>-->
+<!--                </div>-->
 
-        .page {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: white;
-            border: 1px solid #ddd;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+<!--                <div class="page">-->
+<!--                    <img src="/image/hoon.jpg" class="profile-img">-->
+<!--                    <h3>사현제</h3>-->
+<!--                    <p>Front-End / Back-End / AI Engineer</p>-->
+<!--                    <p class="email">a066235@aivle.kt.co.kr</p>-->
+<!--                </div>-->
+<!--                <div class="page cover">-->
+<!--                    <h2>감사합니다! 🙌</h2>-->
+<!--                    <p>Fiction2Toon 팀</p>-->
+<!--                </div>-->
 
-        /* 📌 스타일리시한 화살표 버튼 */
-        .arrow-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 40px;
-            border: none;
-            padding: 15px;
-            cursor: pointer;
-            background: none;
-            color: #333;
-            transition: all 0.2s ease-in-out;
-            font-weight: bold;
-        }
+<!--                <div class="page">-->
+<!--                    <img src="/image/hoon.jpg" class="profile-img">-->
+<!--                    <h3>오현제</h3>-->
+<!--                    <p>Front-End / Back-End / AI Engineer</p>-->
+<!--                    <p class="email">a066235@aivle.kt.co.kr</p>-->
+<!--                </div>-->
+<!--                <div class="page cover">-->
+<!--                    <h2>감사합니다! 🙌</h2>-->
+<!--                    <p>Fiction2Toon 팀</p>-->
+<!--                </div>-->
 
-        /* 📌 화살표 버튼 hover & active 효과 */
-        .arrow-btn:hover {
-            color: #ff5f5f;
-            transform: translateY(-50%) scale(1.2);
-        }
+<!--                <div class="page">-->
+<!--                    <img src="/image/hoon.jpg" class="profile-img">-->
+<!--                    <h3>육현제</h3>-->
+<!--                    <p>Front-End / Back-End / AI Engineer</p>-->
+<!--                    <p class="email">a066235@aivle.kt.co.kr</p>-->
+<!--                </div>-->
+<!--                <div class="page cover">-->
+<!--                    <h2>감사합니다! 🙌</h2>-->
+<!--                    <p>Fiction2Toon 팀</p>-->
+<!--                </div>-->
+<!--            </div>-->
 
-        .arrow-btn:active {
-            transform: translateY(-50%) scale(1.1);
-        }
 
-        /* 📌 버튼 위치 */
-        #prev-btn {
-            left: -60px; /* 책 바로 왼쪽 */
-        }
 
-        #next-btn {
-            right: -60px; /* 책 바로 오른쪽 */
-        }
-        .ti {
-    display: flex; /* 가로 정렬 */
-    flex-direction: row; /* 요소를 가로로 배치 */
-    align-items: center; /* 세로 축 정렬 */
-    gap: 20px; /* 텍스트와 이미지 사이 간격 */
-    width: 100%; /* 섹션 내부 너비 */
-    justify-content: center; /* 부모 안에서 가운데 정렬 */
-    opacity: 0; /* 처음에는 보이지 않도록 */
-    transform: translateY(50px); /* 아래에서 올라오도록 */
-    transition: opacity 1.1s ease-out, transform 1.1s ease-out;
-}
-.text-section {
-    flex: 1; /* 텍스트가 이미지와 같은 비율로 배치 */
-    text-align: center; /* 텍스트 정렬 */
-}
-
-        /* ✅ 반응형 (작은 화면에서 메뉴 줄어들지 않도록 처리) */
-        @media screen and (max-width: 768px) {
-            .navbar {
-                flex-direction: row;
-                flex-wrap: nowrap;
-                height: auto;
-                padding: 10px;
-            }
-
-            .nav-links {
-                gap: 15px; /* 작은 화면에서 간격 조정 */
-            }
-        }
-
-    </style>
-</head>
-<body>
-
-<!-- ✅ 네비게이션 바 -->
-<div class="navbar">
-    <div class="logo">fiction</div>
-    <div class="nav-links">
-        <a href="#">Home</a>
-        <a href="#">PlayModel</a>
-        <a href="#">Board</a>
-        <a href="#">Log</a>
-    </div>
-</div>
-
-<div id="container">
-    <!-- 📌 "이전 페이지" 버튼 -->
-    <button id="prev-btn" class="arrow-btn" disabled>◀</button>
-
-    <div id="flipbook">
-        <!-- 📖 표지 -->
-        <div class="page">
-            <div class="ti">
-                <img src="/image/hoonpaint.jpg" alt="HoonPaint 이미지">
-            </div>
-        </div>
-        <div class="page">
-            <div class="text-section">
-            <h1>저희 <strong>Fiction2Toon</strong>에 대해 알고 싶으면 페이지를 넘겨주세요.</h1>
-            <p>Fiction2Toon은 사용자 친화적인 인터페이스를 제공합니다. 간단하고 편리하게 이용하세요!</p>
-            </div>
-        </div>
-        <div class="page">
-            <div class="text-section">
-            <h1>저희 <strong>Fiction2Toon</strong>에 대해 알고 싶으면 페이지를 넘겨주세요.</h1>
-            <p>Fiction2Toon은 사용자 친화적인 인터페이스를 제공합니다. 간단하고 편리하게 이용하세요!</p>
-            </div>
-        </div>
-        <div class="page">3️⃣ 세 번째 페이지</div>
-        <div class="page">4️⃣ 네 번째 페이지</div>
-        <div class="page">5️⃣ 다섯 번째 페이지</div>
-        <div class="page">6️⃣ 여섯 번째 페이지</div>
-        <div class="page">7️⃣ 시작 페이지</div>
-        <div class="page">8️⃣ 추가 페이지 1</div>
-        <div class="page">9️⃣ 추가 페이지 2</div>
-        <div class="page">🔟 추가 페이지 3</div>
-        <div class="page">1️⃣1️⃣ 추가 페이지 4</div>
-        <div class="page">📕 마지막 페이지</div>
-    </div>
-
-    <!-- 📌 "다음 페이지" 버튼 -->
-    <button id="next-btn" class="arrow-btn">▶</button>
-</div>
-
-<script>
-    $(document).ready(function() {
-      var flipbook = $("#flipbook");
-      var prevBtn = $("#prev-btn");
-      var nextBtn = $("#next-btn");
-        var autoFlipActive = true;
-        var autoFlipInterval;
-        var lockedPage = 7;  // 7번째 페이지 이전으로는 못 돌아가게 설정
-
-        flipbook.turn({
-          width: 800,
-          height: 600,
-          autoCenter: true,
-          display: "double",
-          elevation: 100,
-          gradients: true,
-          acceleration: true,
-          duration: 800
-        });
-
-        // ✅ "이전 페이지" 버튼 클릭 이벤트 추가
-        prevBtn.on("click", function() {
-            flipbook.turn("previous");
-        });
-
-        // ✅ "다음 페이지" 버튼 클릭 이벤트 추가
-        nextBtn.on("click", function() {
-            flipbook.turn("next");
-        });
-
-        // ✅ 처음 6페이지 자동 넘김
-        function autoSkipPages() {
-            let pageIndex = 1;
-            let targetPage = lockedPage;  // 7페이지로 이동
-            let interval = setInterval(function() {
-                if (pageIndex < targetPage) {
-                    flipbook.turn("page", pageIndex + 1);
-                    pageIndex++;
-                } else {
-                    clearInterval(interval);
-                    prevBtn.prop("disabled", false); // 이후 이전 버튼 활성화
-                }
-            }, 200);  // ⬅️ 빠르게 넘김
-        }
-
-        // ✅ 0.5초 후 자동으로 첫 6페이지 넘기기
-        setTimeout(autoSkipPages, 100);
-    });
-</script>
-
-</body>
-</html>
+<!--            <button id="next-btn" class="arrow-btn">▶</button>-->
+<!--        </div>-->
+<!--    </section>-->
